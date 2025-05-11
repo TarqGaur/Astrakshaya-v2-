@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+}
+
+.mission-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 40px 20px;
+}
+
+.mission-content {
+    max-width: 1200px;
+    text-align: center;
+    z-index: 1;
+}
+
+.bg-1 {
+    background-image: url("rocket.jpg");
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.bg-2 {
+    background-image: url("lrocket.png");
+    min-height: 600px;
+}
+
+.bg-3 {
+    background-image: url("sprocket.png");
+    min-height: 100vh;
+}
+
+.bg-4 {
+    background-image: url("mrocket.png");
+    min-height: 100vh;
+}
+
+/* Overlay for better text readability */
+.mission-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .mission-section {
+        background-attachment: scroll; /* Better performance on tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .mission-section {
+        padding: 30px 15px;
+        min-height: 500px;
+    }
+    
+    .bg-1 {
+        height: 90vh;
+    }
+    
+    .bg-2, .bg-3, .bg-4 {
+        min-height: 500px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mission-section {
+        padding: 20px 10px;
+    }
+    
+    .mission-content {
+        padding: 0 10px;
+    }
+}
+
+/* Performance optimizations for mobile */
+@media (prefers-reduced-motion: reduce) {
+    .mission-section {
+        background-attachment: scroll;
+    }
+}
+
+/* High-DPI screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .mission-section {
+        background-size: cover;
+    }
+}

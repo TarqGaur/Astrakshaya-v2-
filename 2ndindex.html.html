@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astrakshaya's Galaxy</title>
+    <link rel="icon" href="teamImages/logo.jpg" type="image/x-icon">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <div class="back">
+    <a href="index.html">
+        <img src="arrow (1).png" alt="Clickable Image">
+    </a>
+</div>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+        .back{
+            position: absolute;
+            bottom: 850px; /* Position it near the bottom of the viewport */
+            left: 2.5%;
+            transform: translateX(-50%); /* Center it horizontally */
+            z-index: 10; /* Ensure it appears above the canvas */
+            text-align: center;
+        }
+        .back img {
+            width: 50px;
+            border: 0px solid white;
+            border-radius: 10px;
+            cursor: pointer; /* Indicate the image is clickable */
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+    </style>
+    </head>
+    <body>
+  <script src="js/galaxy.js"></script>
+  <script src="js/start.js"></script>
+  <script src ="js/head.js"></script>
+</body>
+</html>

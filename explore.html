@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astrakshaya's Universe</title>
+    <link rel="icon" href="teamImages/logo.jpg" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/footer.css">
+  
+    <!-- Added new stylesheet -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <link rel="stylesheet" href="css/bag.css">
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        /* Phi Announcement Text */
+        .phi-announcement {
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            text-align: center;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        .phi-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+            letter-spacing: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .phi-subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            color: #e0e0e0;
+            line-height: 1.6;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Styling for the clickable image at the bottom center */
+        .exploreC1 {
+            position: absolute;
+            bottom: 5vh; /* Using viewport height instead of fixed pixels */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            text-align: center;
+            width: 90%; /* Set a max width relative to viewport */
+            max-width: 500px; /* Limit maximum size */
+            animation: pulse 2s infinite;
+        }
+
+        /* Pulsing animation */
+        @keyframes pulse {
+            0% {
+                transform: translateX(-50%) scale(1);
+                filter: brightness(1);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.05);
+                filter: brightness(1.2) drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+            }
+            100% {
+                transform: translateX(-50%) scale(1);
+                filter: brightness(1);
+            }
+        }
+
+        .exploreC1 img {
+            width: 100%; /* Make image width responsive */
+            height: auto; /* Maintain aspect ratio */
+            max-width: 300px; /* Maximum size on larger screens */
+            border: 0px solid white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            position: relative;
+        }
+
+        /* Tooltip styling */
+        .exploreC1 a {
+            position: relative;
+            display: inline-block;
+        }
+
+        .exploreC1 a::before {
+            content: "Click to Enter";
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        .exploreC1 a:hover::before {
+            opacity: 1;
+        }
+
+        /* Responsive adjustments */
+        @media screen and (max-width: 768px) {
+            .exploreC1 {
+                bottom: 3vh;
+            }
+            .exploreC1 img {
+                max-width: 250px;
+            }
+            .phi-title {
+                font-size: 2.5rem;
+            }
+            .phi-subtitle {
+                font-size: 1rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .exploreC1 {
+                bottom: 2vh;
+            }
+            .exploreC1 img {
+                max-width: 200px;
+            }
+            .phi-title {
+                font-size: 2rem;
+            }
+            .phi-subtitle {
+                font-size: 0.9rem;
+            }
+            .phi-announcement {
+                top: 100px;
+            }
+        }
+
+        /* For very small devices */
+        @media screen and (max-width: 320px) {
+            .exploreC1 {
+                bottom: 1vh;
+            }
+            .exploreC1 img {
+                max-width: 150px;
+            }
+            .phi-title {
+                font-size: 1.8rem;
+            }
+            .phi-announcement {
+                top: 90px;
+            }
+        }
+
+        /* For landscape orientation */
+        @media screen and (orientation: landscape) and (max-height: 500px) {
+            .exploreC1 {
+                bottom: 2vh;
+            }
+            .exploreC1 img {
+                max-width: 180px;
+            }
+            .phi-title {
+                font-size: 2rem;
+            }
+            .phi-subtitle {
+                font-size: 0.9rem;
+            }
+        }
+
+        .back{
+            position: absolute;
+            bottom: 850px; /* Position it near the bottom of the viewport */
+            left: 2.5%;
+            transform: translateX(-50%); /* Center it horizontally */
+            z-index: 10; /* Ensure it appears above the canvas */
+            text-align: center;
+        }
+        .back img {
+            width: 50px;
+            border: 0px solid white;
+            border-radius: 10px;
+            cursor: pointer; /* Indicate the image is clickable */
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .exploreC1 img:hover {
+            transform: scale(1.1); /* Slight zoom effect on hover */
+            opacity: 0.9;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .futuristic-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 40px;
+            z-index: 1002; /* Increase z-index to be above other elements */
+        }
+
+        .navbar-menu a {
+            font-family: 'Rajdhani', sans-serif;
+            color: #b3b3b3;
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-menu a:hover {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            margin: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        @media screen and (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
+            .navbar-menu {
+                position: fixed;
+                right: -100%;
+                top: 0;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: 0.5s ease;
+                padding: 20px;
+                gap: 30px;
+                z-index: 1002; /* Ensure menu is above other elements */
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+                border-left: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .navbar-menu a {
+                opacity: 0;
+                transform: translateX(50px);
+                transition: all 0.3s ease;
+            }
+
+            .navbar-menu.active {
+                right: 0;
+            }
+
+            .navbar-menu.active a {
+                opacity: 1;
+                transform: translateX(0);
+                transition-delay: calc(0.1s * var(--i));
+            }
+
+            .hamburger.active .line1 {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+
+            .hamburger.active .line2 {
+                opacity: 0;
+            }
+
+            .hamburger.active .line3 {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .futuristic-text {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .navbar {
+                padding: 10px 15px;
+            }
+
+            .futuristic-text {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>    <!-- Navbar -->
+    <nav class="navbar">
+        <div id="particles-js"></div>
+        <div class="futuristic-text">ASTRAKSHAYA</div>
+        <div class="navbar-menu">
+            <a href="./index.html" style="--i:1">Home</a>
+            <a href="./about.html" style="--i:2">About Us</a>
+            <a href="./explore.html" style="--i:3">Explore</a>
+            <a href="./team.html" style="--i:4">Team</a>
+            <a href="./join.html" style="--i:5">Join Us</a>
+        </div>
+        <div class="hamburger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <!-- Phi Announcement -->
+    <div class="phi-announcement">
+        <h1 class="phi-title">PHI: COMING SOON</h1>
+        <p class="phi-subtitle">Discovering the universal constant in everything. The most advanced AI model that calculates the golden ratio across dimensions. Redefining the boundaries of cosmic intelligence.</p>
+    </div>
+
+    <!-- Div for clickable image -->
+    <div class="exploreC1">
+        <a href="2ndindex.html.html">
+            <img src="galaxy/bg_remover.png" alt="Clickable Image">
+        </a>
+    </div>
+
+    <div class="back">
+        <a href="index.html">
+            <img src="arrow (1).png" alt="Clickable Image">
+        </a>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.module.js';
+
+        // Scene, Camera, and Renderer
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Galaxy Parameters
+        const galaxyParams = {
+            starCount: 10000,
+            radius: 10,
+            branches: 4,
+            spin: 1,
+            randomness: 0.5,
+            randomnessPower: 3,
+            colorInside: new THREE.Color(0xffddaa),
+            colorOutside: new THREE.Color(0xaaaaee),
+        };
+
+        // Geometry and Material
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(galaxyParams.starCount * 3);
+        const colors = new Float32Array(galaxyParams.starCount * 3);
+
+        for (let i = 0; i < galaxyParams.starCount; i++) {
+            const i3 = i * 3;
+
+            // Position
+            const radius = Math.random() * galaxyParams.radius;
+            const spinAngle = radius * galaxyParams.spin;
+            const branchAngle = (i % galaxyParams.branches) / galaxyParams.branches * Math.PI * 2;
+
+            const randomX = Math.pow(Math.random(), galaxyParams.randomnessPower) * (Math.random() < 0.5 ? 1 : -1);
+            const randomY = Math.pow(Math.random(), galaxyParams.randomnessPower) * (Math.random() < 0.5 ? 1 : -1);
+            const randomZ = Math.pow(Math.random(), galaxyParams.randomnessPower) * (Math.random() < 0.5 ? 1 : -1);
+
+            positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+            positions[i3 + 1] = randomY;
+            positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+
+            // Color
+            const mixedColor = galaxyParams.colorInside.clone();
+            mixedColor.lerp(galaxyParams.colorOutside, radius / galaxyParams.radius);
+
+            colors[i3] = mixedColor.r;
+            colors[i3 + 1] = mixedColor.g;
+            colors[i3 + 2] = mixedColor.b;
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        const material = new THREE.PointsMaterial({
+            size: 0.05,
+            vertexColors: true,
+        });
+
+        const galaxy = new THREE.Points(geometry, material);
+        scene.add(galaxy);
+
+        // Adjust Camera for Full View
+        camera.position.set(0, 20, 20); // Slightly angled top-down view
+        camera.lookAt(0, 0, 0); // Ensure the camera looks at the center of the galaxy
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            galaxy.rotation.y += 0.001; // Rotate galaxy
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Handle Resize
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+        // Menu Toggle Functionality
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.navbar-menu');
+        let isMenuOpen = false;
+
+        hamburger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            isMenuOpen = !isMenuOpen;
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.navbar-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                isMenuOpen = false;
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (isMenuOpen && !navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                isMenuOpen = false;
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
+        });
+    </script>
+
+    <!-- Initialize particles.js -->
+    <script>
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 100,
+                    density: {
+                        enable: true,
+                        value_area: 1000
+                    }
+                },
+                color: {
+                    value: ['#ffffff', '#84b0e6', '#4b7397']
+                },
+                shape: {
+                    type: 'circle'
+                },
+                opacity: {
+                    value: 0.6,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 2,
+                        size_min: 0.1,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#84b0e6',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: true,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false,
+                    attract: {
+                        enable: true,
+                        rotateX: 600,
+                        rotateY: 1200
+                    }
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: ['grab', 'bubble']
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: 'push'
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 140,
+                        line_linked: {
+                            opacity: 0.8
+                        }
+                    },
+                    bubble: {
+                        distance: 200,
+                        size: 6,
+                        duration: 0.3,
+                        opacity: 0.8,
+                        speed: 3
+                    },
+                    push: {
+                        particles_nb: 4
+                    }
+                }
+            },
+            retina_detect: true
+        });
+    </script>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-text">
+                <p>© 2025 ASTRAKSHAYA. All rights reserved.</p>
+                <p>Exploring the cosmos, one discovery at a time.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

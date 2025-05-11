@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTRAKSHAYA - Discover</title>
+    <link rel="icon" href="teamImages/logo.jpg" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/bag.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/stardust.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        :root {
+            --primary-bg: #000000;
+            --card-bg: #0c0c0c;
+            --card-hover-bg: #141414;
+            --primary-text: #ffffff;
+            --secondary-text: rgba(255, 255, 255, 0.7);
+            --tertiary-text: rgba(255, 255, 255, 0.5);
+            --accent-blue: #0062FF;
+            --accent-purple: #6E3CF8;
+            --accent-cyan: #00C7FF;
+            --accent-pink: #FF2D75;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            --transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.0);
+            --accent-blue-rgb: 0, 98, 255;
+            --accent-purple-rgb: 110, 60, 248;
+            --accent-cyan-rgb: 0, 199, 255;
+            --accent-pink-rgb: 255, 45, 117;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 0, 0, 0.5) transparent;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        /* Scrollbar styles for all devices */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 0;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        /* Container and Layout */
+        #background-container {
+            min-height: 100%;
+            padding-bottom: 100px; /* Space for footer */
+            overflow-y: auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            flex: 1;
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            width: 100%;
+            overflow-y: visible;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Background */
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('galaxy/nebula.webp') center/cover no-repeat;
+            opacity: 0.4;
+            z-index: -1;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .footer-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 24px;
+        }
+
+        .footer-text {
+            color: var(--secondary-text);
+            font-size: 14px;
+        }
+
+        /* Animation Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Hero Section Styling */
+        .hero-section {
+            text-align: center;
+            padding: 1rem;
+            margin-top: 5rem; /* Increased margin from navbar */
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-section h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(
+                300deg,
+                var(--accent-blue) 0%,
+                var(--accent-purple) 25%,
+                var(--accent-cyan) 50%,
+                var(--accent-pink) 75%,
+                var(--accent-blue) 100%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% auto;
+            animation: gradient 8s linear infinite;
+        }
+
+        .hero-section span {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .hero-section p {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 500;
+            max-width: 800px;
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            text-shadow: 0 0 20px rgba(0, 199, 255, 0.3);
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px rgba(0, 199, 255, 0.5); }
+            100% { text-shadow: 0 0 20px rgba(255, 45, 117, 0.8); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Media Queries for Hero Section */
+        @media (max-width: 768px) {
+            .hero-section {
+                margin-top: 4rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-section p {
+                font-size: 1.1rem;
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section {
+                margin-top: 3.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+
+            .hero-section p {
+                font-size: 1rem;
+            }
+        }
+
+        /* Card Grid Layout */
+        .explore-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            padding: 0 2rem;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            margin-bottom: 100px; /* Space for footer */
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Card Styles */
+        .explore-card {
+            background: rgba(12, 12, 12, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            min-height: 240px; /* Reduced height */
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .explore-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(
+                circle at center,
+                rgba(var(--accent-blue-rgb, 0, 98, 255), 0.1) 0%,
+                rgba(var(--accent-purple-rgb, 110, 60, 248), 0.05) 50%,
+                transparent 100%
+            );
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+            border-radius: 16px;
+        }
+
+        .explore-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(0, 199, 255, 0.2),
+                0 0 40px rgba(0, 98, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(18, 18, 24, 0.7);
+        }
+
+        .explore-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            width: 40px; /* Smaller icons */
+            height: 40px;
+            color: var(--accent-cyan);
+            transition: transform 0.3s ease;
+        }
+
+        .explore-card:hover .card-icon {
+            transform: scale(1.1);
+            color: var(--accent-blue);
+        }
+
+        .card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem; /* Smaller title */
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .card-description {
+            color: var(--secondary-text);
+            font-size: 0.85rem; /* Smaller description */
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .card-action {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--accent-cyan);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-top: auto;
+            transition: color 0.3s ease;
+        }
+
+        .explore-card:hover .card-action {
+            color: var(--accent-blue);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1200px) {
+            .explore-grid {
+                max-width: 900px;
+                gap: 1.25rem;
+                padding: 0 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .explore-grid {
+                grid-template-columns: 1fr;
+                max-width: 450px; /* Reduced max-width */
+                padding: 0 1rem;
+                gap: 1.25rem;
+                margin-bottom: 120px;
+            }
+            
+            .explore-card {
+                min-height: 220px;
+                padding: 1.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .explore-grid {
+                padding: 0 1rem;
+                gap: 1rem;
+                margin-bottom: 100px;
+            }
+            
+            .explore-card {
+                min-height: 200px;
+                padding: 1.25rem;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .card-description {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Custom Scrollbar Styles */
+        @media screen and (max-width: 768px) {
+            body {
+                overflow-y: auto;
+            }
+
+            .container {
+                padding-bottom: 60px; /* Add space for footer */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div id="stars3"></div>
+        <div id="stars4"></div>
+    </div>
+
+    <div id="background-container">
+        <div class="space-background"></div>
+        <div class="stars"></div>
+        <div class="particles"></div>
+
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div id="particles-js"></div>
+            <span class="futuristic-text">ASTRAKSHAYA</span>
+            <div class="hamburger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+            <div class="navbar-menu">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="explore.html">Explore</a>
+                <a href="team.html">Team</a>
+                <a href="join.html">Join Us</a>
+            </div>
+        </nav>
+
+        <div class="container">
+            <section class="hero-section">
+                <br></br>
+                <h1>Where do you want to <span>explore?</span></h1>
+                <p>Journey through the cosmos with our interactive tools. Discover daily space images, track near-Earth objects, explore Mars, and follow the ISS in orbit.</p>
+            </section>
+
+            <div class="explore-grid">
+                <!-- APOD Card -->
+                <a href="coming soon.html" class="explore-card card-apod">
+                    <div class="card-icon-container">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 2a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9 10 10 0 0 0 0-18z"></path>
+                                <path d="M12 6.5v-4.5"></path>
+                                <path d="M12 22.5v-4.5"></path>
+                                <path d="M16 19l1 2"></path>
+                                <path d="M7 5l1.5 1"></path>
+                                <path d="M21 12h-4.5"></path>
+                                <path d="M4 12h4.5"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div>
+                            <h3 class="card-title">Astronomy Picture of the Day</h3>
+                            <p class="card-description">Discover the cosmos through NASA's daily featured image of our fascinating universe.</p>
+                        </div>
+                        <div class="card-action">
+                            <span>View Daily Image</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- NEO Tracker Card -->
+                <a href="neoWs.html" class="explore-card card-neo">
+                    <div class="card-icon-container">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="8"></circle>
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <line x1="9" y1="3" x2="15" y2="21"></line>
+                                <circle cx="16" cy="6" r="2"></circle>
+                                <circle cx="19" cy="10" r="1"></circle>
+                                <circle cx="6" cy="16" r="1.5"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div>
+                            <h3 class="card-title">NEO Tracker</h3>
+                            <p class="card-description">Monitor near-Earth objects and asteroids in real-time as they approach our planet.</p>
+                        </div>
+                        <div class="card-action">
+                            <span>Track Asteroids</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Mars Rovers Card -->
+                <a href="coming soon.html" class="explore-card card-mars">
+                    <div class="card-icon-container">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="8" y="2" width="8" height="4" rx="1"></rect>
+                                <path d="M16 4h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2"></path>
+                                <path d="M8 4H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path>
+                                <path d="M18 12h-12"></path>
+                                <path d="M18 18c0 1-1 2-3 2h-6c-2 0-3-1-3-2"></path>
+                                <circle cx="7" cy="12" r="2"></circle>
+                                <circle cx="17" cy="12" r="2"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div>
+                            <h3 class="card-title">Mars Rovers</h3>
+                            <p class="card-description">Explore the Martian landscape through the eyes of NASA's rovers with our curated photo gallery.</p>
+                        </div>
+                        <div class="card-action">
+                            <span>Explore Mars</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- ISS Tracker Card -->
+                <a href="coming soon.html" class="explore-card card-iss">
+                    <div class="card-icon-container">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 15h14"></path>
+                                <path d="M5 9h14"></path>
+                                <path d="M9 15v6"></path>
+                                <path d="M9 3v6"></path>
+                                <path d="M15 15v6"></path>
+                                <path d="M15 3v6"></path>
+                                <path d="M9 15h6"></path>
+                                <path d="M12 9V3"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div>
+                            <h3 class="card-title">ISS Tracker</h3>
+                            <p class="card-description">Follow the International Space Station in real-time as it orbits Earth at 17,500 mph.</p>
+                        </div>
+                        <div class="card-action">
+                            <span>Track ISS</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <p>&copy; 2025 ASTRAKSHAYA. All Rights Reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+    <script src="js/nav.js"></script>
+    <script src="js/bag.js"></script>
+    <script src="js/stardust.js"></script>
+
+</body>
+</html>

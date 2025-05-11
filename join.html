@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Times's Garden by Astrakshaya</title>
+    <link rel="icon" href="teamImages/logo.jpg" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/bag.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js" type="module"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: 'Rajdhani', sans-serif;
+            background: #1a1015;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #scene-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .ui-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            color: rgba(255, 255, 255, 0.8);
+            z-index: 1;
+        }
+
+        .location {
+            position: fixed;
+            top: 80px;
+            right: max(1rem, 2vw);
+            font-size: max(0.6rem, min(0.8rem, 1.5vw));
+            max-width: min(250px, 45vw);
+            text-align: right;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            backdrop-filter: blur(5px);
+            line-height: 1.4;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .player span:first-child {
+            color: #ff6b6b;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+
+        .player span:last-child {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.05em;
+            color: rgba(255, 255, 255, 0.9);
+            white-space: normal; /* Allow text wrapping on very small screens */
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .player {
+                bottom: 80px;
+                padding: 0.8rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .player {
+                bottom: 75px;
+                left: 1rem;
+                max-width: calc(100% - 2rem);
+                padding: 0.7rem 1rem;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .player {
+                bottom: 70px;
+            }
+        }
+
+        .amphitheatre-title {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 20%); /* Moved down further */
+            font-size: min(2.5rem, max(1.8rem, 5vw));
+            letter-spacing: 0.15em;
+            width: min(90%, 600px);
+            text-align: center;
+            white-space: normal;
+            padding: 0 15px;
+            line-height: 1.3;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            margin: 0;
+            z-index: 10;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .main {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 120%); /* Adjusted spacing from title */
+            font-size: min(1.2rem, max(0.9rem, 3vw));
+            letter-spacing: 0.08em;
+            width: min(85%, 500px);
+            text-align: center;
+            white-space: normal;
+            padding: 0 15px;
+            line-height: 1.4;
+            margin: 0;
+            z-index: 10;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* New responsive adjustments */
+        @media (max-width: 768px) {
+            .amphitheatre-title {
+                transform: translate(-50%, 30%);
+                font-size: min(2.2rem, 6vw);
+                letter-spacing: 0.1em;
+                width: min(92%, 550px);
+            }
+
+            .main {
+                transform: translate(-50%, 140%);
+                font-size: min(1.1rem, 3.5vw);
+                width: min(88%, 450px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .amphitheatre-title {
+                transform: translate(-50%, 40%);
+                font-size: min(2rem, 7vw);
+                letter-spacing: 0.08em;
+                width: min(94%, 500px);
+                padding: 0 10px;
+            }
+
+            .main {
+                transform: translate(-50%, 160%);
+                font-size: min(1rem, 4vw);
+                width: min(90%, 400px);
+                letter-spacing: 0.05em;
+            }
+        }
+
+        /* Portrait mode optimizations */
+        @media (max-width: 480px) and (min-height: 700px) {
+            .amphitheatre-title {
+                transform: translate(-50%, 50%);
+            }
+
+            .main {
+                transform: translate(-50%, 180%);
+            }
+        }
+
+        /* Landscape mode optimizations */
+        @media (max-height: 600px) {
+            .amphitheatre-title {
+                transform: translate(-50%, 15%);
+                font-size: min(1.8rem, 5vw);
+            }
+
+            .main {
+                transform: translate(-50%, 100%);
+                font-size: min(0.9rem, 3vw);
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 320px) {
+            .amphitheatre-title {
+                font-size: min(1.8rem, 8vw);
+                letter-spacing: 0.05em;
+                width: 96%;
+            }
+
+            .main {
+                font-size: min(0.9rem, 4.5vw);
+                width: 94%;
+            }
+        }
+
+        /* Firebase Box Styling */
+        .firebase-box {
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 2;
+            pointer-events: auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .firebase-box input {
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            outline: none;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            width: 300px;
+            transition: all 0.3s ease;
+        }
+
+        .firebase-box input:focus {
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .firebase-box button {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .firebase-box button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            backdrop-filter: blur(10px);
+            transform: translateX(200%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .notification.success {
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .notification.error {
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div id="stars3"></div>
+        <div id="stars4"></div>
+    </div>    <!-- Navbar -->
+    <nav class="navbar">
+        <div id="particles-js"></div>
+        <div class="futuristic-text">ASTRAKSHAYA</div>
+        <div class="navbar-menu">
+            <a href="./index.html">Home</a>
+            <a href="./about.html">About Us</a>
+            <a href="./explore.html">Explore</a>
+            <a href="./team.html">Team</a>
+            <a href="./join.html">Join Us</a>
+        </div>
+        <div class="hamburger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <div id="scene-container"></div>
+    <div class="ui-overlay">
+        <div class="location">Right Ascension 19h 16m 52.2sec and Declination +47deg 53min 4.2sec.</div>
+        <h1 class="amphitheatre-title">THE TIME CAPSULE</h1>
+        <h2 class="main">YOU CAN SEE THIS MESSAGE AFTER 60 YEARS AGAIN..</h2>
+        <div class="player">
+            <span>*</span>
+            <span>Remember this when you are losing hope 18.5,18.6&19.1...</span>
+        </div>
+    </div>
+
+    <!-- Firebase Input Box -->
+    <div class="firebase-box">
+        <input type="text" id="textt" placeholder="Enter a message for the future...">
+        <button onclick="send()">SEND TO THE FUTURE</button>
+    </div>
+
+    <!-- Notification Element -->
+    <div class="notification" id="notification"></div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-text">
+                <p>&copy; 2025 ASTARAKSHYA. All Rights Reserved.</p>
+                <p>Innovating for a Better Future in Space Exploration</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+    <script src="js/nav.js"></script>
+    <script src="js/bag.js"></script>
+
+    <script type="module">
+        // Import Firebase functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBDQ4FzYVyu7163wT5ViDAlCg6OpDcFvKA",
+            authDomain: "astrakshaya-contact-us.firebaseapp.com",
+            projectId: "astrakshaya-contact-us",
+            storageBucket: "astrakshaya-contact-us.firebasestorage.app",
+            messagingSenderId: "883214854108",
+            appId: "1:883214854108:web:b051150db882d2814f1119",
+            measurementId: "G-Z6SWBE25B6"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const database = getDatabase(app);
+
+        // Notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.offsetHeight; // Force reflow
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Send data to Firebase with simple confirmation
+        window.send = async function() {
+            const inputText = document.getElementById("textt").value;
+            
+            if (!inputText.trim()) {
+                showNotification('Please enter a message first', 'error');
+                return;
+            }
+
+            try {
+                // Create a unique key for the message using timestamp
+                const messageKey = Date.now().toString();
+                
+                // Add message to Firebase
+                await set(ref(database, `/messages/${messageKey}`), inputText);
+                
+                // Show thank you message
+                showNotification('Thank you for your message! 🚀');
+                document.getElementById("textt").value = ''; // Clear input
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Failed to send message. Please try again.', 'error');
+            }
+        };
+
+        // THREE.js scene setup continues...
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x1a1015);
+        document.getElementById('scene-container').appendChild(renderer.domElement);
+
+        function createParticleSystem(count, geometry, colorIntensity, size) {
+            const particles = new THREE.BufferGeometry();
+            const positions = new Float32Array(count * 3);
+            const colors = new Float32Array(count * 3);
+
+            const centerZ = -20;
+            const width = 40;
+            const height = 30;
+            const depth = 60;
+
+            for (let i = 0; i < count; i++) {
+                const i3 = i * 3;
+
+                let x, y, z;
+
+                if (geometry === 'path') {
+                    x = (Math.random() - 0.5) * width;
+                    z = (Math.random() * depth) + centerZ;
+                    const distanceFromCenter = Math.abs(x) / (width / 2);
+                    y = Math.sin(((z - centerZ) / depth) * Math.PI) * 5 * (1 - distanceFromCenter);
+                    y += Math.floor((z - centerZ) / 5) * 0.5;
+                } else if (geometry === 'trees') {
+                    const side = Math.random() > 0.5 ? 1 : -1;
+                    x = (Math.random() * 10 + 15) * side;
+                    z = (Math.random() * depth) + centerZ;
+                    y = Math.random() * height - 5;
+                } else {
+                    x = (Math.random() - 0.5) * width * 2;
+                    y = Math.random() * height - 5;
+                    z = (Math.random() * depth) + centerZ;
+                }
+
+                positions[i3] = x;
+                positions[i3 + 1] = y;
+                positions[i3 + 2] = z;
+
+                const brightness = Math.random() * 0.3 + colorIntensity;
+                colors[i3] = brightness * 0.7;
+                colors[i3 + 1] = brightness;
+                colors[i3 + 2] = brightness * 0.8;
+            }
+
+            particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: size,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+
+            return new THREE.Points(particles, material);
+        }
+
+        const pathParticles = createParticleSystem(100000, 'path', 0.4, 0.03);
+        const treeParticles = createParticleSystem(150000, 'trees', 0.5, 0.02);
+        const atmosphereParticles = createParticleSystem(50000, 'atmosphere', 0.2, 0.01);
+
+        scene.add(pathParticles);
+        scene.add(treeParticles);
+        scene.add(atmosphereParticles);
+
+        camera.position.z = 30;
+        camera.position.y = 8;
+        camera.lookAt(0, 0, -20);
+
+        let time = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.001;
+
+            camera.position.x = Math.sin(time) * 0.5;
+            camera.position.y = 8 + Math.sin(time * 0.5) * 0.2;
+            camera.lookAt(0, 0, -20);
+
+            pathParticles.rotation.y = Math.sin(time * 0.2) * 0.01;
+            treeParticles.rotation.y = Math.sin(time * 0.1) * 0.005;
+            atmosphereParticles.rotation.y = Math.sin(time * 0.3) * 0.008;
+
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>

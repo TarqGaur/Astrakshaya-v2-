@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTRAKSHYA | COMING SOON</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        
+        body {
+            background: #000000;
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+        }
+        
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 12px 16px;
+            border-radius: 10px;
+            opacity: 0.8;
+            transition: opacity 0.3s, transform 0.3s;
+            font-size: 12px;
+            max-width: 300px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            pointer-events: auto;
+            z-index: 100;
+            text-transform: lowercase;
+        }
+        
+        .info:hover {
+            opacity: 1;
+            transform: translateY(-5px);
+        }
+        
+        .title {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            opacity: 0.9;
+            pointer-events: none;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.4);
+            z-index: 100;
+        }
+        
+        .coming-soon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 72px;
+            font-weight: 700;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.9), 0 0 20px rgba(255, 215, 0, 0.7), 0 0 40px rgba(255, 215, 0, 0.5);
+            pointer-events: none;
+            z-index: 100;
+            animation: glowPulse 2s ease-in-out infinite;
+            white-space: nowrap;
+        }
+        
+        @keyframes glowPulse {
+            0% { text-shadow: 0 0 10px rgba(255, 215, 0, 0.9), 0 0 20px rgba(255, 215, 0, 0.7), 0 0 40px rgba(255, 215, 0, 0.5); }
+            50% { text-shadow: 0 0 15px rgba(255, 215, 0, 1), 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.6); }
+            100% { text-shadow: 0 0 10px rgba(255, 215, 0, 0.9), 0 0 20px rgba(255, 215, 0, 0.7), 0 0 40px rgba(255, 215, 0, 0.5); }
+        }
+        
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease-out;
+        }
+        
+        .loading-text {
+            color: #fff;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .control-btn {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .control-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: rgba(255, 215, 0, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 24px;
+                letter-spacing: 4px;
+            }
+            .coming-soon {
+                font-size: 36px;
+                letter-spacing: 6px;
+            }
+            .info {
+                font-size: 10px;
+                max-width: 250px;
+                bottom: 10px;
+                left: 10px;
+                padding: 10px 14px;
+            }
+            .controls {
+                top: 10px;
+                right: 10px;
+                gap: 8px;
+            }
+            .control-btn {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading">
+        <div class="loading-text">ASTRAKSHYA AEROSPACE</div>
+    </div>
+    
+    <div class="title"></div>
+    <div class="coming-soon">COMING SOON</div>
+    <div class="info">
+        witness an ultra-realistic simulation of nuclear fusion events in the background, showcasing plasma particles driven by electromagnetic forces, spiraling inward through gravitational attraction, and culminating in a precisely calculated energy release.
+    </div>
+    
+    <div class="controls">
+        <button class="control-btn" id="toggleCamera">Toggle Camera Mode</button>
+        <button class="control-btn" id="increaseDensity">Increase Density</button>
+        <button class="control-btn" id="togglePostProcessing">Toggle Effects</button>
+    </div>
+    
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    
+    <script>
+        // Enhanced constants for the simulation
+        const SIMULATION_CONFIG = {
+            fusionEventCount: 30,
+            spaceSize: 1000,
+            particleRadius: {
+                min: 1.5,
+                max: 2.8
+            },
+            fusionDistance: 4.0,
+            maxRippleSize: 50,
+            spawnInterval: {
+                min: 2000,
+                max: 6000
+            },
+            energyRelease: {
+                min: 1.2,
+                max: 3.5
+            },
+            particleColors: {
+                scheme1: { color: 0x66ccff, emissive: 0x1155cc, intensity: 0.8 },
+                scheme2: { color: 0xffcc66, emissive: 0xcc5511, intensity: 0.8 },
+                scheme3: { color: 0xccff66, emissive: 0x55cc11, intensity: 0.7 }
+            },
+            fusionColors: {
+                flash: 0xffffdd,
+                ripple: 0xffffbb,
+                glow: 0xffffaa
+            },
+            starCount: 4000,
+            dustCount: 8000,
+            nebulaCount: 2,
+            cameraMovement: {
+                speed: 0.12,
+                radius: 60
+            },
+            physicsSimulation: {
+                gravity: 0.015,
+                chargeStrength: 0.035,
+                frictionCoefficient: 0.985
+            }
+        };
+        
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x000000, 0.0004);
+        
+        // Camera setup
+        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 2500);
+        camera.position.z = 800;
+        
+        // Camera positions
+        const cameraPositions = {
+            wide: { position: new THREE.Vector3(0, 0, 800), lookAt: new THREE.Vector3(0, 0, 0) },
+            orbiting: { position: new THREE.Vector3(350, 80, 350), lookAt: new THREE.Vector3(0, 0, 0) },
+            closeup: { position: new THREE.Vector3(150, 40, 150), lookAt: new THREE.Vector3(0, 0, 0) }
+        };
+        
+        let currentCameraMode = 'orbiting';
+        
+        // Renderer setup
+        const renderer = new THREE.WebGLRenderer({ 
+            antialias: true,
+            alpha: true,
+            precision: 'highp',
+            powerPreference: 'high-performance'
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.physicallyCorrectLights = true;
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.toneMappingExposure = 1.3;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        document.body.appendChild(renderer.domElement);
+        
+        // Lighting system
+        function setupLighting() {
+            const ambientLight = new THREE.AmbientLight(0x112244, 0.35);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xfff0ee, 0.9);
+            directionalLight.position.set(1, 1, 1).normalize();
+            scene.add(directionalLight);
+            
+            const lightColors = [0xffffbb, 0xbbffff, 0xffbbbb];
+            for (let i = 0; i < 6; i++) {
+                const light = new THREE.PointLight(
+                    lightColors[i % lightColors.length], 
+                    0.5 + Math.random() * 0.3, 
+                    250 + Math.random() * 100
+                );
+                light.position.set(
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize,
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize,
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize * 0.5
+                );
+                scene.add(light);
+                
+                gsap.to(light.position, {
+                    x: light.position.x + (Math.random() - 0.5) * 80,
+                    y: light.position.y + (Math.random() - 0.5) * 80,
+                    z: light.position.z + (Math.random() - 0.5) * 80,
+                    duration: 25 + Math.random() * 25,
+                    ease: "sine.inOut",
+                    repeat: -1,
+                    yoyo: true
+                });
+            }
+        }
+        
+        // Enhanced stars
+        function createEnhancedStars() {
+            const starsGeometry = new THREE.BufferGeometry();
+            const starPositions = [];
+            const starSizes = [];
+            const starColors = [];
+            
+            const colorVariations = [
+                new THREE.Color(0xffffff),
+                new THREE.Color(0xffffee),
+                new THREE.Color(0xeeffff),
+                new THREE.Color(0xffeeee),
+                new THREE.Color(0xeeffee)
+            ];
+            
+            for (let i = 0; i < SIMULATION_CONFIG.starCount; i++) {
+                const radius = Math.random() * Math.random() * SIMULATION_CONFIG.spaceSize * 1.4;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos((Math.random() * 2) - 1);
+                
+                const x = radius * Math.sin(phi) * Math.cos(theta);
+                const y = radius * Math.sin(phi) * Math.sin(theta);
+                const z = radius * Math.cos(phi);
+                
+                starPositions.push(x, y, z);
+                const size = Math.random() < 0.05 ? 1.2 + Math.random() * 1.8 : 0.4 + Math.random() * 0.7;
+                starSizes.push(size);
+                
+                const colorIndex = Math.floor(Math.random() * colorVariations.length);
+                const color = colorVariations[colorIndex];
+                starColors.push(color.r, color.g, color.b);
+            }
+            
+            starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+            starsGeometry.setAttribute('size', new THREE.Float32BufferAttribute(starSizes, 1));
+            starsGeometry.setAttribute('color', new THREE.Float32BufferAttribute(starColors, 3));
+            
+            const starsMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0 },
+                    pixelRatio: { value: renderer.getPixelRatio() }
+                },
+                vertexShader: `
+                    uniform float time;
+                    uniform float pixelRatio;
+                    attribute float size;
+                    attribute vec3 color;
+                    varying vec3 vColor;
+                    varying float vSize;
+                    
+                    void main() {
+                        vColor = color;
+                        vSize = size;
+                        
+                        vec3 pos = position;
+                        float timeFactor = time * 0.5;
+                        
+                        if (size > 1.0) {
+                            pos.x += sin(timeFactor + position.z * 0.1) * 0.08;
+                            pos.y += cos(timeFactor + position.x * 0.1) * 0.08;
+                        }
+                        
+                        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                        gl_Position = projectionMatrix * mvPosition;
+                        gl_PointSize = size * pixelRatio * (250.0 / -mvPosition.z);
+                    }
+                `,
+                fragmentShader: `
+                    uniform float time;
+                    varying vec3 vColor;
+                    varying float vSize;
+                    
+                    void main() {
+                        vec2 center = gl_PointCoord - 0.5;
+                        float dist = length(center);
+                        float circle = smoothstep(0.5, 0.48, dist);
+                        float glow = exp(-dist * 3.5) * 0.25;
+                        
+                        float twinkle = 1.0;
+                        if (vSize > 1.0) {
+                            float t = time * 1.3;
+                            twinkle = 0.75 + 0.25 * sin(t + gl_FragCoord.x * 0.08);
+                        }
+                        
+                        vec3 finalColor = vColor * twinkle;
+                        float alpha = circle + glow;
+                        gl_FragColor = vec4(finalColor, alpha);
+                    }
+                `,
+                blending: THREE.AdditiveBlending,
+                depthTest: true,
+                transparent: true
+            });
+            
+            const stars = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(stars);
+            
+            animationObjects.push({
+                update: function(time) {
+                    starsMaterial.uniforms.time.value = time;
+                }
+            });
+            
+            return stars;
+        }
+        
+        // Enhanced space dust
+        function createEnhancedSpaceDust() {
+            const dustGeometry = new THREE.BufferGeometry();
+            const dustPositions = [];
+            const dustSizes = [];
+            const dustColors = [];
+            
+            const dustColorVariations = [
+                new THREE.Color(0xaabbcc),
+                new THREE.Color(0xccbbaa),
+                new THREE.Color(0xbbccaa),
+                new THREE.Color(0xaabbdd)
+            ];
+            
+            for (let i = 0; i < SIMULATION_CONFIG.dustCount; i++) {
+                const radiusFactor = Math.pow(Math.random(), 3);
+                const radius = radiusFactor * SIMULATION_CONFIG.spaceSize * 1.1;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos((Math.random() * 2) - 1);
+                
+                const x = radius * Math.sin(phi) * Math.cos(theta);
+                const y = radius * Math.sin(phi) * Math.sin(theta);
+                const z = radius * Math.cos(phi);
+                
+                dustPositions.push(x, y, z);
+                const size = 0.15 + Math.random() * 0.5;
+                dustSizes.push(size);
+                
+                const colorIndex = Math.floor(Math.random() * dustColorVariations.length);
+                const color = dustColorVariations[colorIndex];
+                dustColors.push(color.r, color.g, color.b);
+            }
+            
+            dustGeometry.setAttribute('position', new THREE.Float32BufferAttribute(dustPositions, 3));
+            dustGeometry.setAttribute('size', new THREE.Float32BufferAttribute(dustSizes, 1));
+            dustGeometry.setAttribute('color', new THREE.Float32BufferAttribute(dustColors, 3));
+            
+            const dustMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0 },
+                    pixelRatio: { value: renderer.getPixelRatio() }
+                },
+                vertexShader: `
+                    uniform float time;
+                    uniform float pixelRatio;
+                    attribute float size;
+                    attribute vec3 color;
+                    varying vec3 vColor;
+                    
+                    void main() {
+                        vColor = color;
+                        vec3 pos = position;
+                        float drift = time * 0.08;
+                        pos.x += sin(drift + position.z * 0.015) * 0.25;
+                        pos.y += cos(drift + position.x * 0.015) * 0.25;
+                        pos.z += sin(drift + position.y * 0.015) * 0.25;
+                        
+                        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                        gl_Position = projectionMatrix * mvPosition;
+                        gl_PointSize = size * pixelRatio * (250.0 / -mvPosition.z);
+                    }
+                `,
+                fragmentShader: `
+                    varying vec3 vColor;
+                    
+                    void main() {
+                        vec2 center = gl_PointCoord - 0.5;
+                        float dist = length(center);
+                        float alpha = exp(-dist * dist * 9.0);
+                        gl_FragColor = vec4(vColor, alpha * 0.25);
+                    }
+                `,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                transparent: true
+            });
+            
+            const dust = new THREE.Points(dustGeometry, dustMaterial);
+            scene.add(dust);
+            
+            animationObjects.push({
+                update: function(time) {
+                    dustMaterial.uniforms.time.value = time;
+                }
+            });
+            
+            return dust;
+        }
+        
+        // Volumetric nebulae
+        function createNebulae() {
+            for (let n = 0; n < SIMULATION_CONFIG.nebulaCount; n++) {
+                const nebulaGeometry = new THREE.BufferGeometry();
+                const particleCount = 1500 + Math.floor(Math.random() * 800);
+                const nebulaPositions = [];
+                const nebulaColors = [];
+                const nebulaAlphas = [];
+                const nebulaSizes = [];
+                
+                let nebulaBaseColor;
+                const colorScheme = Math.floor(Math.random() * 3);
+                switch(colorScheme) {
+                    case 0: nebulaBaseColor = new THREE.Color(0x3377ff); break;
+                    case 1: nebulaBaseColor = new THREE.Color(0xffaa44); break;
+                    case 2: nebulaBaseColor = new THREE.Color(0x77cc77); break;
+                }
+                
+                const nebulaCenter = new THREE.Vector3(
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize * 1.1,
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize * 1.1,
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize * 0.7
+                );
+                
+                const nebulaSize = 80 + Math.random() * 150;
+                const nebulaDensity = 0.6 + Math.random() * 0.4;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const radius = Math.pow(Math.random(), nebulaDensity) * nebulaSize;
+                    const theta = Math.random() * Math.PI * 2;
+                    const phi = Math.acos((Math.random() * 2) - 1);
+                    
+                    let x = radius * Math.sin(phi) * Math.cos(theta);
+                    let y = radius * Math.sin(phi) * Math.sin(theta);
+                    let z = radius * Math.cos(phi);
+                    
+                    const noiseAmp = nebulaSize * 0.12;
+                    x += (Math.random() - 0.5) * noiseAmp;
+                    y += (Math.random() - 0.5) * noiseAmp;
+                    z += (Math.random() - 0.5) * noiseAmp;
+                    
+                    x += nebulaCenter.x;
+                    y += nebulaCenter.y;
+                    z += nebulaCenter.z;
+                    
+                    nebulaPositions.push(x, y, z);
+                    
+                    const distFromCenter = Math.sqrt(x*x + y*y + z*z) / nebulaSize;
+                    const colorVariation = 0.12;
+                    const r = nebulaBaseColor.r + (Math.random() - 0.5) * colorVariation;
+                    const g = nebulaBaseColor.g + (Math.random() - 0.5) * colorVariation;
+                    const b = nebulaBaseColor.b + (Math.random() - 0.5) * colorVariation;
+                    nebulaColors.push(r, g, b);
+                    
+                    const alpha = 0.25 + (1 - distFromCenter) * 0.55;
+                    nebulaAlphas.push(alpha);
+                    const size = 1.5 + (1 - distFromCenter) * 3.5;
+                    nebulaSizes.push(size);
+                }
+                
+                nebulaGeometry.setAttribute('position', new THREE.Float32BufferAttribute(nebulaPositions, 3));
+                nebulaGeometry.setAttribute('color', new THREE.Float32BufferAttribute(nebulaColors, 3));
+                nebulaGeometry.setAttribute('alpha', new THREE.Float32BufferAttribute(nebulaAlphas, 1));
+                nebulaGeometry.setAttribute('size', new THREE.Float32BufferAttribute(nebulaSizes, 1));
+                
+                const nebulaMaterial = new THREE.ShaderMaterial({
+                    uniforms: {
+                        time: { value: 0 },
+                        pixelRatio: { value: renderer.getPixelRatio() }
+                    },
+                    vertexShader: `
+                        uniform float time;
+                        uniform float pixelRatio;
+                        attribute vec3 color;
+                        attribute float alpha;
+                        attribute float size;
+                        varying vec3 vColor;
+                        varying float vAlpha;
+                        
+                        void main() {
+                            vColor = color;
+                            vAlpha = alpha;
+                            vec3 pos = position;
+                            float t = time * 0.08;
+                            float xFactor = sin(t + position.z * 0.008) * 1.5;
+                            float yFactor = cos(t + position.x * 0.008) * 1.5;
+                            float zFactor = sin(t + position.y * 0.008) * 1.5;
+                            pos.x += xFactor;
+                            pos.y += yFactor;
+                            pos.z += zFactor;
+                            vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                            gl_Position = projectionMatrix * mvPosition;
+                            gl_PointSize = size * pixelRatio * (250.0 / -mvPosition.z);
+                        }
+                    `,
+                    fragmentShader: `
+                        varying vec3 vColor;
+                        varying float vAlpha;
+                        
+                        void main() {
+                            vec2 center = gl_PointCoord - 0.5;
+                            float dist = length(center);
+                            float alpha = smoothstep(0.5, 0.2, dist) * vAlpha * 0.55;
+                            gl_FragColor = vec4(vColor, alpha);
+                        }
+                    `,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false,
+                    transparent: true
+                });
+                
+                const nebula = new THREE.Points(nebulaGeometry, nebulaMaterial);
+                scene.add(nebula);
+                
+                animationObjects.push({
+                    update: function(time) {
+                        nebulaMaterial.uniforms.time.value = time;
+                        nebula.rotation.x = Math.sin(time * 0.025) * 0.008;
+                        nebula.rotation.y = Math.cos(time * 0.015) * 0.008;
+                    }
+                });
+            }
+        }
+        
+        // Energy field
+        function createEnergyField() {
+            const energyGeometry = new THREE.PlaneGeometry(2500, 2500, 1, 1);
+            const energyMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0 }
+                },
+                vertexShader: `
+                    varying vec2 vUv;
+                    void main() {
+                        vUv = uv;
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                    }
+                `,
+                fragmentShader: `
+                    uniform float time;
+                    varying vec2 vUv;
+                    vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+                    float snoise(vec2 v) {
+                        const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+                        vec2 i = floor(v + dot(v, C.yy));
+                        vec2 x0 = v - i + dot(i, C.xx);
+                        vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                        vec4 x12 = x0.xyxy + C.xxzz;
+                        x12.xy -= i1;
+                        i = mod(i, 289.0);
+                        vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+                        vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                        m = m*m*m*m;
+                        vec3 x = 2.0 * fract(p * C.www) - 1.0;
+                        vec3 h = abs(x) - 0.5;
+                        vec3 ox = floor(x + 0.5);
+                        vec3 a0 = x - ox;
+                        m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
+                        vec3 g;
+                        g.x = a0.x * x0.x + h.x * x0.y;
+                        g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+                        return 130.0 * dot(m, g);
+                    }
+                    void main() {
+                        vec2 center = vUv - 0.5;
+                        float dist = length(center);
+                        float t = time * 0.08;
+                        float noise1 = snoise(center * 4.5 + vec2(t * 0.15, t * 0.25)) * 0.5 + 0.5;
+                        float noise2 = snoise(center * 9.0 + vec2(-t * 0.08, t * 0.15)) * 0.25 + 0.5;
+                        float noise3 = snoise(center * 18.0 + vec2(t * 0.35, -t * 0.25)) * 0.125 + 0.5;
+                        float noise = noise1 + noise2 + noise3;
+                        noise *= 0.45;
+                        float radial = 1.0 - smoothstep(0.0, 0.65, dist);
+                        vec3 baseColor1 = vec3(0.015, 0.035, 0.09);
+                        vec3 baseColor2 = vec3(0.045, 0.015, 0.09);
+                        vec3 finalColor = mix(baseColor1, baseColor2, noise);
+                        float alpha = radial * noise * 0.35;
+                        gl_FragColor = vec4(finalColor, alpha);
+                    }
+                `,
+                transparent: true,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                side: THREE.DoubleSide
+            });
+            
+            const energyField = new THREE.Mesh(energyGeometry, energyMaterial);
+            energyField.position.z = -1200;
+            energyField.rotation.x = Math.PI * 0.12;
+            scene.add(energyField);
+            
+            animationObjects.push({
+                update: function(time) {
+                    energyMaterial.uniforms.time.value = time;
+                }
+            });
+        }
+        
+        // Animation objects array
+        const animationObjects = [];
+        
+        // Enhanced FusionEvent
+        class EnhancedFusionEvent {
+            constructor() {
+                this.active = false;
+                this.particles = [];
+                this.trackers = [];
+                this.ripples = [];
+                this.glows = [];
+                this.velocity1 = new THREE.Vector3();
+                this.velocity2 = new THREE.Vector3();
+                this.acceleration1 = new THREE.Vector3();
+                this.acceleration2 = new THREE.Vector3();
+                this.mass1 = 1 + Math.random() * 0.4;
+                this.mass2 = 1 + Math.random() * 0.4;
+                this.charge1 = Math.random() < 0.5 ? 1 : -1;
+                this.charge2 = -this.charge1;
+                this.energyLevel = SIMULATION_CONFIG.energyRelease.min + 
+                    Math.random() * (SIMULATION_CONFIG.energyRelease.max - SIMULATION_CONFIG.energyRelease.min);
+                this.position = new THREE.Vector3(
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize,
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize,
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize * 0.7
+                );
+                this.createParticles();
+                this.createRipples();
+                this.addToScene();
+                this.hideElements();
+            }
+            
+            createParticles() {
+                const radius1 = SIMULATION_CONFIG.particleRadius.min + 
+                    Math.random() * (SIMULATION_CONFIG.particleRadius.max - SIMULATION_CONFIG.particleRadius.min);
+                const radius2 = SIMULATION_CONFIG.particleRadius.min + 
+                    Math.random() * (SIMULATION_CONFIG.particleRadius.max - SIMULATION_CONFIG.particleRadius.min);
+                const particle1Geometry = new THREE.SphereGeometry(radius1, 20, 20);
+                const particle2Geometry = new THREE.SphereGeometry(radius2, 20, 20);
+                const colorSchemes = Object.values(SIMULATION_CONFIG.particleColors);
+                const scheme1 = colorSchemes[Math.floor(Math.random() * colorSchemes.length)];
+                let scheme2;
+                do {
+                    scheme2 = colorSchemes[Math.floor(Math.random() * colorSchemes.length)];
+                } while (scheme1 === scheme2);
+                const particle1Material = new THREE.MeshStandardMaterial({
+                    color: scheme1.color,
+                    emissive: scheme1.emissive,
+                    emissiveIntensity: scheme1.intensity,
+                    roughness: 0.25,
+                    metalness: 0.15,
+                    envMapIntensity: 1.4
+                });
+                const particle2Material = new THREE.MeshStandardMaterial({
+                    color: scheme2.color,
+                    emissive: scheme2.emissive,
+                    emissiveIntensity: scheme2.intensity,
+                    roughness: 0.25,
+                    metalness: 0.15,
+                    envMapIntensity: 1.4
+                });
+                const particle1 = new THREE.Mesh(particle1Geometry, particle1Material);
+                const particle2 = new THREE.Mesh(particle2Geometry, particle2Material);
+                this.particles = [particle1, particle2];
+                this.createParticleTrackers(particle1, scheme1);
+                this.createParticleTrackers(particle2, scheme2);
+                this.createGlowEffects(radius1, radius2, scheme1, scheme2);
+            }
+            
+            createParticleTrackers(particle, colorScheme) {
+                const trailGeometry = new THREE.BufferGeometry();
+                const trailVertices = [];
+                const trailIndices = [];
+                const trailColors = [];
+                const segmentCount = 15;
+                for (let i = 0; i < segmentCount + 1; i++) {
+                    trailVertices.push(0, 0, 0);
+                    const intensity = 1 - (i / segmentCount);
+                    const color = new THREE.Color(colorScheme.color);
+                    color.lerp(new THREE.Color(colorScheme.emissive), 0.6);
+                    trailColors.push(color.r, color.g, color.b);
+                }
+                for (let i = 0; i < segmentCount; i++) {
+                    trailIndices.push(i, i + 1);
+                }
+                trailGeometry.setAttribute('position', new THREE.Float32BufferAttribute(trailVertices, 3));
+                trailGeometry.setAttribute('color', new THREE.Float32BufferAttribute(trailColors, 3));
+                trailGeometry.setIndex(trailIndices);
+                const trailMaterial = new THREE.LineBasicMaterial({
+                    vertexColors: true,
+                    transparent: true,
+                    opacity: 0.55,
+                    blending: THREE.AdditiveBlending
+                });
+                const trail = new THREE.LineSegments(trailGeometry, trailMaterial);
+                this.trackers.push({
+                    trail: trail,
+                    particle: particle,
+                    positions: Array(segmentCount + 1).fill().map(() => new THREE.Vector3()),
+                    positionIndex: 0,
+                    updateInterval: 0
+                });
+            }
+            
+            createGlowEffects(radius1, radius2, scheme1, scheme2) {
+                const glow1Geometry = new THREE.SphereGeometry(radius1 * 2.2, 28, 28);
+                const glow1Material = new THREE.ShaderMaterial({
+                    uniforms: {
+                        glowColor: { value: new THREE.Color(scheme1.emissive) },
+                        viewVector: { value: new THREE.Vector3() },
+                        time: { value: 0 }
+                    },
+                    vertexShader: `
+                        uniform vec3 viewVector;
+                        uniform float time;
+                        varying float intensity;
+                        varying vec3 vNormal;
+                        void main() {
+                            vNormal = normalize(normalMatrix * normal);
+                            vec3 vNormel = normalize(normalMatrix * viewVector);
+                            intensity = pow(1.0 - dot(vNormal, vNormel), 2.0);
+                            float scale = 1.0 + sin(time * 1.8) * 0.04;
+                            vec3 newPosition = position * scale;
+                            gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+                        }
+                    `,
+                    fragmentShader: `
+                        uniform vec3 glowColor;
+                        uniform float time;
+                        varying float intensity;
+                        varying vec3 vNormal;
+                        void main() {
+                            float glow = intensity * 0.75;
+                            float energyFlux = 0.15 * sin(time * 2.5 + gl_FragCoord.x * 0.008) * sin(time * 1.8 + gl_FragCoord.y * 0.008);
+                            glow += energyFlux * intensity;
+                            gl_FragColor = vec4(glowColor, glow);
+                        }
+                    `,
+                    side: THREE.BackSide,
+                    blending: THREE.AdditiveBlending,
+                    transparent: true,
+                    depthWrite: false
+                });
+                const glow2Geometry = new THREE.SphereGeometry(radius2 * 2.2, 28, 28);
+                const glow2Material = new THREE.ShaderMaterial({
+                    uniforms: {
+                        glowColor: { value: new THREE.Color(scheme2.emissive) },
+                        viewVector: { value: new THREE.Vector3() },
+                        time: { value: 0 }
+                    },
+                    vertexShader: `
+                        uniform vec3 viewVector;
+                        uniform float time;
+                        varying float intensity;
+                        varying vec3 vNormal;
+                        void main() {
+                            vNormal = normalize(normalMatrix * normal);
+                            vec3 vNormel = normalize(normalMatrix * viewVector);
+                            intensity = pow(1.0 - dot(vNormal, vNormel), 2.0);
+                            float scale = 1.0 + sin(time * 1.8) * 0.04;
+                            vec3 newPosition = position * scale;
+                            gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+                        }
+                    `,
+                    fragmentShader: `
+                        uniform vec3 glowColor;
+                        uniform float time;
+                        varying float intensity;
+                        varying vec3 vNormal;
+                        void main() {
+                            float glow = intensity * 0.75;
+                            float energyFlux = 0.15 * sin(time * 2.5 + gl_FragCoord.x * 0.008) * sin(time * 1.8 + gl_FragCoord.y * 0.008);
+                            glow += energyFlux * intensity;
+                            gl_FragColor = vec4(glowColor, glow);
+                        }
+                    `,
+                    side: THREE.BackSide,
+                    blending: THREE.AdditiveBlending,
+                    transparent: true,
+                    depthWrite: false
+                });
+                const glow1 = new THREE.Mesh(glow1Geometry, glow1Material);
+                const glow2 = new THREE.Mesh(glow2Geometry, glow2Material);
+                this.glows = [glow1, glow2];
+                animationObjects.push({
+                    update: (time) => {
+                        glow1Material.uniforms.time.value = time;
+                        glow2Material.uniforms.time.value = time;
+                        const cameraPosition = camera.position.clone();
+                        glow1Material.uniforms.viewVector.value = cameraPosition.sub(glow1.position);
+                        glow2Material.uniforms.viewVector.value = cameraPosition.sub(glow2.position);
+                    }
+                });
+            }
+            
+            createRipples() {
+                const rippleGeometry = new THREE.PlaneGeometry(SIMULATION_CONFIG.maxRippleSize, SIMULATION_CONFIG.maxRippleSize);
+                const rippleMaterial = new THREE.ShaderMaterial({
+                    uniforms: {
+                        time: { value: 0 },
+                        rippleCenter: { value: new THREE.Vector2(0.5, 0.5) },
+                        rippleSize: { value: 0 },
+                        rippleOpacity: { value: 0 },
+                        rippleColor: { value: new THREE.Color(SIMULATION_CONFIG.fusionColors.ripple) }
+                    },
+                    vertexShader: `
+                        varying vec2 vUv;
+                        void main() {
+                            vUv = uv;
+                            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                        }
+                    `,
+                    fragmentShader: `
+                        uniform float time;
+                        uniform vec2 rippleCenter;
+                        uniform float rippleSize;
+                        uniform float rippleOpacity;
+                        uniform vec3 rippleColor;
+                        varying vec2 vUv;
+                        void main() {
+                            float dist = length(vUv - rippleCenter);
+                            float ring = smoothstep(rippleSize - 0.04, rippleSize, dist) - 
+                                        smoothstep(rippleSize, rippleSize + 0.04, dist);
+                            float alpha = ring * rippleOpacity;
+                            gl_FragColor = vec4(rippleColor, alpha);
+                        }
+                    `,
+                    transparent: true,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false,
+                    side: THREE.DoubleSide
+                });
+                const ripple = new THREE.Mesh(rippleGeometry, rippleMaterial);
+                this.ripples.push(ripple);
+                const flashGeometry = new THREE.SphereGeometry(4, 28, 28);
+                const flashMaterial = new THREE.ShaderMaterial({
+                    uniforms: {
+                        time: { value: 0 },
+                        flashColor: { value: new THREE.Color(SIMULATION_CONFIG.fusionColors.flash) },
+                        flashOpacity: { value: 0 }
+                    },
+                    vertexShader: `
+                        varying vec3 vNormal;
+                        void main() {
+                            vNormal = normalize(normalMatrix * normal);
+                            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                        }
+                    `,
+                    fragmentShader: `
+                        uniform float time;
+                        uniform vec3 flashColor;
+                        uniform float flashOpacity;
+                        varying vec3 vNormal;
+                        void main() {
+                            float intensity = abs(dot(vNormal, vec3(0, 0, 1)));
+                            float alpha = flashOpacity * intensity;
+                            gl_FragColor = vec4(flashColor, alpha);
+                        }
+                    `,
+                    transparent: true,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false
+                });
+                const flash = new THREE.Mesh(flashGeometry, flashMaterial);
+                this.ripples.push(flash);
+            }
+            
+            addToScene() {
+                this.particles.forEach(particle => scene.add(particle));
+                this.trackers.forEach(tracker => scene.add(tracker.trail));
+                this.glows.forEach(glow => scene.add(glow));
+                this.ripples.forEach(ripple => scene.add(ripple));
+            }
+            
+            hideElements() {
+                this.particles.forEach(particle => particle.visible = false);
+                this.trackers.forEach(tracker => tracker.trail.visible = false);
+                this.glows.forEach(glow => glow.visible = false);
+                this.ripples.forEach(ripple => ripple.visible = false);
+                this.active = false;
+            }
+            
+            showElements() {
+                this.particles.forEach(particle => particle.visible = true);
+                this.trackers.forEach(tracker => tracker.trail.visible = true);
+                this.glows.forEach(glow => glow.visible = true);
+                this.active = true;
+            }
+            
+            start() {
+                this.showElements();
+                const offset = 40 + Math.random() * 40;
+                this.particles[0].position.copy(this.position).add(new THREE.Vector3(offset, 0, 0));
+                this.particles[1].position.copy(this.position).add(new THREE.Vector3(-offset, 0, 0));
+                this.glows[0].position.copy(this.particles[0].position);
+                this.glows[1].position.copy(this.particles[1].position);
+                this.velocity1.set((Math.random() - 0.5) * 1.8, (Math.random() - 0.5) * 1.8, (Math.random() - 0.5) * 1.8);
+                this.velocity2.set((Math.random() - 0.5) * 1.8, (Math.random() - 0.5) * 1.8, (Math.random() - 0.5) * 1.8);
+            }
+            
+            update(deltaTime) {
+                if (!this.active) return;
+                const pos1 = this.particles[0].position;
+                const pos2 = this.particles[1].position;
+                const distanceVec = pos1.clone().sub(pos2);
+                const distance = distanceVec.length();
+                if (distance < SIMULATION_CONFIG.fusionDistance) {
+                    this.triggerFusion();
+                    return;
+                }
+                const gravityForce = SIMULATION_CONFIG.physicsSimulation.gravity * this.mass1 * this.mass2 / (distance * distance + 0.08);
+                const gravityDir = distanceVec.clone().normalize();
+                const gravityAccel1 = gravityDir.clone().multiplyScalar(-gravityForce / this.mass1);
+                const gravityAccel2 = gravityDir.clone().multiplyScalar(gravityForce / this.mass2);
+                const chargeForce = SIMULATION_CONFIG.physicsSimulation.chargeStrength * this.charge1 * this.charge2 / (distance * distance + 0.08);
+                const chargeAccel1 = gravityDir.clone().multiplyScalar(chargeForce / this.mass1);
+                const chargeAccel2 = gravityDir.clone().multiplyScalar(-chargeForce / this.mass2);
+                this.acceleration1.copy(gravityAccel1).add(chargeAccel1);
+                this.acceleration2.copy(gravityAccel2).add(chargeAccel2);
+                this.velocity1.add(this.acceleration1.clone().multiplyScalar(deltaTime));
+                this.velocity2.add(this.acceleration2.clone().multiplyScalar(deltaTime));
+                this.velocity1.multiplyScalar(SIMULATION_CONFIG.physicsSimulation.frictionCoefficient);
+                this.velocity2.multiplyScalar(SIMULATION_CONFIG.physicsSimulation.frictionCoefficient);
+                this.particles[0].position.add(this.velocity1.clone().multiplyScalar(deltaTime));
+                this.particles[1].position.add(this.velocity2.clone().multiplyScalar(deltaTime));
+                this.glows[0].position.copy(this.particles[0].position);
+                this.glows[1].position.copy(this.particles[1].position);
+                this.trackers.forEach(tracker => {
+                    tracker.updateInterval += deltaTime;
+                    if (tracker.updateInterval > 0.04) {
+                        tracker.positions[tracker.positionIndex].copy(tracker.particle.position);
+                        tracker.positionIndex = (tracker.positionIndex + 1) % tracker.positions.length;
+                        tracker.updateInterval = 0;
+                        const positions = tracker.trail.geometry.attributes.position.array;
+                        for (let i = 0, j = tracker.positionIndex; i < tracker.positions.length; i++) {
+                            const pos = tracker.positions[j];
+                            positions[i * 3] = pos.x;
+                            positions[i * 3 + 1] = pos.y;
+                            positions[i * 3 + 2] = pos.z;
+                            j = (j + 1) % tracker.positions.length;
+                        }
+                        tracker.trail.geometry.attributes.position.needsUpdate = true;
+                    }
+                });
+            }
+            
+            triggerFusion() {
+                const fusionPos = this.particles[0].position.clone().lerp(this.particles[1].position, 0.5);
+                this.hideElements();
+                this.ripples.forEach(ripple => {
+                    ripple.visible = true;
+                    ripple.position.copy(fusionPos);
+                    ripple.lookAt(camera.position);
+                });
+                gsap.to(this.ripples[1].material.uniforms.flashOpacity, {
+                    value: 1,
+                    duration: 0.15,
+                    onComplete: () => {
+                        gsap.to(this.ripples[1].material.uniforms.flashOpacity, {
+                            value: 0,
+                            duration: 0.4
+                        });
+                    }
+                });
+                gsap.to(this.ripples[0].material.uniforms, {
+                    rippleSize: SIMULATION_CONFIG.maxRippleSize / 8,
+                    rippleOpacity: 1,
+                    duration: 0.4,
+                    onComplete: () => {
+                        gsap.to(this.ripples[0].material.uniforms, {
+                            rippleSize: SIMULATION_CONFIG.maxRippleSize / 4,
+                            rippleOpacity: 0,
+                            duration: 0.8,
+                            onComplete: () => {
+                                this.ripples.forEach(ripple => ripple.visible = false);
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        
+        // Fusion event manager
+        class FusionManager {
+            constructor() {
+                this.events = [];
+                for (let i = 0; i < SIMULATION_CONFIG.fusionEventCount; i++) {
+                    this.events.push(new EnhancedFusionEvent());
+                }
+                this.spawnNext();
+            }
+            
+            spawnNext() {
+                const inactiveEvents = this.events.filter(event => !event.active);
+                if (inactiveEvents.length > 0) {
+                    const event = inactiveEvents[Math.floor(Math.random() * inactiveEvents.length)];
+                    event.start();
+                }
+                setTimeout(() => this.spawnNext(), SIMULATION_CONFIG.spawnInterval.min + 
+                    Math.random() * (SIMULATION_CONFIG.spawnInterval.max - SIMULATION_CONFIG.spawnInterval.min));
+            }
+            
+            update(deltaTime) {
+                this.events.forEach(event => event.update(deltaTime));
+            }
+            
+            increaseDensity() {
+                SIMULATION_CONFIG.fusionEventCount = Math.min(SIMULATION_CONFIG.fusionEventCount + 3, 45);
+                for (let i = 0; i < 3; i++) {
+                    this.events.push(new EnhancedFusionEvent());
+                }
+            }
+        }
+        
+        // Initialize scene
+        setupLighting();
+        createEnhancedStars();
+        createEnhancedSpaceDust();
+        createNebulae();
+        createEnergyField();
+        const fusionManager = new FusionManager();
+        
+        // Animation loop
+        let lastTime = 0;
+        function animate(time) {
+            requestAnimationFrame(animate);
+            const deltaTime = (time - lastTime) / 1000;
+            lastTime = time;
+            if (currentCameraMode === 'orbiting') {
+                camera.position.x = Math.sin(time * SIMULATION_CONFIG.cameraMovement.speed * 0.001) * SIMULATION_CONFIG.cameraMovement.radius;
+                camera.position.z = Math.cos(time * SIMULATION_CONFIG.cameraMovement.speed * 0.001) * SIMULATION_CONFIG.cameraMovement.radius;
+                camera.position.y = Math.sin(time * SIMULATION_CONFIG.cameraMovement.speed * 0.0004) * SIMULATION_CONFIG.cameraMovement.radius * 0.4;
+                camera.lookAt(0, 0, 0);
+            } else {
+                camera.position.copy(cameraPositions[currentCameraMode].position);
+                camera.lookAt(cameraPositions[currentCameraMode].lookAt);
+            }
+            animationObjects.forEach(obj => obj.update(time * 0.001));
+            fusionManager.update(deltaTime);
+            renderer.render(scene, camera);
+        }
+        
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // Controls
+        document.getElementById('toggleCamera').addEventListener('click', () => {
+            const modes = Object.keys(cameraPositions);
+            const currentIndex = modes.indexOf(currentCameraMode);
+            currentCameraMode = modes[(currentIndex + 1) % modes.length];
+        });
+        
+        document.getElementById('increaseDensity').addEventListener('click', () => {
+            fusionManager.increaseDensity();
+        });
+        
+        document.getElementById('togglePostProcessing').addEventListener('click', () => {
+            // Placeholder for post-processing
+        });
+        
+        // Fade out loading screen
+        setTimeout(() => {
+            gsap.to('.loading', {
+                opacity: 0,
+                duration: 1.2,
+                onComplete: () => {
+                    document.querySelector('.loading').style.display = 'none';
+                    animate(0);
+                }
+            });
+        }, 2500);
+    </script>
+</body>
+</html>

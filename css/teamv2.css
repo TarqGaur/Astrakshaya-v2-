@@ -1,0 +1,259 @@
+* {
+    font-family: Nunito, sans-serif;
+  }
+  
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+  
+  .responsive-cell-block {
+    min-height: 75px;
+  }
+  
+  .text-blk {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    line-height: 25px;
+  }
+  
+  .responsive-container-block {
+    min-height: 75px;
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0px;
+    margin-right: auto;
+    margin-bottom: 0px;
+    margin-left: auto;
+    justify-content: space-evenly;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .team-head-text {
+    font-size: 48px;
+    font-weight: 900;
+    text-align: center;
+    line-height: 50px;
+    width: 100%;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 50px;
+    margin-left: 0px;
+    padding-top: 20px; /* Extra space between navbar and title */
+  }
+  
+  .container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 100px 30px 120px 30px; /* Increased bottom padding for footer */
+    flex: 1;
+  }
+  
+  .card {
+    text-align: center;
+    box-shadow: rgba(0, 0, 0, 0.9) 0px 4px 20px 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+    padding-right: 25px;
+    padding-bottom: 30px;
+    padding-left: 25px;
+  
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(196, 153, 82, 0.2);
+  }
+  
+  .card-container {
+    width: 280px;
+    margin-top: 0px;
+    margin-right: 10px;
+    margin-bottom: 25px;
+    margin-left: 10px;
+  }
+  
+  .name {
+    margin-top: 20px;
+    margin-right: 0px;
+    margin-bottom: 5px;
+    margin-left: 0px;
+    font-size: 18px;
+    font-weight: 800;
+  }
+  
+  .position {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 10px;
+    margin-left: 0px;
+  }
+  
+  .feature-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 20px;
+    margin-left: 0px;
+    color: rgb(122, 122, 122);
+    line-height: 30px;
+  }
+  .social-icons {
+    display: flex; /* Icons ko ek line me lane ke liye */
+    gap: 10px; /* Icons ke beech spacing */
+    align-items: center;
+}
+
+.social-icons a {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+.social-icons img {
+  width: 30px; /* Ya jo size chahe */
+  height: auto;
+}
+
+  
+  .team-image-wrapper {
+    clip-path: circle(50% at 50% 50%);
+    width: 130px;
+    height: 130px;
+  }
+  
+  .team-member-image {
+    max-width: 100%;
+  }
+  
+  @media (max-width: 1200px) {
+    .card-container {
+        width: 250px;
+    }
+    
+    .team-head-text {
+        font-size: 40px;
+    }
+}
+
+@media (max-width: 992px) {
+    .responsive-container-block {
+        padding: 10px;
+    }
+    
+    .card-container {
+        width: 220px;
+        margin: 10px;
+    }
+    
+    .team-head-text {
+        font-size: 36px;
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin-top: 100px; /* Adjusted for mobile */
+    }
+    
+    .card-container {
+        width: calc(50% - 20px);
+        min-width: 200px;
+    }
+    
+    .team-head-text {
+        font-size: 32px;
+        line-height: 40px;
+    }
+    
+    .social-icons {
+        gap: 8px;
+    }
+    
+    .social-icons a {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+@media (max-width: 520px) {
+    .card-container {
+        width: 100%;
+        max-width: 300px;
+        margin: 10px auto;
+    }
+    
+    .team-head-text {
+        font-size: 28px;
+        line-height: 36px;
+        margin-bottom: 20px;
+    }
+    
+    .name {
+        font-size: 16px;
+    }
+    
+    .position {
+        font-size: 14px;
+    }
+    
+    .feature-text {
+        font-size: 14px;
+        line-height: 24px;
+    }
+}
+
+@media (max-width: 500px) {
+    .card-container {
+      width: 100%;
+      margin-top: 0px;
+      margin-right: 0px;
+      margin-bottom: 25px;
+      margin-left: 0px;
+    }
+  }
+  
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+      width: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(20px);
+      box-shadow: inset 0 0 10px rgba(196, 153, 82, 0.3);
+      transition: all 0.3s ease;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 0 15px rgba(196, 153, 82, 0.5);
+  }
+  
+  /* Footer positioning fixes */
+  .footer {
+      position: relative; /* Changed from absolute to relative */
+      width: 100%;
+      margin-top: auto;
+  }

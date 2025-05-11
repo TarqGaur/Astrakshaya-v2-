@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Nuclear Fusion Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        
+        body {
+            background-color: #000;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+        }
+        
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 12px 18px;
+            border-radius: 10px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+            font-size: 14px;
+            max-width: 350px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .info:hover {
+            opacity: 1;
+        }
+        
+        .title {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 26px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            pointer-events: none;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+            z-index: 100;
+        }
+        
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease-out;
+        }
+        
+        .loading-text {
+            color: #fff;
+            font-size: 24px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .control-btn {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="loading">
+        <div class="loading-text">Initializing Fusion Simulation</div>
+    </div>
+    
+    <div class="title">Advanced Nuclear Fusion Visualization</div>
+    <div class="info">
+        Ultra-realistic simulation of nuclear fusion events. Each event demonstrates 
+        plasma particles approaching with electromagnetic forces, swirling inward due to 
+        gravitational attraction, and merging in a precisely calculated energy release.
+    </div>
+    
+    <div class="controls">
+        <button class="control-btn" id="toggleCamera">Toggle Camera Mode</button>
+        <button class="control-btn" id="increaseDensity">Increase Density</button>
+        <button class="control-btn" id="togglePostProcessing">Toggle Effects</button>
+    </div>
+    
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    
+    <script>
+        // Enhanced constants for the simulation
+        const SIMULATION_CONFIG = {
+            fusionEventCount: 35,           // Number of potential fusion events
+            spaceSize: 1200,                // Size of the space
+            particleRadius: {               // Dynamic particle sizes
+                min: 1.8,
+                max: 3.2
+            },
+            fusionDistance: 4.5,            // Distance at which fusion occurs
+            maxRippleSize: 60,              // Maximum size of the ripple effect
+            spawnInterval: {                // Timing between spawns (ms)
+                min: 1800,
+                max: 7000
+            },
+            energyRelease: {                // Energy released during fusion (arbitrary units)
+                min: 1.5,
+                max: 4.0
+            },
+            particleColors: {               // Color schemes for particles
+                scheme1: {
+                    color: 0x66aaff,
+                    emissive: 0x1133aa,
+                    intensity: 0.7
+                },
+                scheme2: {
+                    color: 0xffaa66,
+                    emissive: 0xaa3311,
+                    intensity: 0.7
+                },
+                scheme3: {
+                    color: 0xaaff66,
+                    emissive: 0x33aa11,
+                    intensity: 0.6
+                }
+            },
+            fusionColors: {                 // Color schemes for fusion events
+                flash: 0xffffcc,
+                ripple: 0xffffaa,
+                glow: 0xffffa0
+            },
+            starCount: 5000,                // Number of background stars
+            dustCount: 10000,               // Number of space dust particles
+            nebulaCount: 3,                 // Number of nebula clouds
+            cameraMovement: {               // Camera movement parameters
+                speed: 0.15,
+                radius: 70
+            },
+            physicsSimulation: {            // Physics parameters
+                gravity: 0.02,              // Strength of gravity between particles
+                chargeStrength: 0.04,       // Strength of electromagnetic force
+                frictionCoefficient: 0.98   // Damping on particle velocity (simulates medium resistance)
+            }
+        };
+        
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x000a0f, 0.0003);
+        
+        // Camera setup with higher field of view
+        const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 1, 3000);
+        camera.position.z = 900;
+        
+        // Multiple camera positions for different views
+        const cameraPositions = {
+            wide: {
+                position: new THREE.Vector3(0, 0, 900),
+                lookAt: new THREE.Vector3(0, 0, 0)
+            },
+            orbiting: {
+                position: new THREE.Vector3(400, 100, 400),
+                lookAt: new THREE.Vector3(0, 0, 0)
+            },
+            closeup: {
+                position: new THREE.Vector3(200, 50, 200),
+                lookAt: new THREE.Vector3(0, 0, 0)
+            }
+        };
+        
+        let currentCameraMode = 'orbiting';
+        
+        // Advanced renderer setup
+        const renderer = new THREE.WebGLRenderer({ 
+            antialias: true,
+            alpha: true,
+            precision: 'highp',
+            powerPreference: 'high-performance',
+            stencil: false
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Cap at 2x for performance
+        renderer.physicallyCorrectLights = true;
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.toneMappingExposure = 1.2;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        document.body.appendChild(renderer.domElement);
+        
+        // Lighting system
+        function setupLighting() {
+            // Ambient light for base visibility - slightly bluer for deep space feel
+            const ambientLight = new THREE.AmbientLight(0x112233, 0.3);
+            scene.add(ambientLight);
+            
+            // Directional light to simulate distant star
+            const directionalLight = new THREE.DirectionalLight(0xfff0dd, 0.8);
+            directionalLight.position.set(1, 1, 1).normalize();
+            scene.add(directionalLight);
+            
+            // Add key point lights at random positions for highlighting
+            const lightColors = [0xffffaa, 0xaaffff, 0xffaaaa];
+            for (let i = 0; i < 8; i++) {
+                const light = new THREE.PointLight(
+                    lightColors[i % lightColors.length], 
+                    0.6 + Math.random() * 0.4, 
+                    300 + Math.random() * 150
+                );
+                light.position.set(
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize,
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize,
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize * 0.5
+                );
+                scene.add(light);
+                
+                // Add subtle animation to the lights
+                gsap.to(light.position, {
+                    x: light.position.x + (Math.random() - 0.5) * 100,
+                    y: light.position.y + (Math.random() - 0.5) * 100,
+                    z: light.position.z + (Math.random() - 0.5) * 100,
+                    duration: 30 + Math.random() * 30, 
+                    ease: "sine.inOut",
+                    repeat: -1,
+                    yoyo: true
+                });
+            }
+        }
+        
+        // Enhanced stars with depth and variability
+        function createEnhancedStars() {
+            // Star geometry with size variation
+            const starsGeometry = new THREE.BufferGeometry();
+            const starPositions = [];
+            const starSizes = [];
+            const starColors = [];
+            
+            // Star color variations
+            const colorVariations = [
+                new THREE.Color(0xffffff), // White
+                new THREE.Color(0xffffdd), // Warm white
+                new THREE.Color(0xddffff), // Cool white
+                new THREE.Color(0xffdddd), // Slight red
+                new THREE.Color(0xddffdd)  // Slight green
+            ];
+            
+            for (let i = 0; i < SIMULATION_CONFIG.starCount; i++) {
+                // Star positions with higher density toward center
+                const radius = Math.random() * Math.random() * SIMULATION_CONFIG.spaceSize * 1.5;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos((Math.random() * 2) - 1);
+                
+                const x = radius * Math.sin(phi) * Math.cos(theta);
+                const y = radius * Math.sin(phi) * Math.sin(theta);
+                const z = radius * Math.cos(phi);
+                
+                starPositions.push(x, y, z);
+                
+                // Variable star sizes (some larger stars for visual interest)
+                const size = Math.random() < 0.05 ? 
+                    1.5 + Math.random() * 2 :  // Larger stars (5% of population)
+                    0.5 + Math.random() * 0.8;  // Normal stars
+                starSizes.push(size);
+                
+                // Variable star colors
+                const colorIndex = Math.floor(Math.random() * colorVariations.length);
+                const color = colorVariations[colorIndex];
+                starColors.push(color.r, color.g, color.b);
+            }
+            
+            starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+            starsGeometry.setAttribute('size', new THREE.Float32BufferAttribute(starSizes, 1));
+            starsGeometry.setAttribute('color', new THREE.Float32BufferAttribute(starColors, 3));
+            
+            // Advanced star shader material with glow and twinkle
+            const starsMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0 },
+                    pixelRatio: { value: renderer.getPixelRatio() }
+                },
+                vertexShader: `
+                    uniform float time;
+                    uniform float pixelRatio;
+                    attribute float size;
+                    attribute vec3 color;
+                    varying vec3 vColor;
+                    varying float vSize;
+                    
+                    void main() {
+                        vColor = color;
+                        vSize = size;
+                        
+                        // Apply subtle position variation for "twinkling" effect
+                        vec3 pos = position;
+                        float timeFactor = time * 0.5;
+                        
+                        // Twinkle only for some stars
+                        if (size > 1.0) {
+                            // Slightly oscillate position for larger stars
+                            pos.x += sin(timeFactor + position.z * 0.1) * 0.1;
+                            pos.y += cos(timeFactor + position.x * 0.1) * 0.1;
+                        }
+                        
+                        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                        gl_Position = projectionMatrix * mvPosition;
+                        
+                        // Size attenuation based on distance
+                        gl_PointSize = size * pixelRatio * (300.0 / -mvPosition.z);
+                    }
+                `,
+                fragmentShader: `
+                    uniform float time;
+                    varying vec3 vColor;
+                    varying float vSize;
+                    
+                    void main() {
+                        // Calculate distance from point center
+                        vec2 center = gl_PointCoord - 0.5;
+                        float dist = length(center);
+                        
+                        // Basic circle shape
+                        float circle = smoothstep(0.5, 0.48, dist);
+                        
+                        // Subtle glow effect that fades with distance
+                        float glow = exp(-dist * 3.0) * 0.3;
+                        
+                        // Twinkle effect - more pronounced for larger stars
+                        float twinkle = 1.0;
+                        if (vSize > 1.0) {
+                            float t = time * 1.5;
+                            // Different frequencies for natural twinkling
+                            twinkle = 0.7 + 0.3 * sin(t + gl_FragCoord.x * 0.1);
+                        }
+                        
+                        // Combine core and glow with color
+                        vec3 finalColor = vColor * twinkle;
+                        float alpha = circle + glow;
+                        
+                        gl_FragColor = vec4(finalColor, alpha);
+                    }
+                `,
+                blending: THREE.AdditiveBlending,
+                depthTest: true,
+                transparent: true
+            });
+            
+            const stars = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(stars);
+            
+            // Update time uniform in animation loop
+            animationObjects.push({
+                update: function(time) {
+                    starsMaterial.uniforms.time.value = time;
+                }
+            });
+            
+            return stars;
+        }
+        
+        // Enhanced space dust with custom shaders
+        function createEnhancedSpaceDust() {
+            const dustGeometry = new THREE.BufferGeometry();
+            const dustPositions = [];
+            const dustSizes = [];
+            const dustColors = [];
+            
+            // Different dust colors
+            const dustColorVariations = [
+                new THREE.Color(0xaaaacc),
+                new THREE.Color(0xccaaaa),
+                new THREE.Color(0xaaccaa),
+                new THREE.Color(0xaaaabb)
+            ];
+            
+            for (let i = 0; i < SIMULATION_CONFIG.dustCount; i++) {
+                // Distribute dust in a spherical volume with more density toward center
+                const radiusFactor = Math.pow(Math.random(), 3); // Cube makes more in center
+                const radius = radiusFactor * SIMULATION_CONFIG.spaceSize * 1.2;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos((Math.random() * 2) - 1);
+                
+                const x = radius * Math.sin(phi) * Math.cos(theta);
+                const y = radius * Math.sin(phi) * Math.sin(theta);
+                const z = radius * Math.cos(phi);
+                
+                dustPositions.push(x, y, z);
+                
+                // Random dust sizes - mostly tiny
+                const size = 0.2 + Math.random() * 0.6;
+                dustSizes.push(size);
+                
+                // Random colors
+                const colorIndex = Math.floor(Math.random() * dustColorVariations.length);
+                const color = dustColorVariations[colorIndex];
+                dustColors.push(color.r, color.g, color.b);
+            }
+            
+            dustGeometry.setAttribute('position', new THREE.Float32BufferAttribute(dustPositions, 3));
+            dustGeometry.setAttribute('size', new THREE.Float32BufferAttribute(dustSizes, 1));
+            dustGeometry.setAttribute('color', new THREE.Float32BufferAttribute(dustColors, 3));
+            
+            // Custom dust shader
+            const dustMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0 },
+                    pixelRatio: { value: renderer.getPixelRatio() }
+                },
+                vertexShader: `
+                    uniform float time;
+                    uniform float pixelRatio;
+                    attribute float size;
+                    attribute vec3 color;
+                    varying vec3 vColor;
+                    
+                    void main() {
+                        vColor = color;
+                        
+                        // Subtle drift motion
+                        vec3 pos = position;
+                        float drift = time * 0.1;
+                        
+                        // Each dust particle drifts slightly based on its position
+                        pos.x += sin(drift + position.z * 0.02) * 0.3;
+                        pos.y += cos(drift + position.x * 0.02) * 0.3;
+                        pos.z += sin(drift + position.y * 0.02) * 0.3;
+                        
+                        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                        gl_Position = projectionMatrix * mvPosition;
+                        
+                        // Size attenuation for depth
+                        gl_PointSize = size * pixelRatio * (300.0 / -mvPosition.z);
+                    }
+                `,
+                fragmentShader: `
+                    varying vec3 vColor;
+                    
+                    void main() {
+                        // Softer particles with gaussian falloff
+                        vec2 center = gl_PointCoord - 0.5;
+                        float dist = length(center);
+                        
+                        // Gaussian falloff for natural looking particles
+                        float alpha = exp(-dist * dist * 8.0);
+                        
+                        gl_FragColor = vec4(vColor, alpha * 0.3); // Low opacity for subtle effect
+                    }
+                `,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                transparent: true
+            });
+            
+            const dust = new THREE.Points(dustGeometry, dustMaterial);
+            scene.add(dust);
+            
+            // Update time uniform in animation loop
+            animationObjects.push({
+                update: function(time) {
+                    dustMaterial.uniforms.time.value = time;
+                }
+            });
+            
+            return dust;
+        }
+        
+        // Create volumetric nebulae with custom shaders
+        function createNebulae() {
+            for (let n = 0; n < SIMULATION_CONFIG.nebulaCount; n++) {
+                // Create base geometry
+                const nebulaGeometry = new THREE.BufferGeometry();
+                const particleCount = 2000 + Math.floor(Math.random() * 1000);
+                const nebulaPositions = [];
+                const nebulaColors = [];
+                const nebulaAlphas = [];
+                const nebulaSizes = [];
+                
+                // Choose a color scheme for this nebula
+                let nebulaBaseColor;
+                const colorScheme = Math.floor(Math.random() * 3);
+                
+                switch(colorScheme) {
+                    case 0: // Blue-ish
+                        nebulaBaseColor = new THREE.Color(0x3366ff);
+                        break;
+                    case 1: // Amber-ish
+                        nebulaBaseColor = new THREE.Color(0xff9933);
+                        break;
+                    case 2: // Green-ish
+                        nebulaBaseColor = new THREE.Color(0x66bb66);
+                        break;
+                }
+                
+                // Create nebula center position
+                const nebulaCenter = new THREE.Vector3(
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize * 1.2,
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize * 1.2,
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize * 0.8
+                );
+                
+                // Nebula shape parameters
+                const nebulaSize = 100 + Math.random() * 200;
+                const nebulaDensity = 0.5 + Math.random() * 0.5;
+                
+                // Generate particles in cloud shape using noise
+                for (let i = 0; i < particleCount; i++) {
+                    // Create 3D cloud-like distribution using multiple spherical harmonics
+                    const radius = Math.pow(Math.random(), nebulaDensity) * nebulaSize;
+                    const theta = Math.random() * Math.PI * 2;
+                    const phi = Math.acos((Math.random() * 2) - 1);
+                    
+                    // Base spherical position
+                    let x = radius * Math.sin(phi) * Math.cos(theta);
+                    let y = radius * Math.sin(phi) * Math.sin(theta);
+                    let z = radius * Math.cos(phi);
+                    
+                    // Apply some noise to create non-uniform cloud shape
+                    const noiseAmp = nebulaSize * 0.15;
+                    x += (Math.random() - 0.5) * noiseAmp;
+                    y += (Math.random() - 0.5) * noiseAmp;
+                    z += (Math.random() - 0.5) * noiseAmp;
+                    
+                    // Translate to nebula center
+                    x += nebulaCenter.x;
+                    y += nebulaCenter.y;
+                    z += nebulaCenter.z;
+                    
+                    nebulaPositions.push(x, y, z);
+                    
+                    // Color variation based on position in nebula
+                    const distFromCenter = Math.sqrt(x*x + y*y + z*z) / nebulaSize;
+                    const colorVariation = 0.15;
+                    const r = nebulaBaseColor.r + (Math.random() - 0.5) * colorVariation;
+                    const g = nebulaBaseColor.g + (Math.random() - 0.5) * colorVariation;
+                    const b = nebulaBaseColor.b + (Math.random() - 0.5) * colorVariation;
+                    
+                    nebulaColors.push(r, g, b);
+                    
+                    // Alpha increases toward center
+                    const alpha = 0.2 + (1 - distFromCenter) * 0.6;
+                    nebulaAlphas.push(alpha);
+                    
+                    // Size larger toward center
+                    const size = 2 + (1 - distFromCenter) * 4;
+                    nebulaSizes.push(size);
+                }
+                
+                nebulaGeometry.setAttribute('position', new THREE.Float32BufferAttribute(nebulaPositions, 3));
+                nebulaGeometry.setAttribute('color', new THREE.Float32BufferAttribute(nebulaColors, 3));
+                nebulaGeometry.setAttribute('alpha', new THREE.Float32BufferAttribute(nebulaAlphas, 1));
+                nebulaGeometry.setAttribute('size', new THREE.Float32BufferAttribute(nebulaSizes, 1));
+                
+                // Advanced shader for volumetric-like effect
+                const nebulaMaterial = new THREE.ShaderMaterial({
+                    uniforms: {
+                        time: { value: 0 },
+                        pixelRatio: { value: renderer.getPixelRatio() }
+                    },
+                    vertexShader: `
+                        uniform float time;
+                        uniform float pixelRatio;
+                        attribute vec3 color;
+                        attribute float alpha;
+                        attribute float size;
+                        varying vec3 vColor;
+                        varying float vAlpha;
+                        
+                        void main() {
+                            vColor = color;
+                            vAlpha = alpha;
+                            
+                            // Subtle internal motion
+                            vec3 pos = position;
+                            float t = time * 0.1;
+                            
+                            // Position-based smooth motion
+                            float xFactor = sin(t + position.z * 0.01) * 2.0;
+                            float yFactor = cos(t + position.x * 0.01) * 2.0;
+                            float zFactor = sin(t + position.y * 0.01) * 2.0;
+                            
+                            pos.x += xFactor;
+                            pos.y += yFactor;
+                            pos.z += zFactor;
+                            
+                            vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                            gl_Position = projectionMatrix * mvPosition;
+                            
+                            // Size attenuation
+                            gl_PointSize = size * pixelRatio * (300.0 / -mvPosition.z);
+                        }
+                    `,
+                    fragmentShader: `
+                        varying vec3 vColor;
+                        varying float vAlpha;
+                        
+                        void main() {
+                            // Smooth circular particles
+                            vec2 center = gl_PointCoord - 0.5;
+                            float dist = length(center);
+                            
+                            // Soft edge
+                            float alpha = smoothstep(0.5, 0.2, dist) * vAlpha * 0.6;
+                            
+                            gl_FragColor = vec4(vColor, alpha);
+                        }
+                    `,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false,
+                    transparent: true
+                });
+                
+                const nebula = new THREE.Points(nebulaGeometry, nebulaMaterial);
+                scene.add(nebula);
+                
+                // Animation for nebula
+                animationObjects.push({
+                    update: function(time) {
+                        nebulaMaterial.uniforms.time.value = time;
+                        
+                        // Add subtle rotation
+                        nebula.rotation.x = Math.sin(time * 0.03) * 0.01;
+                        nebula.rotation.y = Math.cos(time * 0.02) * 0.01;
+                    }
+                });
+            }
+        }
+        
+        // Create distant energy field for background effect
+        function createEnergyField() {
+            const energyGeometry = new THREE.PlaneGeometry(3000, 3000, 1, 1);
+            
+            // Use advanced shader for energy field
+            const energyMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0 }
+                },
+                vertexShader: `
+                    varying vec2 vUv;
+                    
+                    void main() {
+                        vUv = uv;
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                    }
+                `,
+                fragmentShader: `
+                    uniform float time;
+                    varying vec2 vUv;
+                    
+                    // Simplex noise function
+                    vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+                    
+                    float snoise(vec2 v) {
+                        const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+                                         -0.577350269189626, 0.024390243902439);
+                        vec2 i  = floor(v + dot(v, C.yy));
+                        vec2 x0 = v -   i + dot(i, C.xx);
+                        vec2 i1;
+                        i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                        vec4 x12 = x0.xyxy + C.xxzz;
+                        x12.xy -= i1;
+                        i = mod(i, 289.0);
+                        vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+                            + i.x + vec3(0.0, i1.x, 1.0 ));
+                        vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
+                            dot(x12.zw,x12.zw)), 0.0);
+                        m = m*m ;
+                        m = m*m ;
+                        vec3 x = 2.0 * fract(p * C.www) - 1.0;
+                        vec3 h = abs(x) - 0.5;
+                        vec3 ox = floor(x + 0.5);
+                        vec3 a0 = x - ox;
+                        m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+                        vec3 g;
+                        g.x  = a0.x  * x0.x  + h.x  * x0.y;
+                        g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+                        return 130.0 * dot(m, g);
+                    }
+                    
+                    void main() {
+                        // Center coordinates for radial effect
+                        vec2 center = vUv - 0.5;
+                        float dist = length(center);
+                        
+                        // Create energy field using noise
+                        float t = time * 0.1;
+                        
+                        // Multiple noise layers at different scales
+                        float noise1 = snoise(center * 5.0 + vec2(t * 0.2, t * 0.3)) * 0.5 + 0.5;
+                        float noise2 = snoise(center * 10.0 + vec2(-t * 0.1, t * 0.2)) * 0.25 + 0.5;
+                        float noise3 = snoise(center * 20.0 + vec2(t * 0.4, -t * 0.3)) * 0.125 + 0.5;
+                        
+                        // Combine noise layers
+                        float noise = noise1 + noise2 + noise3;
+                        noise *= 0.5; // Scale down for better visual
+                        
+                        // Create radial gradient that fades from center
+                        float radial = 1.0 - smoothstep(0.0, 0.7, dist);
+                        
+                        // Combine with subtle color variation
+                        vec3 baseColor1 = vec3(0.02, 0.04, 0.1); // Dark blue
+                        vec3 baseColor2 = vec3(0.05, 0.02, 0.1); // Dark purple
+                        
+                        // Mix colors based on noise
+                        vec3 finalColor = mix(baseColor1, baseColor2, noise);
+                        
+                        // Apply radial gradient and overall dimming
+                        float alpha = radial * noise * 0.4;
+                        
+                        gl_FragColor = vec4(finalColor, alpha);
+                    }
+                `,
+                transparent: true,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                side: THREE.DoubleSide
+            });
+            
+            const energyField = new THREE.Mesh(energyGeometry, energyMaterial);
+            energyField.position.z = -1500; // Far behind everything
+            energyField.rotation.x = Math.PI * 0.1; // Slight tilt
+            scene.add(energyField);
+            
+            // Animation update
+            animationObjects.push({
+                update: function(time) {
+                    energyMaterial.uniforms.time.value = time;
+                }
+            });
+        }
+        
+        // Array to store objects that need animation updates
+        const animationObjects = [];
+        
+        // Enhanced FusionEvent with realistic physics
+        class EnhancedFusionEvent {
+            constructor() {
+                this.active = false;
+                this.particles = [];
+                this.trackers = []; // For particle trails
+                this.ripples = [];
+                this.glows = [];
+                this.glowParticles = []; // Array to store glow effects
+                
+                // Physics properties
+                this.velocity1 = new THREE.Vector3();
+                this.velocity2 = new THREE.Vector3();
+                this.acceleration1 = new THREE.Vector3();
+                this.acceleration2 = new THREE.Vector3();
+                this.mass1 = 1 + Math.random() * 0.5;
+                this.mass2 = 1 + Math.random() * 0.5;
+                this.charge1 = Math.random() < 0.5 ? 1 : -1; // Electric charge
+                this.charge2 = -this.charge1; // Opposite charge
+                
+                // Energy level for this event
+                this.energyLevel = SIMULATION_CONFIG.energyRelease.min + 
+                                  Math.random() * (SIMULATION_CONFIG.energyRelease.max - SIMULATION_CONFIG.energyRelease.min);
+                
+                // Initialize position
+                this.position = new THREE.Vector3(
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize,
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize,
+                    (Math.random() - 0.5) * SIMULATION_CONFIG.spaceSize * 0.8
+                );
+                
+                // Create particles with varied appearance
+                this.createParticles();
+                
+                // Create ripple effects (initially invisible)
+                this.createRipples();
+                
+                // Add to scene but make invisible initially
+                this.addToScene();
+                this.hideElements();
+            }
+            
+            createParticles() {
+                // Randomize particle sizes
+                const radius1 = SIMULATION_CONFIG.particleRadius.min + 
+                               Math.random() * (SIMULATION_CONFIG.particleRadius.max - SIMULATION_CONFIG.particleRadius.min);
+                const radius2 = SIMULATION_CONFIG.particleRadius.min + 
+                               Math.random() * (SIMULATION_CONFIG.particleRadius.max - SIMULATION_CONFIG.particleRadius.min);
+                
+                // Create particle geometries with higher detail
+                const particle1Geometry = new THREE.SphereGeometry(radius1, 24, 24);
+                const particle2Geometry = new THREE.SphereGeometry(radius2, 24, 24);
+                
+                // Select color schemes
+                const colorSchemes = Object.values(SIMULATION_CONFIG.particleColors);
+                const scheme1 = colorSchemes[Math.floor(Math.random() * colorSchemes.length)];
+                
+                // Make sure second particle has different color scheme
+                let scheme2;
+                do {
+                    scheme2 = colorSchemes[Math.floor(Math.random() * colorSchemes.length)];
+                } while (scheme1 === scheme2);
+                
+                // Create advanced materials with custom shaders
+                const particle1Material = new THREE.MeshStandardMaterial({
+                    color: scheme1.color,
+                    emissive: scheme1.emissive,
+                    emissiveIntensity: scheme1.intensity,
+                    roughness: 0.3,
+                    metalness: 0.2,
+                    envMapIntensity: 1.5
+                });
+                
+                const particle2Material = new THREE.MeshStandardMaterial({
+                    color: scheme2.color,
+                    emissive: scheme2.emissive,
+                    emissiveIntensity: scheme2.intensity,
+                    roughness: 0.3,
+                    metalness: 0.2,
+                    envMapIntensity: 1.5
+                });
+                
+                // Create mesh objects
+                const particle1 = new THREE.Mesh(particle1Geometry, particle1Material);
+                const particle2 = new THREE.Mesh(particle2Geometry, particle2Material);
+                
+                this.particles = [particle1, particle2];
+                
+                // Create particle trackers (trails)
+                this.createParticleTrackers(particle1, scheme1);
+                this.createParticleTrackers(particle2, scheme2);
+                
+                // Create glow effects
+                this.createGlowEffects(radius1, radius2, scheme1, scheme2);
+            }
+            
+            createParticleTrackers(particle, colorScheme) {
+                // Create trail geometry
+                const trailGeometry = new THREE.BufferGeometry();
+                const trailVertices = [];
+                const trailIndices = [];
+                const trailColors = [];
+                
+                const segmentCount = 20; // Number of trail segments
+                
+                for (let i = 0; i < segmentCount + 1; i++) {
+                    // All points initialized at origin, will be updated during animation
+                    trailVertices.push(0, 0, 0);
+                    
+                    // Trail colors fade out toward the end
+                    const intensity = 1 - (i / segmentCount);
+                    const color = new THREE.Color(colorScheme.color);
+                    color.lerp(new THREE.Color(colorScheme.emissive), 0.5);
+                    
+                    trailColors.push(color.r, color.g, color.b);
+                }
+                
+                // Create line segments for trail
+                for (let i = 0; i < segmentCount; i++) {
+                    trailIndices.push(i, i + 1);
+                }
+                
+                trailGeometry.setAttribute('position', new THREE.Float32BufferAttribute(trailVertices, 3));
+                trailGeometry.setAttribute('color', new THREE.Float32BufferAttribute(trailColors, 3));
+                trailGeometry.setIndex(trailIndices);
+                
+                // Custom material for trail
+                const trailMaterial = new THREE.LineBasicMaterial({
+                    vertexColors: true,
+                    transparent: true,
+                    opacity: 0.6,
+                    blending: THREE.AdditiveBlending
+                });
+                
+                const trail = new THREE.LineSegments(trailGeometry, trailMaterial);
+                this.trackers.push({
+                    trail: trail,
+                    particle: particle,
+                    positions: Array(segmentCount + 1).fill().map(() => new THREE.Vector3()),
+                    positionIndex: 0,
+                    updateInterval: 0
+                });
+            }
+            
+            createGlowEffects(radius1, radius2, scheme1, scheme2) {
+                // Create glow effect for particle 1
+                const glow1Geometry = new THREE.SphereGeometry(radius1 * 2.5, 32, 32);
+                const glow1Material = new THREE.ShaderMaterial({
+                    uniforms: {
+                        glowColor: { value: new THREE.Color(scheme1.emissive) },
+                        viewVector: { value: new THREE.Vector3() },
+                        time: { value: 0 }
+                    },
+                    vertexShader: `
+                        uniform vec3 viewVector;
+                        uniform float time;
+                        varying float intensity;
+                        varying vec3 vNormal;
+                        
+                        void main() {
+                            vNormal = normalize(normalMatrix * normal);
+                            vec3 vNormel = normalize(normalMatrix * viewVector);
+                            intensity = pow(1.0 - dot(vNormal, vNormel), 2.0);
+                            
+                            // Add subtle pulsation based on time
+                            float scale = 1.0 + sin(time * 2.0) * 0.05;
+                            vec3 newPosition = position * scale;
+                            
+                            gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+                        }
+                    `,
+                    fragmentShader: `
+                        uniform vec3 glowColor;
+                        uniform float time;
+                        varying float intensity;
+                        varying vec3 vNormal;
+                        
+                        void main() {
+                            // Glow effect with rim lighting
+                            float glow = intensity * 0.8;
+                            
+                            // Add energy fluctuation
+                            float energyFlux = 0.2 * sin(time * 3.0 + gl_FragCoord.x * 0.01) * sin(time * 2.0 + gl_FragCoord.y * 0.01);
+                            glow += energyFlux * intensity;
+                            
+                            gl_FragColor = vec4(glowColor, glow);
+                        }
+                    `,
+                    side: THREE.BackSide,
+                    blending: THREE.AdditiveBlending,
+                    transparent: true,
+                    depthWrite: false
+                });
+                this.glowParticles.push({
+                    geometry: glow1Geometry,
+                    material: glow1Material
+                });
+                this.glowParticles.push({
+                    geometry: glow2Geometry,
+                    material: glow2Material
+                });
+                this.glows.push({
+                    particle: this.particles[0],
+                    glow: new THREE.Mesh(glow1Geometry, glow1Material)
+                });
+                this.glows.push({
+                    particle: this.particles[1],
+                    glow: new THREE.Mesh(glow2Geometry, glow2Material)
+                });
+
+                const glow2Geometry = new THREE.SphereGeometry(radius2 * 2.5, 32, 32);
+                const glow2Material = new THREE.ShaderMaterial({
+                    uniforms: {
+                        glowColor: { value: new THREE.Color(scheme2.emissive) },
+                        viewVector: { value: new THREE.Vector3() },
+                        time: { value: 0 }
+                    },
+                    vertexShader: `
+                        uniform vec3 viewVector;
+                        uniform float time;
+                        varying float intensity;
+                        varying vec3 vNormal;
+                        
+                        void main() {
+                            vNormal = normalize(normalMatrix * normal);
+                            vec3 vNormel = normalize(normalMatrix * viewVector);
+                            intensity = pow(1.0 - dot(vNormal, vNormel), 2.0);
+                            
+                            float scale = 1.0 + sin(time * 2.0) * 0.05;
+                            vec3 newPosition = position * scale;
+                            
+                            gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+                        }
+                    `,
+                    fragmentShader: `
+                        uniform vec3 glowColor;
+                        uniform float time;
+                        varying float intensity;
+                        varying vec3 vNormal;
+                        
+                        void main() {
+                            float glow = intensity * 0.8;
+                            float energyFlux = 0.2 * sin(time * 3.0 + gl_FragCoord.x * 0.01) * sin(time * 2.0 + gl_FragCoord.y * 0.01);
+                            glow += energyFlux * intensity;
+                            
+                            gl_FragColor = vec4(glowColor, glow);
+                        }
+                    `,
+                    side: THREE.BackSide,
+                    blending: THREE.AdditiveBlending,
+                    transparent: true,
+                    depthWrite: false
+                });
+
+                const glow2 = new THREE.Mesh(glow2Geometry, glow2Material);
+                this.glows.push(glow2);
+
+                // Add animation updates for glow effects
+                animationObjects.push({
+                    update: (time) => {
+                        glow1Material.uniforms.time.value = time;
+                        glow2Material.uniforms.time.value = time;
+                        
+                        const cameraPosition = camera.position.clone();
+                        glow1Material.uniforms.viewVector.value = cameraPosition.sub(this.particles[0].position);
+                        glow2Material.uniforms.viewVector.value = cameraPosition.sub(this.particles[1].position);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

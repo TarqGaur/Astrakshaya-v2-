@@ -1,0 +1,156 @@
+/* General Styles */
+body {
+    font-family: 'Rajdhani', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+   
+    color: white;
+    padding: 0 20px;
+}
+
+.hero-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: rgba(200, 200, 200, 0.8);
+    margin-top: 10px;
+}
+
+.cta-buttons {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.cta-button {
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 10px;
+    border: 2px solid #ffffff;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: 'Orbitron', sans-serif;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #84b0e6;
+    transform: scale(1.1);
+}
+
+.cta-button.secondary {
+    border-color: #84b0e6;
+}
+
+/* Footer */
+.footer {
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    font-family: 'Rajdhani', sans-serif;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-text p {
+    font-size: 1rem;
+    color: #b3b3b3;
+    margin-top: 0px;
+}
+
+/* Space Themed Design */
+.footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #ffddaa, #aaaaee);
+    opacity: 0.3;
+}
+
+/* Ensure footer stays at the bottom */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1024px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        height: auto;
+        padding: 50px 20px;
+    }
+    .hero-title {
+        font-size: 2rem;
+    }
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+    .cta-button {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
+    .footer-socials {
+        margin-bottom: 10px;
+    }
+    .social-icon {
+        font-size: 1.5rem;
+        margin: 0 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    .hero-subtitle {
+        font-size: 0.8rem;
+    }
+    .cta-button {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+}

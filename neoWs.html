@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ASTRAKSHAYA - NeoWs Tracker</title>  
+  <link rel="stylesheet" href="./css/nav.css">
+  <link rel="stylesheet" href="./css/footer.css">
+  <style>    
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600&display=swap');
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #333333;
+      border: none;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #404040;
+    }    
+
+    /* Enhanced Space Background */
+    .space-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+      background: radial-gradient(ellipse at center, #0a1a2a 0%, #000000 100%);
+    }
+
+    .star {
+      position: absolute;
+      background: #ffffff;
+      border-radius: 50%;
+      filter: blur(0.1px);
+      animation: starTwinkle linear infinite, starFloat linear infinite;
+    }
+
+    .star.tiny {
+      width: 1px;
+      height: 1px;
+      box-shadow: 0 0 1px #ffffff, 0 0 2px #84b0e6;
+    }
+
+    .star.small {
+      width: 2px;
+      height: 2px;
+      box-shadow: 0 0 2px #ffffff, 0 0 3px #84b0e6;
+    }
+
+    .star.medium {
+      width: 3px;
+      height: 3px;
+      box-shadow: 0 0 3px #ffffff, 0 0 5px #84b0e6;
+    }
+
+    .nebula {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      filter: blur(30px);
+      opacity: 0.1;
+      background: radial-gradient(circle at center, 
+        rgba(132, 176, 230, 0.3),
+        rgba(255, 42, 109, 0.2),
+        transparent 70%);
+      animation: nebulaFloat 20s linear infinite;
+    }
+
+    .comet {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: rgba(255, 255, 255, 1);
+      border-radius: 50%;
+      animation: cometFall linear infinite;
+      opacity: 0.9;
+      box-shadow: 0 0 4px #ffffff, 0 0 8px #84b0e6;
+    }
+
+    .comet::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0.9), 
+        rgba(132, 176, 230, 0.5), 
+        transparent);
+      transform: translate(-100%, -50%);
+      filter: blur(1px);
+    }
+
+    @keyframes starTwinkle {
+      0% {
+        opacity: 0.2;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        opacity: 0.2;
+      }
+    }
+
+    @keyframes cometFall {
+      0% {
+        transform: translateY(-100vh) translateX(-100vw) rotate(45deg);
+        opacity: 0;
+      }
+      5% {
+        opacity: 0.7;
+      }
+      95% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(100vh) translateX(100vw) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    :root {
+      --primary: #84b0e6;
+      --primary-glow: rgba(132, 176, 230, 0.4);
+      --secondary: #ff2a6d;
+      --tertiary: #d1fff3;
+      --background: #0e0e16;
+      --dark-bg: #030010;
+      --panel-bg: rgba(0, 0, 0, 0.85);
+      --border: rgba(255, 255, 255, 0.2);
+      --text: #e8f0f8;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Rajdhani', sans-serif;
+    }
+    
+    html, body {
+      min-height: 100vh;
+      width: 100%;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--background);
+      background-image: 
+        radial-gradient(circle at 20% 35%, rgba(132, 176, 230, 0.02) 0%, transparent 25%),
+        radial-gradient(circle at 75% 44%, rgba(255, 42, 109, 0.02) 0%, transparent 30%);
+      display: flex;  
+      flex-direction: column;
+      position: relative;
+    }
+
+    #main-content {
+      flex: 1 0 auto;
+      padding-top: 80px;
+      min-height: calc(100vh - 60px); /* Account for footer height */
+      width: 100%;
+      margin-bottom: 100px; /* Adjust based on your footer height */
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1rem;
+      width: 100%;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+      padding: 0 1rem;
+    }
+    
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      background: linear-gradient(90deg, var(--text), var(--primary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 2px;
+      margin-bottom: 0.25rem;
+      text-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      margin-bottom: 1rem;
+      letter-spacing: 1px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .subtitle {
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      line-height: 1.5;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+      background: var(--panel-bg);
+      border-radius: 8px;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    .stat {
+      text-align: center;
+      padding: 1rem;
+      position: relative;
+    }
+    
+    .stat:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: -0.5rem;
+      top: 25%;
+      height: 50%;
+      width: 1px;
+      background: var(--border);
+    }
+    
+    .stat-value {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 700;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--primary);
+      text-shadow: 0 0 10px var(--primary-glow);
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
+      color: #a0b7c5;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Options Section */
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1rem;
+    }
+    
+    .date-selector {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      background: var(--panel-bg);
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: 320px;
+    }
+    
+    .date-selector label {
+      font-size: 0.9rem;
+      color: #a0b7c5;
+      white-space: nowrap;
+    }
+    
+    .date-selector input {
+      background: rgba(3, 9, 34, 0.9);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-family: 'Rajdhani', sans-serif;
+      width: 100%;
+      max-width: 200px;
+      color-scheme: dark;  /* For dark mode calendar */
+    }
+
+    /* Calendar icon styling */
+    .date-selector input[type="date"]::-webkit-calendar-picker-indicator {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+      filter: brightness(1.8) drop-shadow(0 0 5px rgba(255, 255, 255, 0.7));
+      opacity: 0.8;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .date-selector input[type="date"]::-webkit-calendar-picker-indicator:hover {
+      opacity: 1;
+      filter: brightness(2.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
+    }
+    
+    .view-toggle {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      background: var(--panel-bg);
+      border-radius: 8px;
+      padding: 0.25rem;
+      border: 1px solid var(--border);
+    }
+    
+    .view-btn {
+      background: none;
+      border: none;
+      color: #a0b7c5;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-size: clamp(0.8rem, 2vw, 1rem);
+      white-space: nowrap;
+    }
+    
+    .view-btn.active {
+      background: rgba(132, 176, 230, 0.15);
+      color: var(--primary);
+      box-shadow: 0 0 10px var(--primary-glow);
+    }
+
+    /* Card Grid */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      padding: 0 1rem;
+    }
+    
+    .neo-card {
+      background: var(--panel-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    .neo-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(132, 176, 230, 0.2);
+      border-color: var(--primary);
+    }
+    
+    .card-header {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      font-weight: 600;
+    }
+    
+    .hazard-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+    
+    .hazard-badge.safe {
+      background: rgba(0, 255, 128, 0.15);
+      color: #00ff80;
+      border: 1px solid rgba(0, 255, 128, 0.3);
+    }
+    
+    .hazard-badge.danger {
+      background: rgba(255, 42, 109, 0.15);
+      color: var(--secondary);
+      border: 1px solid rgba(255, 42, 109, 0.3);
+    }
+    
+    .card-body {
+      padding: 1rem;
+    }
+    
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .data-label {
+      color: #a0b7c5;
+    }
+    
+    .data-value {
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* Table View */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin-bottom: 2rem;
+      padding: 0 1rem;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .table-view {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    .table-view thead {
+      background: rgba(3, 9, 34, 0.9);
+    }
+    
+    .table-view th {
+      padding: 1rem;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 500;
+      text-align: left;
+      color: var(--primary);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+    
+    .table-view td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: clamp(0.85rem, 2vw, 0.95rem);
+      white-space: nowrap;
+    }
+    
+    .table-view tr:hover {
+      background: rgba(132, 176, 230, 0.05);
+    }
+
+    /* Loading and Error States */
+    .loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      min-height: 200px;
+    }
+    
+    .loader::after {
+      content: "";
+      width: 50px;
+      height: 50px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: loader-spin 1s linear infinite;
+    }
+    
+    @keyframes loader-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
+    .error, .no-results {
+      text-align: center;
+      padding: 3rem 1rem;
+      background: var(--panel-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin: 1rem;
+    }
+    
+    .error {
+      border-color: rgba(255, 42, 109, 0.3);
+      background: rgba(255, 42, 109, 0.1);
+    }
+    
+    .error h3, .no-results h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+      margin-bottom: 1rem;
+    }
+    
+    .error p, .no-results p {
+      color: #a0b7c5;
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+
+    /* Footer Positioning */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--background);
+      z-index: 100;
+      padding: 1rem;
+      text-align: center;
+    }
+    
+    .footer::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    }
+    
+    .footer-text p {
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
+      color: #a0b7c5;
+      margin: 0;
+    }
+
+    /* Mobile Optimizations */
+    @media (max-width: 768px) {
+      .stats-bar {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        padding: 0.5rem;
+      }
+      
+      .stat::after {
+        display: none;
+      }
+      
+      .options {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .date-selector, .view-toggle {
+        max-width: 100%;
+      }
+      
+      .view-toggle {
+        justify-content: center;
+      }
+      
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 0.5rem;
+      }
+      
+      .header {
+        margin-bottom: 1rem;
+      }
+      
+      .stats-bar {
+        gap: 0.5rem;
+      }
+      
+      .stat {
+        padding: 0.5rem;
+      }
+      
+      .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .table-view td, .table-view th {
+        padding: 0.75rem;
+      }
+    }
+
+    /* Accessibility Improvements */
+    .view-btn:focus, .date-selector input:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="space-background" id="spaceBackground"></div>
+
+  <!-- Navbar -->  
+  <nav class="navbar">
+    <div id="particles-js"></div>
+    <div class="futuristic-text">ASTRAKSHAYA</div>
+    <div class="navbar-menu">
+      <a href="./index.html">Home</a>
+      <a href="./about.html">About Us</a>
+      <a href="./explore.html">Explore</a>
+      <a href="./team.html">Team</a>
+      <a href="./join.html">Join Us</a>
+    </div>
+    <div class="hamburger">
+      <div class="line1"></div>
+      <div class="line2"></div>
+      <div class="line3"></div>
+    </div>
+  </nav>
+
+  <div id="main-content">
+    <div class="container">
+      <header>
+        <div class="logo">   </div><br></br>
+        <h1>NeoWs - Near-Earth Object Tracker</h1>
+        <p class="subtitle">Real-time monitoring of asteroids and near-Earth objects using advanced NEO tracking systems.</p>
+      </header>
+      
+      <div class="stats-bar">
+        <div class="stat">
+          <div class="stat-value" id="total-neos">--</div>
+          <div class="stat-label">Objects Tracked</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="hazardous-count">--</div>
+          <div class="stat-label">Potentially Hazardous</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="closest-approach">--</div>
+          <div class="stat-label">Closest Approach (km)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="max-diameter">--</div>
+          <div class="stat-label">Largest Object (m)</div>
+        </div>
+      </div>
+      
+      <div class="options">
+        <div class="date-selector">
+          <label for="date-input">Tracking Date:</label>
+          <input type="date" id="date-input">
+        </div>
+        <div class="view-toggle">
+          <button class="view-btn active" data-view="cards">Card View</button>
+          <button class="view-btn" data-view="table">Table View</button>
+        </div>
+      </div>
+      
+      <div id="neo-container">
+        <div class="loader"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-text">
+        <p>© 2025 ASTRAKSHAYA. Exploring the cosmos, one discovery at a time.</p>
+      </div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="./js/nav.js"></script>
+    <script>
+    // Initialize particles.js with enhanced configuration
+    particlesJS('particles-js', {
+      particles: {
+        number: {
+          value: 100,
+          density: {
+            enable: true,
+            value_area: 1000
+          }
+        },
+        color: {
+          value: ['#ffffff', '#84b0e6', '#4b7397']
+        },
+        shape: {
+          type: 'circle'
+        },
+        opacity: {
+          value: 0.6,
+          random: true,
+          anim: {
+            enable: true,
+            speed: 1,
+            opacity_min: 0.1,
+            sync: false
+          }
+        },
+        size: {
+          value: 3,
+          random: true,
+          anim: {
+            enable: true,
+            speed: 2,
+            size_min: 0.1,
+            sync: false
+          }
+        },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: '#84b0e6',
+          opacity: 0.4,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 2,
+          direction: 'none',
+          random: true,
+          straight: false,
+          out_mode: 'out',
+          bounce: false,
+          attract: {
+            enable: true,
+            rotateX: 600,
+            rotateY: 1200
+          }
+        }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: {
+          onhover: {
+            enable: true,
+            mode: ['grab', 'bubble']
+          },
+          onclick: {
+            enable: true,
+            mode: 'push'
+          },
+          resize: true
+        },
+        modes: {
+          grab: {
+            distance: 140,
+            line_linked: {
+              opacity: 0.8
+            }
+          },
+          bubble: {
+            distance: 200,
+            size: 6,
+            duration: 0.3,
+            opacity: 0.8,
+            speed: 3
+          },
+          push: {
+            particles_nb: 4
+          }
+        }
+      },
+      retina_detect: true
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const API_KEY = 'dMSKIgUdzZqgav1YLgUH3BRx6nut36kOrnEsQyaT';
+      let neoData = [];
+      let currentView = 'cards';
+      
+      const formatDate = (date) => {
+        const d = date || new Date();
+        return d.toISOString().split('T')[0];
+      };
+      
+      const dateInput = document.getElementById('date-input');
+      dateInput.value = formatDate();
+      
+      const formatNumber = (num) => {
+        return num.toLocaleString('en-US');
+      };
+      
+      const formatDiameter = (min, max) => {
+        const avg = (min + max) / 2;
+        if (avg >= 1000) {
+          return `${(avg / 1000).toFixed(2)} km`;
+        }
+        return `${Math.round(avg)} m`;
+      };
+      
+      const fetchNeoData = async (date) => {
+        const container = document.getElementById('neo-container');
+        container.innerHTML = '<div class="loader"></div>';
+        
+        try {
+          const formattedDate = formatDate(date);
+          const url = `https://api.nasa.gov/neo/rest/v1/feed?start_date=${formattedDate}&end_date=${formattedDate}&api_key=${API_KEY}`;
+          
+          const response = await fetch(url);
+          const data = await response.json();
+          
+          const dateKey = Object.keys(data.near_earth_objects)[0];
+          neoData = data.near_earth_objects[dateKey];
+          
+          updateStatistics(neoData);
+          updateView(currentView);
+        } catch (error) {
+          console.error('Error fetching NEO data:', error);
+          container.innerHTML = `
+            <div class="error">
+              <h3>Error Retrieving Data</h3>
+              <p>Unable to fetch asteroid data from Astrakshaya API. Please try again later.</p>
+            </div>
+          `;
+        }
+      };
+      
+      const updateStatistics = (data) => {
+        const totalNeos = data.length;
+        const hazardousCount = data.filter(neo => neo.is_potentially_hazardous_asteroid).length;
+        
+        let closestApproach = Infinity;
+        let maxDiameter = 0;
+        
+        data.forEach(neo => {
+          const approach = neo.close_approach_data[0];
+          const distance = parseFloat(approach.miss_distance.kilometers);
+          if (distance < closestApproach) {
+            closestApproach = distance;
+          }
+          
+          const diameter = neo.estimated_diameter.meters.estimated_diameter_max;
+          if (diameter > maxDiameter) {
+            maxDiameter = diameter;
+          }
+        });
+        
+        document.getElementById('total-neos').textContent = totalNeos;
+        document.getElementById('hazardous-count').textContent = hazardousCount;
+        document.getElementById('closest-approach').textContent = formatNumber(Math.round(closestApproach));
+        document.getElementById('max-diameter').textContent = formatNumber(Math.round(maxDiameter));
+      };
+      
+      const generateCardView = (data) => {
+        if (data.length === 0) {
+          return `
+            <div class="no-results">
+              <h3>No Near-Earth Objects Found</h3>
+              <p>There are no asteroids tracked for this date. Try selecting a different date.</p>
+            </div>
+          `;
+        }
+        
+        let cardHTML = '<div class="card-grid">';
+        
+        data.forEach(neo => {
+          const name = neo.name.replace('(', '').replace(')', '');
+          const isHazardous = neo.is_potentially_hazardous_asteroid;
+          const approach = neo.close_approach_data[0];
+          const diameter = {
+            min: neo.estimated_diameter.meters.estimated_diameter_min,
+            max: neo.estimated_diameter.meters.estimated_diameter_max
+          };
+          const velocity = parseFloat(approach.relative_velocity.kilometers_per_hour);
+          const missDistance = parseFloat(approach.miss_distance.kilometers);
+          const approachDate = new Date(approach.close_approach_date_full).toLocaleString();
+          
+          cardHTML += `
+            <div class="neo-card">
+              <div class="card-header">
+                <div class="card-title">${name}</div>
+                <div class="hazard-badge ${isHazardous ? 'danger' : 'safe'}">${isHazardous ? 'Hazardous' : 'Safe'}</div>
+              </div>
+              <div class="card-body">
+                <div class="data-row">
+                  <span class="data-label">Diameter (est.)</span>
+                  <span class="data-value">${formatDiameter(diameter.min, diameter.max)}</span>
+                </div>
+                <div class="data-row">
+                  <span class="data-label">Miss Distance</span>
+                  <span class="data-value">${formatNumber(Math.round(missDistance))} km</span>
+                </div>
+                <div class="data-row">
+                  <span class="data-label">Velocity</span>
+                  <span class="data-value">${formatNumber(Math.round(velocity))} km/h</span>
+                </div>
+                <div class="data-row">
+                  <span class="data-label">Approach Time</span>
+                  <span class="data-value">${approachDate}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        
+        cardHTML += '</div>';
+        return cardHTML;
+      };
+      
+      const generateTableView = (data) => {
+        if (data.length === 0) {
+          return `
+            <div class="no-results">
+              <h3>No Near-Earth Objects Found</h3>
+              <p>There are no asteroids tracked for this date. Try selecting a different date.</p>
+            </div>
+          `;
+        }
+        
+        let tableHTML = `
+          <div class="table-container">
+            <table class="table-view">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Diameter (Est.)</th>
+                  <th>Miss Distance</th>
+                  <th>Velocity</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+        
+        data.forEach(neo => {
+          const name = neo.name.replace('(', '').replace(')', '');
+          const isHazardous = neo.is_potentially_hazardous_asteroid;
+          const approach = neo.close_approach_data[0];
+          const diameter = {
+            min: neo.estimated_diameter.meters.estimated_diameter_min,
+            max: neo.estimated_diameter.meters.estimated_diameter_max
+          };
+          const velocity = parseFloat(approach.relative_velocity.kilometers_per_hour);
+          const missDistance = parseFloat(approach.miss_distance.kilometers);
+          
+          tableHTML += `
+            <tr>
+              <td>${name}</td>
+              <td>${formatDiameter(diameter.min, diameter.max)}</td>
+              <td>${formatNumber(Math.round(missDistance))} km</td>
+              <td>${formatNumber(Math.round(velocity))} km/h</td>
+              <td>
+                <div class="hazard-badge ${isHazardous ? 'danger' : 'safe'}">${isHazardous ? 'Hazardous' : 'Safe'}</div>
+              </td>
+            </tr>
+          `;
+        });
+        
+        tableHTML += `
+            </tbody>
+          </table>
+        </div>
+        `;
+        
+        return tableHTML;
+      };
+      
+      const updateView = (view) => {
+        currentView = view;
+        
+        const container = document.getElementById('neo-container');
+        
+        document.querySelectorAll('.view-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.view === view);
+        });
+        
+        container.innerHTML = view === 'cards' ? generateCardView(neoData) : generateTableView(neoData);
+      };
+      
+      dateInput.addEventListener('change', function() {
+        const selectedDate = new Date(this.value);
+        fetchNeoData(selectedDate);
+      });
+      
+      document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          updateView(this.dataset.view);
+        });
+      });
+      
+      fetchNeoData(new Date());
+    });    // Space background animation
+    document.addEventListener('DOMContentLoaded', function() {
+        const spaceBackground = document.getElementById('spaceBackground');
+        
+        // Create stars with different sizes
+        function createStar() {
+            const star = document.createElement('div');
+            const size = Math.random();
+            star.className = `star ${size < 0.6 ? 'tiny' : size < 0.9 ? 'small' : 'medium'}`;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            spaceBackground.appendChild(star);
+            
+            setTimeout(() => {
+                star.remove();
+            }, 5000);
+        }
+        
+        // Create nebula effect
+        function createNebula() {
+            const nebula = document.createElement('div');
+            nebula.className = 'nebula';
+            nebula.style.left = Math.random() * 100 + '%';
+            nebula.style.top = Math.random() * 100 + '%';
+            spaceBackground.appendChild(nebula);
+            
+            setTimeout(() => {
+                nebula.remove();
+            }, 20000);
+        }
+        
+        // Create comets with enhanced effects
+        function createComet() {
+            const comet = document.createElement('div');
+            comet.className = 'comet';
+            comet.style.left = Math.random() * 100 + '%';
+            comet.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            spaceBackground.appendChild(comet);
+            
+            comet.addEventListener('animationend', () => {
+                comet.remove();
+            });
+        }
+        
+        // Dynamic background elements
+        setInterval(createStar, 300);  // More frequent stars for a richer background
+        setInterval(createComet, 10000); // Occasional comets
+        setInterval(createNebula, 15000); // Rare nebula effects
+        
+        // Initial population
+        for(let i = 0; i < 50; i++) { // More initial stars
+            setTimeout(createStar, Math.random() * 2000);
+        }
+        
+        // Initial nebulas
+        for(let i = 0; i < 3; i++) {
+            setTimeout(createNebula, Math.random() * 5000);
+        }
+    });
+  </script>
+</body>
+</html>
