@@ -65,9 +65,9 @@ body {
 
 /* Footer */
 .footer {
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgba(0, 0, 0, 0.8);
     color: white;
-    padding: 10px 0;
+    padding: 5px 0;
     text-align: center;
     font-family: 'Rajdhani', sans-serif;
     position: absolute;
@@ -76,14 +76,15 @@ body {
 }
 
 .footer-content {
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
 .footer-text p {
-    font-size: 1rem;
+    font-size: 0.8rem;
     color: #b3b3b3;
-    margin-top: 0px;
+    margin: 2px 0;
+    line-height: 1.2;
 }
 
 /* Space Themed Design */
