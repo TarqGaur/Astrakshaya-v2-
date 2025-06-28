@@ -477,40 +477,377 @@
             box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
         }
         
+        /* Responsive Design for All Devices */
+        @media (max-width: 1200px) {
+            .mission-control {
+                width: 320px;
+                padding: 16px;
+            }
+            .skyhack-container {
+                max-width: 350px;
+                padding: 24px 16px;
+            }
+            model-viewer {
+                width: 60vw;
+            }
+        }
+        @media (max-width: 992px) {
+            .mission-control {
+                width: 260px;
+                padding: 12px;
+            }
+            .skyhack-container {
+                max-width: 320px;
+                padding: 18px 10px;
+            }
+            model-viewer {
+                width: 70vw;
+            }
+        }
         @media (max-width: 768px) {
             model-viewer {
                 width: 100vw;
                 right: 0;
+                height: 60vh;
             }
-            
             .skyhack-container {
-                padding: 24px 20px;
-                max-width: 350px;
+                padding: 16px 8px;
+                max-width: 95vw;
             }
-            
             .mission-control {
                 position: fixed;
                 top: 10px;
                 left: 10px;
                 right: 10px;
                 width: auto;
-                padding: 15px;
+                padding: 10px;
             }
-            
             .speedometer-container {
                 justify-content: center;
                 gap: 10px;
             }
-            
             .speedometer {
-                width: 80px;
-                height: 80px;
+                width: 70px;
+                height: 70px;
             }
-            
             .home-btn {
                 top: 10px;
                 right: 10px;
                 padding: 10px 15px;
+            }
+        }
+        @media (max-width: 600px) {
+            .mission-control {
+                width: 98vw;
+                left: 1vw;
+                right: 1vw;
+                padding: 6px;
+                font-size: 0.9rem;
+            }
+            .skyhack-container {
+                max-width: 99vw;
+                padding: 8px 2vw;
+            }
+            .speedometer {
+                width: 50px;
+                height: 50px;
+            }
+            .equal-btn {
+                height: 48px;
+                font-size: 0.95rem;
+                padding: 0 10px;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                box-sizing: border-box !important;
+                text-align: left !important;
+                word-break: break-word !important;
+                /* Fix overflow for long text */
+                overflow-wrap: break-word !important;
+                white-space: normal !important;
+            }
+            .logo-box img {
+                height: 60%;
+            }
+        }
+        @media (max-width: 480px) {
+            .mission-control {
+                width: 100vw;
+                left: 0;
+                right: 0;
+                padding: 2vw;
+                font-size: 0.8rem;
+            }
+            .skyhack-container {
+                max-width: 100vw;
+                padding: 2vw 1vw;
+            }
+            .speedometer {
+                width: 36px;
+                height: 36px;
+            }
+            .equal-btn {
+                height: 36px;
+                font-size: 0.8rem;
+                padding: 0 4px;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                box-sizing: border-box !important;
+                text-align: left !important;
+                word-break: break-word !important;
+                /* Fix overflow for long text */
+                overflow-wrap: break-word !important;
+                white-space: normal !important;
+            }
+            .logo-box img {
+                height: 40%;
+            }
+            .home-btn {
+                font-size: 0.8rem;
+                padding: 6px 8px;
+            }
+        }
+        @media (max-width: 375px) {
+            .mission-control,
+            .skyhack-container {
+                padding: 1vw 0.5vw;
+                font-size: 0.7rem;
+            }
+            .speedometer {
+                width: 24px;
+                height: 24px;
+            }
+            .equal-btn {
+                height: 28px;
+                font-size: 0.7rem;
+            }
+        }
+
+        
+        /* Hide everything except .skyhack-container and .home-btn on small screens */
+        @media (max-width: 600px) {
+            body {
+                overflow-y: auto !important;
+            }
+            .mission-control,
+            .background-thrust-particles,
+            .stars-container,
+            model-viewer {
+                display: none !important;
+            }
+            .skyhack-container {
+                display: flex !important;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto;
+                min-height: 100vh;
+                max-width: 100vw;
+                padding: 4vw 2vw !important;
+                background: transparent !important;
+                box-shadow: none !important;
+            }
+            .skyhack-image {
+                display: block !important;
+                max-width: 90vw;
+                max-height: 120px;
+                margin: 24px auto 16px auto;
+            }
+            .equal-btn {
+                display: flex !important;
+                width: 90vw;
+                max-width: 340px;
+                margin: 10px auto;
+                font-size: 1rem;
+                height: 48px;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                box-sizing: border-box !important;
+                text-align: left !important;
+                word-break: break-word !important;
+                /* Fix overflow for long text */
+                overflow-wrap: break-word !important;
+                white-space: normal !important;
+            }
+            .logo-box img {
+                height: 32px !important;
+                width: auto;
+            }
+            .home-btn {
+                display: block !important;
+                position: fixed;
+                top: 12px;
+                right: 12px;
+                z-index: 100;
+                font-size: 1rem;
+                padding: 8px 14px;
+            }
+            /* Hide fallback text if image fails */
+            #img-fallback {
+                font-size: 1rem;
+                margin-bottom: 16px;
+            }
+        }
+
+        /* Hide everything except the 4 important buttons and popup image on phone */
+        @media (max-width: 600px) {
+            /* Hide all children of .skyhack-container except .skyhack-image and .equal-btn */
+            .skyhack-container > *:not(:first-child):not(.equal-btn) {
+                display: none !important;
+            }
+            /* Only show the first 4 .equal-btn (the important buttons) */
+            .equal-btn:nth-of-type(n+6) {
+                display: none !important;
+            }
+        }
+
+        /* Enhanced mobile experience for .skyhack-container */
+        @media (max-width: 600px) {
+            html, body {
+                height: 100%;
+                min-height: 100vh;
+                width: 100vw;
+                overflow-y: auto !important;
+                background: #0a0a12 !important;
+            }
+            body {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                min-height: 100vh !important;
+                min-width: 100vw !important;
+                width: 100vw !important;
+                height: 100vh !important;
+                position: relative;
+            }
+            .mission-control,
+            model-viewer {
+                display: none !important;
+            }
+            /* Keep background stars and thrust visible */
+            .stars-container,
+            .background-thrust-particles {
+                display: block !important;
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100vw !important;
+                height: 100vh !important;
+                z-index: -2 !important;
+                pointer-events: none !important;
+            }
+            .stars-container {
+                background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a12 100%) !important;
+            }
+            .skyhack-container {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                margin: 0 auto !important;
+                min-height: 100vh !important;
+                max-width: 100vw !important;
+                width: 100vw !important;
+                padding: 0 !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                position: relative !important;
+            }
+            .skyhack-image {
+                display: block !important;
+                max-width: 92vw !important;
+                max-height: 38vh !important;
+                width: auto !important;
+                height: auto !important;
+                margin: 0 auto 24px auto !important;
+                object-fit: contain !important;
+            }
+            .equal-btn {
+                display: flex !important;
+                width: 92vw !important;
+                max-width: 420px !important;
+                margin: 10px auto !important;
+                font-size: 1.08rem !important;
+                height: 54px !important;
+                border-radius: 14px !important;
+                padding: 0 10px !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                box-sizing: border-box !important;
+                text-align: left !important;
+                word-break: break-word !important;
+                /* Fix overflow for long text */
+                overflow-wrap: break-word !important;
+                white-space: normal !important;
+            }
+            .equal-btn span {
+                font-size: 1.08rem !important;
+                flex: 1 !important;
+                text-align: left !important;
+                padding-right: 8px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                white-space: normal !important;
+                word-break: break-word !important;
+                overflow-wrap: break-word !important;
+                /* Prevent text from overflowing the button */
+                min-width: 0 !important;
+                max-width: 100% !important;
+                flex-shrink: 1 !important;
+            }
+            .logo-box {
+                margin-right: 12px !important;
+                padding: 0 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+            .logo-box img {
+                height: 34px !important;
+                width: auto !important;
+                max-width: 40px !important;
+                min-width: 24px !important;
+                object-fit: contain !important;
+                margin: 0 !important;
+            }
+            .home-btn {
+                display: block !important;
+                position: fixed !important;
+                top: 16px !important;
+                right: 16px !important;
+                z-index: 100 !important;
+                font-size: 1.1rem !important;
+                padding: 10px 18px !important;
+            }
+            #img-fallback {
+                font-size: 1.1rem !important;
+                margin-bottom: 18px !important;
+            }
+            /* Center everything vertically and horizontally */
+            .skyhack-container {
+                justify-content: center !important;
+                align-items: center !important;
+                text-align: center !important;
+            }
+        }
+
+        /* Hide everything except the 4 important buttons and popup image on phone */
+        @media (max-width: 600px) {
+            .skyhack-container > *:not(:first-child):not(.equal-btn) {
+                display: none !important;
+            }
+            .equal-btn:nth-of-type(n+6) {
+                display: none !important;
+            }
+        }
+
+        /* Make WhatsApp button text responsive and wrap if needed */
+        @media (max-width: 600px) {
+            .equal-btn span {
+                font-size: 1.08rem !important;
+                white-space: normal !important;
+                word-break: break-word !important;
             }
         }
     </style>
