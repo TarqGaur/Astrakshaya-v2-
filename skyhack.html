@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skyhack Registration - Mission Control</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Model Viewer -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <!-- Anime.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a12;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Animated Star Field Background */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a12 100%);
+        }
+        
+        .stars {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: moveStars 3s linear infinite;
+        }
+        
+        .stars.fast {
+            animation: moveStars 1s linear infinite;
+            opacity: 0.8;
+        }
+        
+        .stars.medium {
+            animation: moveStars 2s linear infinite;
+            opacity: 0.6;
+        }
+        
+        @keyframes moveStars {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+        
+        /* 3D Rocket Model positioned to right */
+        model-viewer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 50vw;
+            height: 100vh;
+            z-index: 1;
+            background: transparent;
+        }
+        
+        .skyhack-container {
+            background: transparent; /* Remove grey background */
+            border-radius: 20px;
+            box-shadow: none; /* Remove box-shadow */
+            backdrop-filter: none; /* Remove blur */
+            border: none; /* Remove border */
+            padding: 32px;
+            max-width: 400px;
+            width: 90vw;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .skyhack-image {
+            width: 100%;
+            height: auto;
+            max-height: 480px; /* Make image bigger */
+            /* min-height removed */
+            object-fit: contain;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(74, 144, 226, 0.5);
+        }
+        
+        .equal-btn {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            max-width: 320px;
+            height: 64px;
+            margin: 12px auto;
+            padding: 0 24px;
+            border: none;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #fff, #f0f4ff);
+            box-shadow: 0 4px 18px rgba(74, 144, 226, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: #222;
+            text-decoration: none;
+            font-weight: 600;
+            gap: 0;
+            letter-spacing: 0.5px;
+        }
+        
+        .logo-box {
+            height: 100%;
+            min-width: 0;
+            width: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border-radius: 10px;
+            margin-right: 16px;
+            padding: 0 4px;
+        }
+        
+        .logo-box img {
+            height: 70%;
+            max-height: 80%;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+            display: block;
+        }
+        
+        .equal-btn span {
+            flex: 1;
+            text-align: left;
+            font-size: 1.1rem;
+            color: #222;
+            font-weight: 600;
+            padding-right: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        
+        .equal-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 28px rgba(74, 144, 226, 0.4);
+            background: linear-gradient(135deg, #f0f4ff, #e8f0ff);
+        }
+        
+        /* Enhanced Mission Control Panel */
+        .mission-control {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 360px;
+            background: linear-gradient(145deg, rgba(20, 20, 30, 0.9), rgba(10, 10, 20, 0.9));
+            color: #e6e6e6;
+            font-family: 'Orbitron', sans-serif;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(74, 144, 226, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(74, 144, 226, 0.6);
+            padding: 20px;
+            z-index: 15;
+        }
+        
+        .mission-control h2 {
+            font-size: 1.4rem;
+            margin: 0 0 15px 0;
+            color: #4a90e2;
+            letter-spacing: 1.5px;
+            text-align: center;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
+        }
+        
+        .speedometer-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .speedometer {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            margin: 0 5px;
+        }
+        
+        .speedometer-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #ff6b35 0%, #4a90e2 50%, #00ff88 100%);
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+        }
+        
+        .speedometer-inner {
+            width: 100%;
+            height: 100%;
+            background: rgba(20, 20, 30, 0.95);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .speed-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #4a90e2;
+            text-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+        }
+        
+        .speed-label {
+            font-size: 0.7rem;
+            color: #b0b0b0;
+            margin-top: 3px;
+            text-transform: uppercase;
+        }
+        
+        .needle {
+            position: absolute;
+            width: 3px;
+            height: 35px;
+            background: #ff6b35;
+            top: 15px;
+            left: 50%;
+            transform-origin: bottom center;
+            transform: translateX(-50%) rotate(0deg);
+            transition: transform 0.5s ease-in-out;
+            box-shadow: 0 0 10px rgba(255, 107, 53, 0.7);
+        }
+        
+        .controls-section {
+            background: rgba(34, 40, 80, 0.6);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(74, 144, 226, 0.4);
+        }
+        
+        .controls-title {
+            font-size: 1rem;
+            color: #4a90e2;
+            margin-bottom: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+        }
+        
+        .control-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .control-btn {
+            background: rgba(74, 144, 226, 0.3);
+            border: 1px solid rgba(74, 144, 226, 0.6);
+            border-radius: 10px;
+            color: #e6e6e6;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            text-align: center;
+            text-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+        }
+        
+        .control-btn:hover, .control-btn.active {
+            background: rgba(74, 144, 226, 0.7);
+            border-color: #4a90e2;
+            box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+        }
+        
+        .control-btn:nth-child(2) { grid-column: 2; grid-row: 1; } /* W */
+        .control-btn:nth-child(1) { grid-column: 1; grid-row: 2; } /* A */
+        .control-btn:nth-child(3) { grid-column: 2; grid-row: 2; } /* S */
+        .control-btn:nth-child(4) { grid-column: 3; grid-row: 2; } /* D */
+        
+        .engine-controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        
+        .engine-btn {
+            flex: 1;
+            background: rgba(255, 107, 53, 0.3);
+            border: 1px solid rgba(255, 107, 53, 0.6);
+            border-radius: 10px;
+            color: #e6e6e6;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .engine-btn img {
+            width: 24px;
+            height: 24px;
+            filter: drop-shadow(0 0 5px rgba(255, 107, 53, 0.5));
+        }
+        
+        .engine-btn:hover {
+            background: rgba(255, 107, 53, 0.6);
+            border-color: #ff6b35;
+            box-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+        }
+        
+        .engine-btn.active {
+            background: rgba(255, 107, 53, 0.8);
+            border-color: #ff6b35;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.7);
+        }
+        
+        .status-display {
+            background: rgba(34, 40, 80, 0.6);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            border: 1px solid rgba(74, 144, 226, 0.4);
+        }
+        
+        .status-display .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .status-display .status-item img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            filter: drop-shadow(0 0 5px rgba(74, 144, 226, 0.5));
+        }
+        
+        .status-label {
+            display: flex;
+            align-items: center;
+            color: #b0b0b0;
+            font-weight: 600;
+        }
+        
+        .status-value {
+            color: #4a90e2;
+            font-weight: 700;
+            text-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+        }
+        
+        /* Background Thrust Animation */
+        .background-thrust-particles {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 50vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            filter: drop-shadow(0 0 60px #ffb300cc) drop-shadow(0 0 120px #ff6b35cc);
+            mix-blend-mode: lighten;
+            opacity: 0;
+            transition: opacity 0.5s cubic-bezier(.4,2,.6,1);
+        }
+        .background-thrust-particles.active {
+            opacity: 1;
+        }
+        .background-thrust-particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            background: linear-gradient(180deg,
+                #fffbe9 0%,
+                #ffe066 10%,
+                #ffb300 30%,
+                #ff6b35 70%,
+                #ff3915 100%);
+            filter: blur(1.5px) brightness(1.3);
+            opacity: 0.7;
+            box-shadow: 0 0 60px 20px #ffb30055, 0 0 120px 40px #ff6b3533;
+            animation: laminar-thrust 2.2s linear infinite, flicker-cinematic 0.22s infinite alternate;
+            will-change: transform, opacity, filter;
+            mix-blend-mode: screen;
+        }
+        @keyframes laminar-thrust {
+            0% {
+                transform: translateY(0) scaleX(var(--sx,1)) scaleY(var(--sy,1)) translateX(var(--drift,0px));
+                opacity: 1;
+            }
+            80% {
+                opacity: 0.85;
+            }
+            100% {
+                transform: translateY(var(--trail, 600px)) scaleX(var(--sx,1)) scaleY(var(--sy,1.5)) translateX(var(--drift,0px));
+                opacity: 0;
+            }
+        }
+        @keyframes flicker-cinematic {
+            0% { filter: blur(1.5px) brightness(1.1); }
+            100% { filter: blur(3.5px) brightness(1.5); }
+        }
+        
+        .home-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(74, 144, 226, 0.3);
+            border: 1px solid rgba(74, 144, 226, 0.6);
+            border-radius: 10px;
+            color: #e6e6e6;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            z-index: 15;
+        }
+        
+        .home-btn:hover {
+            background: rgba(74, 144, 226, 0.7);
+            box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            model-viewer {
+                width: 100vw;
+                right: 0;
+            }
+            
+            .skyhack-container {
+                padding: 24px 20px;
+                max-width: 350px;
+            }
+            
+            .mission-control {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                width: auto;
+                padding: 15px;
+            }
+            
+            .speedometer-container {
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            .speedometer {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .home-btn {
+                top: 10px;
+                right: 10px;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Star Field -->
+    <div class="stars-container" id="starsContainer"></div>
+    
+    <!-- Background Thrust Particles -->
+    <div class="background-thrust-particles" id="backgroundThrustParticles"></div>
+    
+    <!-- 3D Rocket Model Background -->
+    <div style="position:fixed;top:0;right:0;width:50vw;height:100vh;z-index:1;">
+        <model-viewer 
+            src="gslv_mk3.glb" 
+            alt="GSLV MK3 Rocket"
+            auto-rotate 
+            auto-rotate-delay="1000"
+            rotation-per-second="10deg"
+            camera-controls 
+            environment-image="neutral"
+            shadow-intensity="0.3"
+            exposure="0.8"
+            tone-mapping="neutral"
+            disable-zoom
+            style="width:100%;height:100%;background:transparent;position:absolute;top:0;left:0;">
+        </model-viewer>
+    </div>
+
+    <div class="skyhack-container">
+        <div style="position:relative;">
+            <img src="homepopup.png" alt="Skyhack" class="skyhack-image" onerror="this.style.display='none';document.getElementById('img-fallback').style.display='block';">
+            <div id="img-fallback" style="display:none;color:#ff6b6b;background:rgba(34,34,34,0.9);padding:20px;border-radius:12px;border:1px solid #ff6b6b;">
+                <strong>SKYHACK 2025</strong><br>
+                <small>Space Innovation Hackathon</small>
+            </div>
+        </div>
+        
+        <a href="SkyHackDetails.pdf" class="equal-btn" download>
+            <span class="logo-box">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg" alt="PDF icon" />
+            </span>
+            <span>Download Details PDF</span>
+        </a>
+        
+        <a href="https://unstop.com/p/skyhack-astrakshaya-1508643?lb=m9ShFe2q&utm_medium=Share&utm_source=WhatsApp" class="equal-btn" target="_blank">
+            <span class="logo-box">
+                <img src="https://cdn.brandfetch.io/idGDIX1CZd/theme/dark/logo.svg?c=1dxbfHSJFAPEGdCLU4o5B" alt="Unstop logo" onerror="this.style.display='none';this.parentNode.style.display='none';" />
+            </span>
+            <span>Register on Unstop</span>
+        </a>
+        
+        <a href="https://unstop.com/p/skyhack-astrakshaya-1508643?lb=m9ShFe2q&utm_medium=Share&utm_source=WhatsApp" class="equal-btn" target="_blank">
+            <span class="logo-box">
+                <img src="devfolio.svg" alt="Devfolio logo" />
+            </span>
+            <span>Register on Devfolio</span>
+        </a>
+        
+        <a href="https://chat.whatsapp.com/Cs9BcZKLN595aT1oJGFeLK" class="equal-btn" target="_blank">
+            <span class="logo-box">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp logo" />
+            </span>
+            <span>Join WhatsApp Group</span>
+        </a>
+        
+    </div>
+
+    <!-- Enhanced Mission Control -->
+    <div class="mission-control">
+        <h2>COMMAND CONSOLE</h2>
+        
+        <!-- Speedometers -->
+        <div class="speedometer-container">
+            <div class="speedometer">
+                <div class="speedometer-circle">
+                    <div class="speedometer-inner">
+                        <div class="needle" id="speedNeedle"></div>
+                        <div class="speed-value" id="speedValue">0</div>
+                        <div class="speed-label">KM/S</div>
+                    </div>
+                </div>
+            </div>
+            <div class="speedometer">
+                <div class="speedometer-circle">
+                    <div class="speedometer-inner">
+                        <div class="needle" id="altitudeNeedle"></div>
+                        <div class="speed-value" id="altitudeValue">0</div>
+                        <div class="speed-label">ALT</div>
+                    </div>
+                </div>
+            </div>
+            <div class="speedometer">
+                <div class="speedometer-circle">
+                    <div class="speedometer-inner">
+                        <div class="needle" id="fuelNeedle"></div>
+                        <div class="speed-value" id="fuelValue">100</div>
+                        <div class="speed-label">FUEL</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- WASD Controls -->
+        <div class="controls-section">
+            <div class="controls-title">NAVIGATION SYSTEM</div>
+            <div class="control-buttons">
+                <div class="control-btn" data-key="a">A<br>LEFT</div>
+                <div class="control-btn" data-key="w">W<br>UP</div>
+                <div class="control-btn" data-key="s">S<br>DOWN</div>
+                <div class="control-btn" data-key="d">D<br>RIGHT</div>
+            </div>
+            
+            <div class="engine-controls">
+                <button class="engine-btn" id="engineStart">
+                    <img src="engine.png" alt="Start Engine Icon" class="engine-icon">
+                    START ENGINE
+                </button>
+                <button class="engine-btn" id="engineStop">
+                    <img src="engine.png" alt="Stop Engine Icon" class="engine-icon">
+                    STOP ENGINE
+                </button>
+            </div>
+        </div>
+        
+        <!-- Status Display -->
+        <div class="status-display">
+            <div class="status-item">
+                <span class="status-label">
+                    <img src="engine.png" alt="Engine Icon" class="status-icon">
+                    Engine Status
+                </span>
+                <span class="status-value" id="engineStatus">OFFLINE</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">
+                    <img src="timer.png" alt="Timer Icon" class="status-icon">
+                    Mission Time
+                </span>
+                <span class="status-value" id="missionTime">00:00:00</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">
+                    <img src="lever.png" alt="Thrust Icon" class="status-icon">
+                    Thrust Power
+                </span>
+                <span class="status-value" id="thrustPower">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <a href="index.html" class="home-btn">Home</a>
+
+    <audio id="rocketAudio" src="rocket.mp3" preload="auto" loop></audio>
+
+    <script>
+        // Mission Control System
+        class MissionControl {
+            constructor() {
+                this.engineActive = false;
+                this.speed = 0;
+                this.altitude = 0;
+                this.fuel = 100;
+                this.missionStartTime = null;
+                this.thrustPower = 0;
+                this.activeKeys = new Set();
+                
+                this.init();
+                this.createStars();
+                this.createBackgroundThrustParticles();
+                this.animateIcons();
+            }
+            
+            init() {
+                // Keyboard controls
+                document.addEventListener('keydown', (e) => this.handleKeyDown(e));
+                document.addEventListener('keyup', (e) => this.handleKeyUp(e));
+                
+                // Engine controls
+                document.getElementById('engineStart').addEventListener('click', () => this.startEngine());
+                document.getElementById('engineStop').addEventListener('click', () => this.stopEngine());
+                
+                // Update displays
+                this.updateDisplays();
+                this.startMissionTimer();
+            }
+            
+            animateIcons() {
+                // Animate engine icons
+                anime({
+                    targets: '.engine-icon',
+                    scale: [1, 1.1],
+                    rotate: '5deg',
+                    duration: 1000,
+                    easing: 'easeInOutQuad',
+                    direction: 'alternate',
+                    loop: true
+                });
+                
+                // Animate status icons
+                anime({
+                    targets: '.status-icon',
+                    scale: [1, 1.05],
+                    opacity: [0.8, 1],
+                    duration: 1500,
+                    easing: 'easeInOutSine',
+                    direction: 'alternate',
+                    loop: true
+                });
+            }
+            
+            handleKeyDown(e) {
+                const key = e.key.toLowerCase();
+                if (['w', 'a', 's', 'd'].includes(key)) {
+                    e.preventDefault();
+                    this.activeKeys.add(key);
+                    const button = document.querySelector(`[data-key="${key}"]`);
+                    button.classList.add('active');
+                    // Anime.js animation for button press
+                    anime({
+                        targets: button,
+                        scale: [1, 1.05],
+                        duration: 200,
+                        easing: 'easeInOutQuad',
+                        direction: 'alternate'
+                    });
+                    
+                    if (this.engineActive) {
+                        this.processMovement(key);
+                    }
+                }
+            }
+            
+            handleKeyUp(e) {
+                const key = e.key.toLowerCase();
+                if (['w', 'a', 's', 'd'].includes(key)) {
+                    this.activeKeys.delete(key);
+                    document.querySelector(`[data-key="${key}"]`).classList.remove('active');
+                }
+            }
+            
+            processMovement(key) {
+                switch(key) {
+                    case 'w':
+                        this.increaseThrust();
+                        break;
+                    case 's':
+                        this.decreaseThrust();
+                        break;
+                    case 'a':
+                    case 'd':
+                        this.adjustDirection();
+                        break;
+                }
+            }
+            
+            increaseThrust() {
+                if (this.fuel > 0) {
+                    this.thrustPower = Math.min(100, this.thrustPower + 5);
+                    this.speed = Math.min(25, this.speed + 0.5);
+                    this.altitude = Math.min(999, this.altitude + 2);
+                    this.fuel = Math.max(0, this.fuel - 0.2);
+                    this.intensifyStarMovement();
+                    // Check for zero fuel
+                    if (this.fuel <= 0) {
+                        this.fuel = 100; // Reset fuel to 100
+                        anime({
+                            targets: '#fuelValue',
+                            innerHTML: [0, 100],
+                            easing: 'easeInOutQuad',
+                            duration: 1000,
+                            round: 1
+                        });
+                    }
+                }
+            }
+            
+            decreaseThrust() {
+                this.thrustPower = Math.max(0, this.thrustPower - 5);
+                this.speed = Math.max(0, this.speed - 0.3);
+                this.normalizeStarMovement();
+            }
+            
+            adjustDirection() {
+                if (this.fuel > 0) {
+                    this.fuel = Math.max(0, this.fuel - 0.1);
+                    // Check for zero fuel
+                    if (this.fuel <= 0) {
+                        this.fuel = 100; // Reset fuel to 100
+                        anime({
+                            targets: '#fuelValue',
+                            innerHTML: [0, 100],
+                            easing: 'easeInOutQuad',
+                            duration: 1000,
+                            round: 1
+                        });
+                    }
+                }
+            }
+            
+            startEngine() {
+                this.engineActive = true;
+                this.missionStartTime = Date.now();
+                this.speed = 1; // Initial speed of 1
+                document.getElementById('engineStart').classList.add('active');
+                document.getElementById('engineStop').classList.remove('active');
+                // Anime.js animation for button
+                anime({
+                    targets: '#engineStart',
+                    scale: [1, 1.05],
+                    backgroundColor: 'rgba(255, 107, 53, 0.8)',
+                    duration: 300,
+                    easing: 'easeInOutQuad',
+                    direction: 'alternate'
+                });
+                // Show laminar thrust
+                document.getElementById('backgroundThrustParticles').classList.add('active');
+                // Play rocket audio
+                const audio = document.getElementById('rocketAudio');
+                if (audio) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    const playPromise = audio.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(() => {
+                            const resume = () => {
+                                audio.play();
+                                document.removeEventListener('click', resume);
+                            };
+                            document.addEventListener('click', resume);
+                        });
+                    }
+                }
+                this.updateEngineStatus('ONLINE');
+            }
+            
+            stopEngine() {
+                this.engineActive = false;
+                this.thrustPower = 0;
+                this.speed = 0;
+                document.getElementById('engineStop').classList.add('active');
+                document.getElementById('engineStart').classList.remove('active');
+                // Anime.js animation for button
+                anime({
+                    targets: '#engineStop',
+                    scale: [1, 1.05],
+                    backgroundColor: 'rgba(255, 107, 53, 0.8)',
+                    duration: 300,
+                    easing: 'easeInOutQuad',
+                    direction: 'alternate'
+                });
+                // Hide laminar thrust
+                document.getElementById('backgroundThrustParticles').classList.remove('active');
+                // Pause rocket audio
+                const audio = document.getElementById('rocketAudio');
+                if (audio) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
+                this.updateEngineStatus('OFFLINE');
+                this.normalizeStarMovement();
+            }
+            
+            updateDisplays() {
+                // Update text values
+                document.getElementById('speedValue').textContent = Math.floor(this.speed);
+                document.getElementById('altitudeValue').textContent = Math.floor(this.altitude);
+                document.getElementById('fuelValue').textContent = Math.floor(this.fuel);
+                document.getElementById('thrustPower').textContent = Math.floor(this.thrustPower) + '%';
+                
+                // Anime.js animations for needles
+                anime({
+                    targets: '#speedNeedle',
+                    rotate: (this.speed / 25) * 180,
+                    duration: 500,
+                    easing: 'easeInOutSine'
+                });
+                anime({
+                    targets: '#altitudeNeedle',
+                    rotate: (this.altitude / 999) * 180,
+                    duration: 500,
+                    easing: 'easeInOutSine'
+                });
+                anime({
+                    targets: '#fuelNeedle',
+                    rotate: (this.fuel / 100) * 180,
+                    duration: 500,
+                    easing: 'easeInOutSine'
+                });
+                
+                requestAnimationFrame(() => this.updateDisplays());
+            }
+            
+            updateEngineStatus(status) {
+                document.getElementById('engineStatus').textContent = status;
+            }
+            
+            startMissionTimer() {
+                setInterval(() => {
+                    if (this.missionStartTime) {
+                        const elapsed = Date.now() - this.missionStartTime;
+                        const hours = Math.floor(elapsed / 3600000).toString().padStart(2, '0');
+                        const minutes = Math.floor((elapsed % 3600000) / 60000).toString().padStart(2, '0');
+                        const seconds = Math.floor((elapsed % 60000) / 1000).toString().padStart(2, '0');
+                        document.getElementById('missionTime').textContent = `${hours}:${minutes}:${seconds}`;
+                    }
+                }, 1000);
+            }
+            
+            createStars() {
+                const container = document.getElementById('starsContainer');
+                for (let i = 0; i < 100; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'stars';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.animationDelay = Math.random() * 3 + 's';
+                    
+                    if (i % 3 === 0) star.classList.add('fast');
+                    if (i % 3 === 1) star.classList.add('medium');
+                    
+                    container.appendChild(star);
+                }
+            }
+            
+            intensifyStarMovement() {
+                document.querySelectorAll('.stars').forEach(star => {
+                    star.style.animationDuration = '0.5s';
+                });
+            }
+            
+            normalizeStarMovement() {
+                document.querySelectorAll('.stars').forEach((star, i) => {
+                    if (star.classList.contains('fast')) {
+                        star.style.animationDuration = '1s';
+                    } else if (star.classList.contains('medium')) {
+                        star.style.animationDuration = '2s';
+                    } else {
+                        star.style.animationDuration = '3s';
+                    }
+                });
+            }
+            
+            createBackgroundThrustParticles() {
+                const container = document.getElementById('backgroundThrustParticles');
+                container.innerHTML = '';
+                const count = 60;
+                for (let i = 0; i < count; i++) {
+                    const p = document.createElement('div');
+                    p.className = 'background-thrust-particle';
+                    p.style.left = (48 + Math.random() * 4) + '%';
+                    p.style.bottom = (2 + Math.random() * 6) + '%';
+                    const width = 6 + Math.random() * 10;
+                    const height = 80 + Math.random() * 220;
+                    p.style.width = width + 'px';
+                    p.style.height = height + 'px';
+                    p.style.setProperty('--sx', (0.7 + Math.random() * 0.6).toFixed(2));
+                    p.style.setProperty('--sy', (1.2 + Math.random() * 1.8).toFixed(2));
+                    const trail = 400 + Math.random() * 320;
+                    p.style.setProperty('--trail', trail + 'px');
+                    p.style.setProperty('--drift', `${-18 + Math.random() * 36}px`);
+                    const duration = (1.2 + Math.random() * 1.8).toFixed(2);
+                    p.style.animationDuration = `${duration}s, ${0.18 + Math.random() * 0.18}s`;
+                    p.style.animationDelay = `${Math.random() * 2.5}s, ${Math.random() * 0.22}s`;
+                    p.style.opacity = (0.38 + Math.random() * 0.45).toFixed(2);
+                    p.style.filter = `blur(${1.2 + Math.random() * 1.8}px) brightness(${1.1 + Math.random() * 0.7})`;
+                    if (Math.random() > 0.7) {
+                        p.style.background = 'linear-gradient(180deg, #fffbe9 0%, #ffe066 10%, #ffb300 30%, #ff6b35 90%, #ff3915 100%)';
+                    }
+                    if (Math.random() > 0.85) {
+                        p.style.background = 'linear-gradient(180deg, #fffbe9 0%, #ffe066 5%, #ffb300 20%, #ff6b35 60%, #4a90e2 100%)';
+                    }
+                    if (Math.random() > 0.8) {
+                        p.style.boxShadow = '0 0 80px 30px #fffbe988, 0 0 160px 60px #ffe06644';
+                    }
+                    if (Math.random() > 0.9) {
+                        p.style.boxShadow = '0 0 120px 40px #ffb300cc, 0 0 200px 80px #ff6b35cc';
+                    }
+                    if (Math.random() > 0.7) {
+                        p.style.animation = `laminar-thrust ${duration}s linear infinite, flicker-cinematic ${(0.12 + Math.random() * 0.22).toFixed(2)}s infinite alternate`;
+                    }
+                    container.appendChild(p);
+                }
+            }
+        }
+        
+        // Initialize Mission Control
+        const missionControl = new MissionControl();
+    </script>
+</body>
+</html>

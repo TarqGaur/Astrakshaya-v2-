@@ -26,6 +26,13 @@
         <div id="stars4"></div>
     </div>
 
+    <!-- Skyhack Popup -->
+    <div class="skyhack-popup" id="skyhackPopup">
+        <button class="close-popup" onclick="closePopup()">&times;</button>
+        <img src="homepopup.png" alt="Skyhack Event" class="popup-image-full">
+        <a href="skyhack.html" class="register-button">Register Now for Skyhack</a>
+    </div>
+
     <div id="background-container">
         <div class="space-background"></div>
         <div class="stars"></div>
@@ -78,6 +85,17 @@
     <script src="js/stardust.js"></script>
     <script src="js/earth.js"></script>
 
+    <script>
+        // Popup functionality
+        function closePopup() {
+            document.getElementById('skyhackPopup').style.display = 'none';
+        }
+
+        // Show popup when page loads
+        window.addEventListener('load', function() {
+            document.getElementById('skyhackPopup').style.display = 'block';
+        });
+    </script>
 
 </body>
 </html>
