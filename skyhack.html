@@ -6,7 +6,7 @@
     <title>Skyhack Registration - Mission Control</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <!-- Model Viewer -->
-     <link rel="icon" href="teamImages/logo.jpg" type="image/x-icon">
+    <link rel="icon" href="teamImages/logo.jpg" type="image/x-icon">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <!-- Anime.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
@@ -27,8 +27,34 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 10, 18, 0.9);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #4a90e2, #ff6b35);
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #5aa0f2, #ff7b45);
+        }
+
+        /* Firefox Scrollbar */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: #4a90e2 rgba(10, 10, 18, 0.9);
         }
         
         /* Animated Star Field Background */
@@ -90,11 +116,11 @@
         }
         
         .skyhack-container {
-            background: transparent; /* Remove grey background */
+            background: transparent;
             border-radius: 20px;
-            box-shadow: none; /* Remove box-shadow */
-            backdrop-filter: none; /* Remove blur */
-            border: none; /* Remove border */
+            box-shadow: none;
+            backdrop-filter: none;
+            border: none;
             padding: 32px;
             max-width: 400px;
             width: 90vw;
@@ -106,8 +132,7 @@
         .skyhack-image {
             width: 100%;
             height: auto;
-            max-height: 480px; /* Make image bigger */
-            /* min-height removed */
+            max-height: 480px;
             object-fit: contain;
             border-radius: 12px;
             margin-bottom: 24px;
@@ -298,7 +323,7 @@
         
         .control-btn {
             background: rgba(74, 144, 226, 0.3);
-            border: 1px solid rgba(74, 144, 226, 0.6);
+            border1px solid rgba(74, 144, 226, 0.6);
             border-radius: 10px;
             color: #e6e6e6;
             font-family: 'Orbitron', sans-serif;
@@ -478,6 +503,38 @@
         }
         
         /* Responsive Design for All Devices */
+        @media (max-width: 1600px) {
+            .mission-control {
+                width: 340px;
+                padding: 18px;
+            }
+            .skyhack-container {
+                max-width: 380px;
+                padding: 28px 14px;
+            }
+            model-viewer {
+                width: 55vw;
+            }
+        }
+
+        @media (max-width: 1440px) {
+            .mission-control {
+                width: 320px;
+                padding: 16px;
+            }
+            .skyhack-container {
+                max-width: 360px;
+                padding: 26px 12px;
+            }
+            model-viewer {
+                width: 58vw;
+            }
+            .speedometer {
+                width: 90px;
+                height: 90px;
+            }
+        }
+
         @media (max-width: 1200px) {
             .mission-control {
                 width: 320px;
@@ -491,6 +548,7 @@
                 width: 60vw;
             }
         }
+
         @media (max-width: 992px) {
             .mission-control {
                 width: 260px;
@@ -503,7 +561,11 @@
             model-viewer {
                 width: 70vw;
             }
+            body {
+                overflow-y: auto;
+            }
         }
+
         @media (max-width: 768px) {
             model-viewer {
                 width: 100vw;
@@ -535,99 +597,12 @@
                 right: 10px;
                 padding: 10px 15px;
             }
-        }
-        @media (max-width: 600px) {
-            .mission-control {
-                width: 98vw;
-                left: 1vw;
-                right: 1vw;
-                padding: 6px;
-                font-size: 0.9rem;
-            }
-            .skyhack-container {
-                max-width: 99vw;
-                padding: 8px 2vw;
-            }
-            .speedometer {
-                width: 50px;
-                height: 50px;
-            }
-            .equal-btn {
-                height: 48px;
-                font-size: 0.95rem;
-                padding: 0 10px;
-                align-items: center !important;
-                justify-content: flex-start !important;
-                box-sizing: border-box !important;
-                text-align: left !important;
-                word-break: break-word !important;
-                /* Fix overflow for long text */
-                overflow-wrap: break-word !important;
-                white-space: normal !important;
-            }
-            .logo-box img {
-                height: 60%;
-            }
-        }
-        @media (max-width: 480px) {
-            .mission-control {
-                width: 100vw;
-                left: 0;
-                right: 0;
-                padding: 2vw;
-                font-size: 0.8rem;
-            }
-            .skyhack-container {
-                max-width: 100vw;
-                padding: 2vw 1vw;
-            }
-            .speedometer {
-                width: 36px;
-                height: 36px;
-            }
-            .equal-btn {
-                height: 36px;
-                font-size: 0.8rem;
-                padding: 0 4px;
-                align-items: center !important;
-                justify-content: flex-start !important;
-                box-sizing: border-box !important;
-                text-align: left !important;
-                word-break: break-word !important;
-                /* Fix overflow for long text */
-                overflow-wrap: break-word !important;
-                white-space: normal !important;
-            }
-            .logo-box img {
-                height: 40%;
-            }
-            .home-btn {
-                font-size: 0.8rem;
-                padding: 6px 8px;
-            }
-        }
-        @media (max-width: 375px) {
-            .mission-control,
-            .skyhack-container {
-                padding: 1vw 0.5vw;
-                font-size: 0.7rem;
-            }
-            .speedometer {
-                width: 24px;
-                height: 24px;
-            }
-            .equal-btn {
-                height: 28px;
-                font-size: 0.7rem;
+            body {
+                overflow-y: auto;
             }
         }
 
-        
-        /* Hide everything except .skyhack-container and .home-btn on small screens */
         @media (max-width: 600px) {
-            body {
-                overflow-y: auto !important;
-            }
             .mission-control,
             .background-thrust-particles,
             .stars-container,
@@ -664,7 +639,6 @@
                 box-sizing: border-box !important;
                 text-align: left !important;
                 word-break: break-word !important;
-                /* Fix overflow for long text */
                 overflow-wrap: break-word !important;
                 white-space: normal !important;
             }
@@ -681,20 +655,20 @@
                 font-size: 1rem;
                 padding: 8px 14px;
             }
-            /* Hide fallback text if image fails */
             #img-fallback {
                 font-size: 1rem;
                 margin-bottom: 16px;
+            }
+            body {
+                overflow-y: auto !important;
             }
         }
 
         /* Hide everything except the 4 important buttons and popup image on phone */
         @media (max-width: 600px) {
-            /* Hide all children of .skyhack-container except .skyhack-image and .equal-btn */
             .skyhack-container > *:not(:first-child):not(.equal-btn) {
                 display: none !important;
             }
-            /* Only show the first 4 .equal-btn (the important buttons) */
             .equal-btn:nth-of-type(n+6) {
                 display: none !important;
             }
@@ -724,7 +698,6 @@
             model-viewer {
                 display: none !important;
             }
-            /* Keep background stars and thrust visible */
             .stars-container,
             .background-thrust-particles {
                 display: block !important;
@@ -776,7 +749,6 @@
                 box-sizing: border-box !important;
                 text-align: left !important;
                 word-break: break-word !important;
-                /* Fix overflow for long text */
                 overflow-wrap: break-word !important;
                 white-space: normal !important;
             }
@@ -791,7 +763,6 @@
                 white-space: normal !important;
                 word-break: break-word !important;
                 overflow-wrap: break-word !important;
-                /* Prevent text from overflowing the button */
                 min-width: 0 !important;
                 max-width: 100% !important;
                 flex-shrink: 1 !important;
@@ -824,7 +795,6 @@
                 font-size: 1.1rem !important;
                 margin-bottom: 18px !important;
             }
-            /* Center everything vertically and horizontally */
             .skyhack-container {
                 justify-content: center !important;
                 align-items: center !important;
@@ -914,12 +884,9 @@
             <span>Join WhatsApp Group</span>
         </a>
         
-        <a href="volunteer.html" class="equal-btn" target="_blank">
+        <a href="https://forms.gle/S6FSwbeiccNxVc9p8" class="equal-btn" target="_blank">
             <span class="logo-box">
-                <!-- You can use an emoji or an image icon here -->
                 <span style="font-size:1.5em;line-height:1;">🤝</span>
-                <!-- Or, for an image icon, uncomment below and provide a suitable icon -->
-                <!-- <img src="volunteer.svg" alt="Volunteer Icon" /> -->
             </span>
             <span>Join as Volunteer</span>
         </a>
@@ -1031,21 +998,17 @@
             }
             
             init() {
-                // Keyboard controls
                 document.addEventListener('keydown', (e) => this.handleKeyDown(e));
                 document.addEventListener('keyup', (e) => this.handleKeyUp(e));
                 
-                // Engine controls
                 document.getElementById('engineStart').addEventListener('click', () => this.startEngine());
                 document.getElementById('engineStop').addEventListener('click', () => this.stopEngine());
                 
-                // Update displays
                 this.updateDisplays();
                 this.startMissionTimer();
             }
             
             animateIcons() {
-                // Animate engine icons
                 anime({
                     targets: '.engine-icon',
                     scale: [1, 1.1],
@@ -1056,7 +1019,6 @@
                     loop: true
                 });
                 
-                // Animate status icons
                 anime({
                     targets: '.status-icon',
                     scale: [1, 1.05],
@@ -1075,7 +1037,6 @@
                     this.activeKeys.add(key);
                     const button = document.querySelector(`[data-key="${key}"]`);
                     button.classList.add('active');
-                    // Anime.js animation for button press
                     anime({
                         targets: button,
                         scale: [1, 1.05],
@@ -1120,9 +1081,8 @@
                     this.altitude = Math.min(999, this.altitude + 2);
                     this.fuel = Math.max(0, this.fuel - 0.2);
                     this.intensifyStarMovement();
-                    // Check for zero fuel
                     if (this.fuel <= 0) {
-                        this.fuel = 100; // Reset fuel to 100
+                        this.fuel = 100;
                         anime({
                             targets: '#fuelValue',
                             innerHTML: [0, 100],
@@ -1143,9 +1103,8 @@
             adjustDirection() {
                 if (this.fuel > 0) {
                     this.fuel = Math.max(0, this.fuel - 0.1);
-                    // Check for zero fuel
                     if (this.fuel <= 0) {
-                        this.fuel = 100; // Reset fuel to 100
+                        this.fuel = 100;
                         anime({
                             targets: '#fuelValue',
                             innerHTML: [0, 100],
@@ -1160,10 +1119,9 @@
             startEngine() {
                 this.engineActive = true;
                 this.missionStartTime = Date.now();
-                this.speed = 1; // Initial speed of 1
+                this.speed = 1;
                 document.getElementById('engineStart').classList.add('active');
                 document.getElementById('engineStop').classList.remove('active');
-                // Anime.js animation for button
                 anime({
                     targets: '#engineStart',
                     scale: [1, 1.05],
@@ -1172,9 +1130,7 @@
                     easing: 'easeInOutQuad',
                     direction: 'alternate'
                 });
-                // Show laminar thrust
                 document.getElementById('backgroundThrustParticles').classList.add('active');
-                // Play rocket audio
                 const audio = document.getElementById('rocketAudio');
                 if (audio) {
                     audio.pause();
@@ -1199,7 +1155,6 @@
                 this.speed = 0;
                 document.getElementById('engineStop').classList.add('active');
                 document.getElementById('engineStart').classList.remove('active');
-                // Anime.js animation for button
                 anime({
                     targets: '#engineStop',
                     scale: [1, 1.05],
@@ -1208,9 +1163,7 @@
                     easing: 'easeInOutQuad',
                     direction: 'alternate'
                 });
-                // Hide laminar thrust
                 document.getElementById('backgroundThrustParticles').classList.remove('active');
-                // Pause rocket audio
                 const audio = document.getElementById('rocketAudio');
                 if (audio) {
                     audio.pause();
@@ -1221,13 +1174,11 @@
             }
             
             updateDisplays() {
-                // Update text values
                 document.getElementById('speedValue').textContent = Math.floor(this.speed);
                 document.getElementById('altitudeValue').textContent = Math.floor(this.altitude);
                 document.getElementById('fuelValue').textContent = Math.floor(this.fuel);
                 document.getElementById('thrustPower').textContent = Math.floor(this.thrustPower) + '%';
                 
-                // Anime.js animations for needles
                 anime({
                     targets: '#speedNeedle',
                     rotate: (this.speed / 25) * 180,
@@ -1343,7 +1294,6 @@
             }
         }
         
-        // Initialize Mission Control
         const missionControl = new MissionControl();
     </script>
 </body>
