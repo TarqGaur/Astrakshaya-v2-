@@ -6,7 +6,7 @@
     <title>SkyHack 2025 - Launching Soon</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-        <link rel="icon" href="logo.png.png" type="image/x-icon">
+    <link rel="icon" href="logo.png.png" type="image/x-icon">
     <style>
         * {
             margin: 0;
@@ -86,7 +86,86 @@
             height: 100vh;
             z-index: 2;
             background: transparent;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
         }
+
+        model-viewer.loaded {
+            opacity: 1;
+        }
+
+        /* Fallback 3D Animation */
+        .model-fallback {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .space-station-fallback {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotateY(0deg) rotateX(10deg); }
+            100% { transform: rotateY(360deg) rotateX(10deg); }
+        }
+
+        .station-core {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .station-ring {
+            width: 160px;
+            height: 160px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: ring-rotate 10s linear infinite reverse;
+        }
+
+        @keyframes ring-rotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .station-panel {
+            width: 40px;
+            height: 8px;
+            background: linear-gradient(90deg, #72d9ff, #0095ff);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0 0;
+            box-shadow: 0 0 10px rgba(0, 149, 255, 0.5);
+        }
+
+        .station-panel:nth-child(2) { transform: translate(-50%, -50%) rotate(0deg) translateX(80px); }
+        .station-panel:nth-child(3) { transform: translate(-50%, -50%) rotate(60deg) translateX(80px); }
+        .station-panel:nth-child(4) { transform: translate(-50%, -50%) rotate(120deg) translateX(80px); }
+        .station-panel:nth-child(5) { transform: translate(-50%, -50%) rotate(180deg) translateX(80px); }
+        .station-panel:nth-child(6) { transform: translate(-50%, -50%) rotate(240deg) translateX(80px); }
+        .station-panel:nth-child(7) { transform: translate(-50%, -50%) rotate(300deg) translateX(80px); }
 
         /* UI Container */
         .ui-container {
@@ -313,138 +392,6 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Loading Screen */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0a0a12 0%, #1a1a2e 50%, #16213e 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-
-        .loading-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loading-logo {
-            font-size: 3rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 2rem;
-            letter-spacing: -0.02em;
-        }
-
-        .loading-text {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1.1rem;
-            margin-bottom: 3rem;
-            font-weight: 300;
-        }
-
-        .loading-bar-container {
-            width: 400px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            overflow: hidden;
-            margin-bottom: 1rem;
-            position: relative;
-        }
-
-        .loading-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            border-radius: 2px;
-            width: 0%;
-            transition: width 0.3s ease;
-            position: relative;
-        }
-
-        .loading-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            animation: loading-shimmer 2s infinite;
-        }
-
-        @keyframes loading-shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        .loading-percentage {
-            color: rgba(255, 255, 255, 0.8);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
-
-        .loading-status {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.8rem;
-            margin-top: 1rem;
-            min-height: 20px;
-        }
-
-        /* Fallback */
-        .model-fallback {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 107, 107, 0.3);
-            border-radius: 16px;
-            padding: 2rem;
-            text-align: center;
-            z-index: 20;
-            color: #ff6b6b;
-        }
-
-        /* Mobile Loading Screen */
-        @media (max-width: 768px) {
-            .loading-logo {
-                font-size: 2.5rem;
-            }
-            
-            .loading-bar-container {
-                width: 300px;
-            }
-            
-            .loading-text {
-                font-size: 1rem;
-                text-align: center;
-                padding: 0 1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .loading-logo {
-                font-size: 2rem;
-            }
-            
-            .loading-bar-container {
-                width: 250px;
-            }
-        }
-
         /* Responsive Design */
         @media (max-width: 768px) {
             .header {
@@ -500,17 +447,6 @@
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loading-screen">
-        <div class="loading-logo">SkyHack 2025</div>
-        <div class="loading-text">Initializing space station systems...</div>
-        <div class="loading-bar-container">
-            <div class="loading-bar" id="loading-bar"></div>
-        </div>
-        <div class="loading-percentage" id="loading-percentage">0%</div>
-        <div class="loading-status" id="loading-status">Starting engines...</div>
-    </div>
-
     <!-- Animated Background -->
     <div class="stars-container">
         <div class="stars"></div>
@@ -519,7 +455,8 @@
 
     <!-- 3D Space Station Model -->
     <model-viewer 
-        src="space_station.glb" 
+        id="space-station-model"
+        src="./space_station.glb" 
         alt="Space Station Scene"
         autoplay
         auto-rotate 
@@ -537,6 +474,20 @@
         interaction-prompt="none">
     </model-viewer>
 
+    <!-- Fallback 3D Animation -->
+    <div class="model-fallback" id="model-fallback">
+        <div class="space-station-fallback">
+            <div class="station-core"></div>
+            <div class="station-ring"></div>
+            <div class="station-panel"></div>
+            <div class="station-panel"></div>
+            <div class="station-panel"></div>
+            <div class="station-panel"></div>
+            <div class="station-panel"></div>
+            <div class="station-panel"></div>
+        </div>
+    </div>
+
     <!-- UI Container -->
     <div class="ui-container">
         <!-- Header -->
@@ -545,7 +496,6 @@
             <nav class="nav-links">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="mailto:astrakshaya@gmail.com?subject=Contact%20from%20Website&body=Hi%20Astrakshaya%20Team," class="nav-link">Contact</a>
-
             </nav>
         </header>
 
@@ -577,9 +527,7 @@
             </div>
 
             <div class="action-buttons">
-                <!-- <a href="#" class="btn btn-primary">Registeration soon</a> -->
                <a href="SkyHackDetails.pdf" class="btn btn-secondary" target="_blank">Learn More</a>
-
             </div>
         </main>
 
@@ -600,116 +548,7 @@
         </div>
     </div>
 
-
     <script>
-        // Loading Screen Manager
-        class LoadingManager {
-            constructor() {
-                this.progress = 0;
-                this.modelProgress = 0;
-                this.uiProgress = 0;
-                this.modelLoaded = false;
-                this.uiInitialized = false;
-                
-                this.loadingScreen = document.getElementById('loading-screen');
-                this.loadingBar = document.getElementById('loading-bar');
-                this.loadingPercentage = document.getElementById('loading-percentage');
-                this.loadingStatus = document.getElementById('loading-status');
-                
-                this.loadingSteps = [
-                    { progress: 10, status: 'Initializing space systems...' },
-                    { progress: 20, status: 'Loading navigation systems...' },
-                    { progress: 30, status: 'Calibrating sensors...' },
-                    { progress: 40, status: 'Establishing communication...' },
-                    { progress: 50, status: 'Downloading 3D models...' },
-                    { progress: 65, status: 'Processing space station data...' },
-                    { progress: 80, status: 'Rendering space environment...' },
-                    { progress: 90, status: 'Preparing user interface...' },
-                    { progress: 95, status: 'Final systems check...' },
-                    { progress: 100, status: 'Launch sequence initiated!' }
-                ];
-                
-                this.currentStep = 0;
-            }
-            
-            updateProgress(progress) {
-                this.progress = Math.min(progress, 100);
-                this.loadingBar.style.width = this.progress + '%';
-                this.loadingPercentage.textContent = Math.round(this.progress) + '%';
-                
-                // Update status message
-                if (this.currentStep < this.loadingSteps.length) {
-                    const step = this.loadingSteps[this.currentStep];
-                    if (this.progress >= step.progress) {
-                        this.loadingStatus.textContent = step.status;
-                        this.currentStep++;
-                    }
-                }
-            }
-            
-            setModelProgress(progress) {
-                this.modelProgress = progress;
-                this.calculateTotalProgress();
-            }
-            
-            setUIProgress(progress) {
-                this.uiProgress = progress;
-                this.calculateTotalProgress();
-            }
-            
-            setModelLoaded(loaded) {
-                this.modelLoaded = loaded;
-                if (loaded) {
-                    this.modelProgress = 100;
-                    this.calculateTotalProgress();
-                    this.checkComplete();
-                }
-            }
-            
-            setUIInitialized(initialized) {
-                this.uiInitialized = initialized;
-                if (initialized) {
-                    this.uiProgress = 100;
-                    this.calculateTotalProgress();
-                    this.checkComplete();
-                }
-            }
-            
-            calculateTotalProgress() {
-                // Weight: 70% model loading, 30% UI initialization
-                const totalProgress = (this.modelProgress * 0.7) + (this.uiProgress * 0.3);
-                this.updateProgress(totalProgress);
-            }
-            
-            checkComplete() {
-                if (this.modelLoaded && this.uiInitialized) {
-                    setTimeout(() => {
-                        this.hideLoading();
-                    }, 1000); // Small delay to show completion
-                }
-            }
-            
-            hideLoading() {
-                this.loadingScreen.classList.add('hidden');
-                setTimeout(() => {
-                    this.loadingScreen.style.display = 'none';
-                }, 500);
-            }
-            
-            // Fallback: if model fails to load, hide loading after timeout
-            startFallbackTimer() {
-                setTimeout(() => {
-                    if (!this.modelLoaded) {
-                        console.warn('Model loading timeout - hiding loading screen');
-                        this.hideLoading();
-                    }
-                }, 15000); // 15 second timeout
-            }
-        }
-
-        // Initialize loading manager
-        const loadingManager = new LoadingManager();
-
         // Create animated stars
         function createStars() {
             const starsContainer = document.querySelector('.stars');
@@ -782,25 +621,21 @@
         }
 
         // Model viewer event handlers
-        const modelViewer = document.querySelector('model-viewer');
+        const modelViewer = document.getElementById('space-station-model');
         const fallback = document.getElementById('model-fallback');
 
+        // Show fallback initially
+        fallback.style.display = 'flex';
+
         modelViewer.addEventListener('load', () => {
-            console.log('Model loaded successfully');
+            console.log('3D Model loaded successfully');
             fallback.style.display = 'none';
-            loadingManager.setModelLoaded(true);
+            modelViewer.classList.add('loaded');
         });
 
         modelViewer.addEventListener('error', (event) => {
-            console.error('Model loading error:', event);
-            fallback.style.display = 'block';
-            loadingManager.hideLoading();
-        });
-
-        modelViewer.addEventListener('progress', (event) => {
-            const progress = event.detail.totalProgress * 100;
-            console.log('Model loading progress:', progress);
-            loadingManager.setModelProgress(progress);
+            console.log('3D Model failed to load, using fallback animation');
+            fallback.style.display = 'flex';
         });
 
         // Enhanced camera controls
@@ -813,33 +648,15 @@
             modelViewer.cameraOrbit = '45deg 75deg 2.5m';
         });
 
-        // Simulate UI initialization
-        function initializeUI() {
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 10;
-                loadingManager.setUIProgress(progress);
-                
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    loadingManager.setUIInitialized(true);
-                }
-            }, 100);
-        }
-
         // Initialize everything
         function init() {
-            console.log('Initializing application...');
+            console.log('Initializing SkyHack 2025 application...');
             
-            // Create stars
+            // Create stars background
             createStars();
+            
+            // Start countdown timer
             startCountdown();
-            
-            // Start UI initialization
-            initializeUI();
-            
-            // Start fallback timer
-            loadingManager.startFallbackTimer();
         }
 
         // Start when page loads
