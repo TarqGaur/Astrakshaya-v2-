@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyHack 2025 - Launching Soon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <link rel="icon" href="logo.png.png" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #16213e 35%, #0f0f23 100%);
+            color: #fff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Stars Background */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .moving-star {
+            animation: move-star 20s linear infinite;
+        }
+
+        @keyframes move-star {
+            0% { transform: translateX(-100vw) translateY(0); }
+            100% { transform: translateX(100vw) translateY(-50px); }
+        }
+
+        /* Nebula Effects */
+        .nebula {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(255, 107, 107, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 80%, rgba(72, 187, 120, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Model Viewer */
+        model-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 2;
+            background: transparent;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        model-viewer.loaded {
+            opacity: 1;
+        }
+
+        /* Fallback 3D Animation */
+        .model-fallback {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .space-station-fallback {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotateY(0deg) rotateX(10deg); }
+            100% { transform: rotateY(360deg) rotateX(10deg); }
+        }
+
+        .station-core {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .station-ring {
+            width: 160px;
+            height: 160px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: ring-rotate 10s linear infinite reverse;
+        }
+
+        @keyframes ring-rotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .station-panel {
+            width: 40px;
+            height: 8px;
+            background: linear-gradient(90deg, #72d9ff, #0095ff);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0 0;
+            box-shadow: 0 0 10px rgba(0, 149, 255, 0.5);
+        }
+
+        .station-panel:nth-child(2) { transform: translate(-50%, -50%) rotate(0deg) translateX(80px); }
+        .station-panel:nth-child(3) { transform: translate(-50%, -50%) rotate(60deg) translateX(80px); }
+        .station-panel:nth-child(4) { transform: translate(-50%, -50%) rotate(120deg) translateX(80px); }
+        .station-panel:nth-child(5) { transform: translate(-50%, -50%) rotate(180deg) translateX(80px); }
+        .station-panel:nth-child(6) { transform: translate(-50%, -50%) rotate(240deg) translateX(80px); }
+        .station-panel:nth-child(7) { transform: translate(-50%, -50%) rotate(300deg) translateX(80px); }
+
+        /* UI Container */
+        .ui-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Header */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+            pointer-events: auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #fff;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Main Content */
+        .main-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            pointer-events: auto;
+            z-index: 15;
+        }
+
+        .event-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        .event-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        /* Countdown Timer */
+        .countdown-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .countdown-title {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .countdown-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            color: #fff;
+            display: block;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .countdown-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Controls Panel */
+        .controls-panel {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: auto;
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .control-key {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .event-title {
+                font-size: 2.5rem;
+            }
+            
+            .countdown-container {
+                padding: 1.5rem;
+                margin: 0 1rem 2rem;
+            }
+            
+            .countdown {
+                gap: 1rem;
+            }
+            
+            .countdown-number {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .controls-panel {
+                bottom: 16px;
+                right: 16px;
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .event-title {
+                font-size: 2rem;
+            }
+            
+            .countdown-container {
+                padding: 1rem;
+            }
+            
+            .countdown-number {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="stars-container">
+        <div class="stars"></div>
+        <div class="nebula"></div>
+    </div>
+
+    <!-- 3D Space Station Model -->
+    <model-viewer 
+        id="space-station-model"
+        src="./space_station.glb" 
+        alt="Space Station Scene"
+        autoplay
+        auto-rotate 
+        auto-rotate-delay="3000"
+        rotation-per-second="5deg"
+        camera-controls 
+        environment-image="neutral"
+        shadow-intensity="0.4"
+        exposure="1.2"
+        tone-mapping="neutral"
+        min-camera-orbit="auto auto 0.5m"
+        max-camera-orbit="auto auto 100m"
+        camera-orbit="45deg 75deg 2.5m"
+        field-of-view="30deg"
+        interaction-prompt="none">
+    </model-viewer>
+
+    <!-- Fallback 3D Animation -->
+    <div class="model-fallback" id="model-fallback">
+        <div class="space-station-fallback">
+            <div class="station-core"></div>
+            <div class="station-ring"></div>
+            <div class="station-panel"></div>
+            <div class="station-panel"></div>
+            <div class="station-panel"></div>
+            <div class="station-panel"></div>
+            <div class="station-panel"></div>
+            <div class="station-panel"></div>
+        </div>
+    </div>
+
+    <!-- UI Container -->
+    <div class="ui-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">SkyHack</div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="mailto:astrakshaya@gmail.com?subject=Contact%20from%20Website&body=Hi%20Astrakshaya%20Team," class="nav-link">Contact</a>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <h1 class="event-title">SkyHack 2025</h1>
+            <p class="event-subtitle">The Ultimate Space Technology Hackathon</p>
+            
+            <div class="countdown-container">
+                <div class="countdown-title">Launching In</div>
+                <div class="countdown">
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="days">00</span>
+                        <div class="countdown-label">Days</div>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="hours">00</span>
+                        <div class="countdown-label">Hours</div>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="minutes">00</span>
+                        <div class="countdown-label">Minutes</div>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="seconds">00</span>
+                        <div class="countdown-label">Seconds</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+               <a href="SkyHackDetails.pdf" class="btn btn-secondary" target="_blank">Learn More</a>
+            </div>
+        </main>
+
+        <!-- Controls Panel -->
+        <div class="controls-panel">
+            <div class="control-item">
+                <span class="control-key">Click + Drag</span>
+                <span>Rotate</span>
+            </div>
+            <div class="control-item">
+                <span class="control-key">Scroll</span>
+                <span>Zoom</span>
+            </div>
+            <div class="control-item">
+                <span class="control-key">Double Click</span>
+                <span>Reset View</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create animated stars
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const starCount = 100;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random position
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                
+                // Random size
+                const size = Math.random() * 2 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                
+                // Random animation delay
+                star.style.animationDelay = Math.random() * 3 + 's';
+                
+                // Some stars move
+                if (Math.random() > 0.8) {
+                    star.classList.add('moving-star');
+                    star.style.animationDuration = (Math.random() * 20 + 10) + 's';
+                }
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Countdown timer for SkyHack 2025
+        function startCountdown() {
+            // Set target date to 15 days from now
+            const targetDate = new Date();
+            targetDate.setDate(targetDate.getDate() + 15);
+            
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = targetDate.getTime() - now;
+                
+                if (distance < 0) {
+                    daysEl.textContent = '00';
+                    hoursEl.textContent = '00';
+                    minutesEl.textContent = '00';
+                    secondsEl.textContent = '00';
+                    
+                    document.querySelector('.countdown-title').textContent = 'SkyHack 2025 Has Launched!';
+                    return;
+                }
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                daysEl.textContent = days.toString().padStart(2, '0');
+                hoursEl.textContent = hours.toString().padStart(2, '0');
+                minutesEl.textContent = minutes.toString().padStart(2, '0');
+                secondsEl.textContent = seconds.toString().padStart(2, '0');
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        // Model viewer event handlers
+        const modelViewer = document.getElementById('space-station-model');
+        const fallback = document.getElementById('model-fallback');
+
+        // Show fallback initially
+        fallback.style.display = 'flex';
+
+        modelViewer.addEventListener('load', () => {
+            console.log('3D Model loaded successfully');
+            fallback.style.display = 'none';
+            modelViewer.classList.add('loaded');
+        });
+
+        modelViewer.addEventListener('error', (event) => {
+            console.log('3D Model failed to load, using fallback animation');
+            fallback.style.display = 'flex';
+        });
+
+        // Enhanced camera controls
+        modelViewer.addEventListener('camera-change', (event) => {
+            // Optional: Add custom camera behavior here
+        });
+
+        // Double click to reset view
+        modelViewer.addEventListener('dblclick', () => {
+            modelViewer.cameraOrbit = '45deg 75deg 2.5m';
+        });
+
+        // Initialize everything
+        function init() {
+            console.log('Initializing SkyHack 2025 application...');
+            
+            // Create stars background
+            createStars();
+            
+            // Start countdown timer
+            startCountdown();
+        }
+
+        // Start when page loads
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
