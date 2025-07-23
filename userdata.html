@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>What Your Browser Shares Without Permission</title>
+</head>
+<body style="background:white; font-family:monospace; padding:20px; color:black;">
+  <h2>Data Your Browser Shares Instantly (No Permission)</h2>
+  <pre id="output">Loading...</pre>
+
+  <script>
+    async function collectData() {
+      const output = document.getElementById("output");
+      let data = {};
+
+      // 1. IP-based data (via external API)
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        const ipData = await res.json();
+        data["IP Address"] = ipData.ip;
+        data["City"] = ipData.city;
+        data["Region"] = ipData.region;
+        data["Country"] = ipData.country_name;
+        data["Postal Code"] = ipData.postal;
+        data["Timezone"] = ipData.timezone;
+        data["ISP/Org"] = ipData.org;
+      } catch {
+        data["IP Info"] = "Failed to fetch IP info";
+      }
+
+      // 2. Browser + device info
+      data["Browser"] = navigator.userAgent;
+      data["Platform"] = navigator.platform;
+      data["Languages"] = navigator.languages;
+      data["Hardware Concurrency (CPU cores)"] = navigator.hardwareConcurrency;
+      data["Device Memory (GB)"] = navigator.deviceMemory || "Unknown";
+
+      // 3. Screen info
+      data["Screen Resolution"] = `${screen.width}x${screen.height}`;
+      data["Color Depth"] = screen.colorDepth;
+
+      // 4. Time info
+      data["Local Time"] = new Date().toString();
+      data["Timezone Offset (mins)"] = new Date().getTimezoneOffset();
+
+      // 5. Network info
+      const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      if (conn) {
+        data["Network Type"] = conn.effectiveType;
+        data["Downlink (Mbps)"] = conn.downlink;
+        data["RTT (ms)"] = conn.rtt;
+      }
+
+      // 6. Referrer
+      data["Referrer URL"] = document.referrer || "None";
+
+      // 7. Do Not Track
+      data["Do Not Track"] = navigator.doNotTrack;
+
+      // Display
+      output.innerText = Object.entries(data).map(([k, v]) => `${k}: ${v}`).join("\n");
+    }
+
+    collectData();
+  </script>
+</body>
+</html>

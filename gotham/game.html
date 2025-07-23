@@ -1,0 +1,2279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Gotham Signal - Game Room</title>
+    <link rel="icon" type="image/png" href="gothamsignalfavicon.png">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --bg-glass: rgba(22, 27, 34, 0.97);
+            --accent-primary: #007AFF;
+            --accent-secondary: #5856D6;
+            --accent-gradient: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+            --text-primary: #FFFFFF;
+            --text-secondary: #8b949e;
+            --text-tertiary: #484f58;
+            --border-primary: #30363d;
+            --border-secondary: #21262d;
+            --shadow-primary: 0 4px 20px rgba(31, 35, 40, 0.15);
+            --shadow-secondary: 0 2px 10px rgba(0, 0, 0, 0.3);
+            --blur-glass: blur(40px);
+            --border-radius: 8px;
+            --border-radius-lg: 16px;
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition-bounce: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --terminal-green: #00FF41;
+            --terminal-red: #FF3333;
+            --terminal-yellow: #FFFF00;
+            --terminal-orange: #FF8800;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+        
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-feature-settings: "liga", "kern";
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+            overscroll-behavior: none;
+            touch-action: manipulation;
+        }
+
+        /* Server room background animation */
+        .server-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(0, 122, 255, 0.02) 0px,
+                    transparent 2px,
+                    transparent 50px,
+                    rgba(0, 122, 255, 0.02) 52px
+                ),
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(88, 86, 214, 0.01) 0px,
+                    transparent 2px,
+                    transparent 100px,
+                    rgba(88, 86, 214, 0.01) 102px
+                ),
+                radial-gradient(circle at 20% 30%, rgba(0, 122, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(88, 86, 214, 0.05) 0%, transparent 50%),
+                var(--bg-primary);
+        }
+
+        .server-lights {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .server-light {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--terminal-green);
+            opacity: 0.6;
+            animation: serverBlink 2s ease-in-out infinite;
+        }
+
+        .server-light.red { background: var(--terminal-red); animation-delay: 0.5s; }
+        .server-light.blue { background: var(--accent-primary); animation-delay: 1s; }
+        .server-light.yellow { background: var(--terminal-yellow); animation-delay: 1.5s; }
+
+        @keyframes serverBlink {
+            0%, 90% { opacity: 0.2; }
+            5%, 85% { opacity: 1; }
+        }
+        
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: var(--blur-glass);
+            -webkit-backdrop-filter: var(--blur-glass);
+            border-bottom: 1px solid var(--border-secondary);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+        
+        .header.scrolled {
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom-color: var(--border-primary);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--text-primary);
+            z-index: 1001;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--accent-gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: var(--shadow-primary);
+            transition: var(--transition-bounce);
+        }
+        
+        .logo-icon:hover {
+            transform: rotate(180deg) scale(1.1);
+            box-shadow: 0 8px 30px rgba(0, 122, 255, 0.4);
+        }
+        
+        .logo-icon::before {
+            content: '◉';
+            color: white;
+            font-size: 18px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        
+        /* Hamburger Menu Styles */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: var(--transition);
+        }
+        
+        .hamburger span {
+            width: 100%;
+            height: 3px;
+            background: var(--text-primary);
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-links li {
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInStagger 0.5s ease forwards;
+        }
+
+        .nav-links li:nth-child(1) { animation-delay: 0.1s; }
+        .nav-links li:nth-child(2) { animation-delay: 0.2s; }
+        .nav-links li:nth-child(3) { animation-delay: 0.3s; }
+        .nav-links li:nth-child(4) { animation-delay: 0.4s; }
+        .nav-links li:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes fadeInStagger {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            transition: color 0.3s ease;
+            background: transparent;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-gradient);
+            border-radius: var(--border-radius);
+            z-index: -1;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::before {
+            opacity: 0.15;
+            transform: scale(1);
+        }
+
+        .nav-links a.active::before {
+            opacity: 0.2;
+            transform: scale(1);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 80%;
+        }
+
+        /* Game Room Styles */
+        .game-container {
+            padding-top: 80px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-bottom: 60px;
+        }
+
+        .game-header {
+            text-align: center;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .game-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from { filter: brightness(1); text-shadow: 0 0 10px rgba(0, 122, 255, 0.3); }
+            to { filter: brightness(1.2); text-shadow: 0 0 20px rgba(88, 86, 214, 0.5); }
+        }
+
+        .game-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .main-interface {
+            max-width: 1800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: minmax(1000px, 1.5fr) 320px;
+            gap: 2rem;
+            align-items: flex-start;
+            min-height: calc(100vh - 200px);
+        }
+
+        .terminal-container {
+            position: relative;
+            height: 600px;
+            min-height: unset;
+            max-height: unset;
+            margin: 0;
+        }
+
+        .terminal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0d1117;
+            border: 1.5px solid var(--border-primary);
+            border-radius: var(--border-radius);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+        }
+
+        .terminal-header {
+            height: 48px;
+            flex-shrink: 0;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-primary);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: var(--terminal-red); }
+        .terminal-dot.yellow { background: var(--terminal-yellow); }
+        .terminal-dot.green { background: var(--terminal-green); }
+
+        .terminal-title {
+            margin-left: auto;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .terminal-content {
+            flex: 1;
+            padding: 1.5rem;
+            height: calc(100% - 48px);
+            overflow-y: auto;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-secondary) var(--bg-secondary);
+        }
+
+        .terminal-content::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .terminal-content::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 6px;
+        }
+
+        .terminal-content::-webkit-scrollbar-thumb {
+            background: var(--accent-secondary);
+            border-radius: 6px;
+        }
+
+        .welcome-screen {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .welcome-ascii {
+            color: var(--terminal-green);
+            font-size: 0.9rem;
+            line-height: 1.2;
+            margin: 2rem auto;
+            white-space: pre;
+            max-width: 1200px;
+            text-align: left;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: -0.02em;
+        }
+
+        .start-button {
+            background: var(--accent-gradient);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: var(--shadow-primary);
+            position: relative;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .start-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .start-button:hover::before {
+            left: 100%;
+        }
+
+        .start-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.3);
+        }
+
+        .case-display {
+            display: none;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .case-header {
+            border-bottom: 1px solid var(--terminal-green);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .case-title {
+            color: var(--terminal-green);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .case-id {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+
+        .case-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .case-tag {
+            background: rgba(47, 129, 247, 0.15);
+            border: 1px solid rgba(47, 129, 247, 0.3);
+            color: var(--accent-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .difficulty-badge {
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin: 1rem 0;
+            background: var(--bg-tertiary);
+            color: var(--accent-secondary);
+            border: 1px solid var(--accent-secondary);
+        }
+
+        .case-summary {
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 3px solid var(--terminal-green);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .action-buttons {
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-primary);
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            font-family: 'JetBrains Mono', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-align: left;
+            touch-action: manipulation;
+        }
+
+        .action-btn:hover {
+            background: rgba(0, 122, 255, 0.1);
+            border-color: var(--accent-primary);
+            transform: translateX(5px);
+        }
+
+        .result-display {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            display: none;
+            animation: slideInUp 0.6s ease;
+        }
+
+        .result-success {
+            background: rgba(35, 134, 54, 0.08);
+            border: 1px solid var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .result-failure {
+            background: rgba(255, 51, 51, 0.08);
+            border: 1px solid #ff3333;
+            color: #ff3333;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 0;
+        }
+
+        .stats-panel,
+        .case-log-panel,
+        .control-panel {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-secondary);
+            border-radius: var(--border-radius-lg);
+            padding: 1rem;
+            backdrop-filter: var(--blur-glass);
+            -webkit-backdrop-filter: var(--blur-glass);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-panel::before,
+        .case-log-panel::before,
+        .control-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                circle at center,
+                rgba(0, 122, 255, 0.03) 0%,
+                transparent 50%
+            );
+            animation: rotateFluid 15s linear infinite;
+            pointer-events: none;
+        }
+
+        .stats-panel::after,
+        .case-log-panel::after,
+        .control-panel::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                165deg,
+                transparent 0%,
+                rgba(0, 122, 255, 0.03) 100%
+            );
+            animation: pulseFluid 8s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes rotateFluid {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulseFluid {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .panel-title {
+            position: relative;
+            z-index: 1;
+            color: var(--accent-primary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .stat-value {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-gradient);
+            transition: width 0.8s ease;
+            width: 0%;
+        }
+
+        .case-log {
+            max-height: 150px;
+            height: 150px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-primary) rgba(0, 0, 0, 0.3);
+            padding: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        .case-log-item {
+            padding: 0.4rem;
+            border-bottom: 1px solid var(--border-primary);
+            transition: background-color 0.3s ease;
+        }
+
+        .case-log-item:hover {
+            background: rgba(0, 122, 255, 0.1);
+        }
+
+        .case-log-item.success {
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .new-case-btn {
+            background: rgba(0, 122, 255, 0.1);
+            border: 1px solid var(--accent-primary);
+            color: var(--accent-primary);
+            padding: 0.5rem;
+            font-size: 0.85rem;
+            width: 100%;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .new-case-btn:hover {
+            background: rgba(0, 122, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Custom Scrollbar Styles */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 4px;
+            border: 2px solid var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-secondary);
+        }
+
+        /* Password Popup Styles */
+        .password-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent-primary);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            z-index: 2000;
+            display: none;
+            max-width: 90vw;
+        }
+
+        .password-popup.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .password-input {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            color: var(--text-primary);
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            width: 100%;
+            margin: 1rem 0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .password-input:focus {
+            border-color: var(--accent-primary);
+            outline: none;
+        }
+
+        .password-error {
+            color: var(--terminal-red);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* Footer styles */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: var(--blur-glass);
+            -webkit-backdrop-filter: var(--blur-glass);
+            border-top: 1px solid var(--accent-primary);
+            padding: 1rem;
+            text-align: center;
+            z-index: 999;
+        }
+
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .footer-link {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .footer-link:hover::after {
+            width: 100%;
+        }
+
+        /* Popup styles */
+        .custom-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent-primary);
+            box-shadow: 0 0 30px rgba(0, 122, 255, 0.1);
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            width: 90%;
+            max-width: 400px;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .custom-popup.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .popup-title {
+            color: var(--accent-primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .popup-content {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .popup-btn {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: var(--border-radius);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .popup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 122, 255, 0.2);
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .popup-close:hover {
+            color: var(--accent-primary);
+            background: rgba(0, 122, 255, 0.1);
+        }
+
+        /* Enhanced Responsive Design */
+        @media screen and (max-width: 1600px) {
+            .main-interface {
+                grid-template-columns: minmax(800px, 1fr) 300px;
+                padding: 0 1.5rem;
+                gap: 1.5rem;
+            }
+        }
+
+        @media screen and (max-width: 1400px) {
+            .main-interface {
+                grid-template-columns: minmax(600px, 1fr) 280px;
+                padding: 0 1rem;
+                gap: 1rem;
+            }
+
+            .terminal-container, .sidebar {
+                height: 550px;
+            }
+        }
+
+        @media screen and (max-width: 1200px) {
+            .game-title {
+                font-size: 2.5rem;
+            }
+            
+            .main-interface {
+                grid-template-columns: 1fr;
+                max-width: 800px;
+            }
+
+            .sidebar {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                height: auto;
+                gap: 1rem;
+                margin-top: 1rem;
+            }
+
+            .terminal-container {
+                height: 500px;
+            }
+
+            .control-panel {
+                min-height: 120px;
+                padding: 1rem;
+            }
+
+            .new-case-btn {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media screen and (max-width: 900px) {
+            .sidebar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 100%;
+                max-width: 300px;
+                background: var(--bg-secondary);
+                backdrop-filter: var(--blur-glass);
+                -webkit-backdrop-filter: var(--blur-glass);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right 0.3s ease;
+                padding: 2rem;
+                z-index: 1000;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                opacity: 0;
+                transform: translateX(20px);
+                animation: none;
+            }
+
+            .nav-links.active li {
+                animation: fadeInStagger 0.5s ease forwards;
+            }
+
+            .nav-links li:nth-child(1) { animation-delay: 0.1s; }
+            .nav-links li:nth-child(2) { animation-delay: 0.2s; }
+            .nav-links li:nth-child(3) { animation-delay: 0.3s; }
+            .nav-links li:nth-child(4) { animation-delay: 0.4s; }
+            .nav-links li:nth-child(5) { animation-delay: 0.5s; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .nav-container {
+                padding: 0.75rem 1rem;
+            }
+
+            .main-interface {
+                padding: 0 0.5rem;
+            }
+
+            .sidebar {
+                grid-template-columns: 1fr;
+            }
+
+            .control-panel {
+                position: fixed;
+                bottom: 60px;
+                left: 0;
+                right: 0;
+                background: var(--bg-glass);
+                backdrop-filter: var(--blur-glass);
+                margin: 0;
+                border-radius: 0;
+                z-index: 900;
+                padding: 0.75rem;
+                display: flex;
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+
+            .control-panel .new-case-btn {
+                flex: 1;
+                white-space: nowrap;
+                padding: 0.6rem;
+                font-size: 0.8rem;
+            }
+
+            .footer {
+                padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+            }
+
+            .welcome-ascii {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .game-title {
+                font-size: 2rem;
+            }
+
+            .game-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .terminal-container {
+                height: calc(100vh - 350px);
+                min-height: 300px;
+            }
+
+            .terminal-content {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .action-btn {
+                font-size: 0.85rem;
+                padding: 0.5rem;
+            }
+
+            .case-title {
+                font-size: 1.1rem;
+            }
+
+            .case-tag {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.6rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .game-container {
+                padding-top: 120px;
+            }
+
+            .control-panel {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .control-panel .new-case-btn {
+                width: 100%;
+                padding: 0.5rem;
+            }
+
+            .footer-text {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            .terminal-container {
+                height: calc(100vh - 400px);
+                min-height: 350px;
+            }
+
+            .start-button {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media screen and (max-width: 360px) {
+            .game-title {
+                font-size: 1.8rem;
+            }
+
+            .game-subtitle {
+                font-size: 0.8rem;
+            }
+
+            .terminal-header {
+                padding: 0.5rem;
+                font-size: 0.85rem;
+            }
+
+            .terminal-dot {
+                width: 10px;
+                height: 10px;
+            }
+        }
+
+        @media screen and (max-height: 600px) {
+            .terminal-container {
+                height: 350px;
+            }
+
+            .control-panel {
+                position: static;
+                margin-bottom: 60px;
+            }
+
+            .game-container {
+                padding-bottom: 80px;
+            }
+        }
+
+        /* High-resolution displays */
+        @media screen and (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .terminal {
+                box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+            }
+
+            .logo-icon {
+                box-shadow: 0 4px 24px rgba(0, 122, 255, 0.5);
+            }
+        }
+
+        /* Portrait orientation */
+        @media screen and (orientation: portrait) {
+            .main-interface {
+                padding: 0 0.75rem;
+            }
+
+            .terminal-container {
+                height: calc(100vh - 300px);
+            }
+        }
+
+        /* Landscape orientation */
+        @media screen and (orientation: landscape) and (max-height: 500px) {
+            .terminal-container {
+                height: calc(100vh - 200px);
+            }
+
+            .sidebar {
+                height: auto;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        /* iOS safe area support */
+        @supports (padding: max(0px)) {
+            .control-panel {
+                padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+            }
+            
+            .footer {
+                padding-bottom: max(1rem, env(safe-area-inset-bottom));
+            }
+            
+            .header {
+                padding-top: max(0.5rem, env(safe-area-inset-top));
+            }
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            .start-button, .action-btn, .new-case-btn, .popup-btn {
+                transition: none;
+            }
+
+            .logo-icon:hover {
+                transform: none;
+            }
+
+            @keyframes fadeInStagger {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        }
+
+        /* High contrast mode */
+        @media (prefers-contrast: high) {
+            :root {
+                --bg-primary: #000000;
+                --bg-secondary: #1a1a1a;
+                --text-primary: #ffffff;
+                --text-secondary: #cccccc;
+                --accent-primary: #00b7ff;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="server-bg"></div>
+    <div class="server-lights" id="serverLights"></div>
+    
+    <header class="header" id="header">
+        <nav class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"></div>
+                <span>Gotham Signal</span>
+            </a>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aboutus.html">About</a></li>
+                <li><a href="help.html">Help</a></li>
+                <li><a href="game.html" class="active">Game Room</a></li>
+                <li><a href="donate.html">Donate</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="game-container">
+        <div class="game-header">
+            <h1 class="game-title">CASE SIMULATOR</h1>
+            <p class="game-subtitle">> Initiate_cybercrime_investigation.exe</p>
+        </div>
+
+        <div class="main-interface">
+            <div class="terminal-container">
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot red"></div>
+                            <div class="terminal-dot yellow"></div>
+                            <div class="terminal-dot green"></div>
+                        </div>
+                        <div class="terminal-title">GOTHAM_SIGNAL_TERMINAL_v2.7</div>
+                    </div>
+                    <div class="terminal-content">
+                        <div class="welcome-screen" id="welcomeScreen">
+                            <div class="welcome-ascii">
+╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                              GOTHAM SIGNAL - CASE SIMULATOR v2.7                                         ║
+║                                                                                                          ║
+║    > Secure Connection: ESTABLISHED              > Proxy Chain: INITIALIZED        > VPN: ACTIVE         ║
+║    > Encryption: AES-256                         > Database: CONNECTED            > Cases: 20            ║
+║                                                                                                          ║
+║                                    [ READY FOR INVESTIGATION ]                                           ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝</div>
+                            <button class="start-button" id="startCase">
+                                >> START NEW CASE <<
+                            </button>
+                        </div>
+
+                        <div class="loading-overlay" id="loadingOverlay">
+                            <div class="terminal-loader">Loading case data...</div>
+                        </div>
+
+                        <div class="case-display" id="caseDisplay">
+                            <div class="case-header">
+                                <div class="case-id">CASE_ID: <span id="caseId"></span></div>
+                                <div class="case-title" id="caseTitle"></div>
+                                <div class="difficulty-badge" id="difficultyBadge"></div>
+                            </div>
+                            
+                            <div class="case-tags" id="caseTags"></div>
+                            
+                            <div class="case-summary">
+                                <strong>SITUATION BRIEFING:</strong><br>
+                                <span id="caseSummary"></span>
+                            </div>
+
+                            <div style="margin: 1.5rem 0; padding: 1rem; background: rgba(255, 136, 0, 0.1); border-left: 3px solid var(--terminal-orange); color: var(--terminal-orange);">
+                                <strong>⚡ YOUR MISSION:</strong> Select the most effective investigative action. Think like a digital forensics expert.
+                            </div>
+
+                            <div class="action-buttons" id="actionButtons"></div>
+
+                            <div class="result-display" id="resultDisplay">
+                                <h3 id="resultTitle"></h3>
+                                <p id="resultText"></p>
+                                <button class="new-case-btn" id="nextCaseBtn" style="display: none;">
+                                    >> NEXT CASE <<
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="stats-panel">
+                    <div class="panel-title">► OPERATOR STATS</div>
+                    <div class="stat-item">
+                        <span>Cases Solved:</span>
+                        <span class="stat-value" id="casesSolved">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Success Rate:</span>
+                        <span class="stat-value" id="successRate">0%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Experience:</span>
+                        <span class="stat-value" id="expPoints">0 XP</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="expBar"></div>
+                    </div>
+                    <div style="font-size: 0.8rem; color: var(--text-tertiary); text-align: center;">
+                        Level: <span id="playerLevel">1</span>
+                    </div>
+                </div>
+
+                <div class="case-log-panel">
+                    <div class="panel-title">► CASE LOG</div>
+                    <div class="case-log" id="caseLog">
+                        <div style="color: var(--text-tertiary); text-align: center; padding: 2rem; font-style: italic;">
+                            No cases solved yet.<br>
+                            <span class="cursor"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-panel">
+                    <div class="panel-title">► CONTROLS</div>
+                    <button class="new-case-btn" onclick="rerollCase()">
+                        >> REROLL CASE << (50 XP)
+                    </button>
+                    <button class="new-case-btn" onclick="resetStats()">
+                        >> RESET STATS <<
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-text">
+                <span>Gotham Signal v2.7</span>
+                <a href="#" class="footer-link" onclick="checkPassword('team')">Astrakshaya Team</a>
+                <a href="mailto:astrakshaya@gmail.com" class="footer-link">Report Bug</a>
+                <a href="#" class="footer-link" onclick="checkPassword('docs')">Documentation</a>
+            </div>
+        </footer>
+    </div>
+
+    <audio id="terminalBeep" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+    <audio id="keyPress" src="https://assets.mixkit.co/active_storage/sfx/2570/2570-preview.mp3" preload="auto"></audio>
+    <audio id="success" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
+    <audio id="failure" src="https://assets.mixkit.co/active_storage/sfx/2572/2572-preview.mp3" preload="auto"></audio>
+
+    <div class="popup-overlay" id="popupOverlay"></div>
+    <div class="custom-popup" id="customPopup">
+        <button class="popup-close" onclick="closePopup()">✕</button>
+        <h3 class="popup-title" id="popupTitle"></h3>
+        <p class="popup-content" id="popupContent"></p>
+        <button class="popup-btn" onclick="closePopup()">OK</button>
+    </div>
+
+    <div class="password-popup" id="passwordPopup">
+        <h3 style="color: var(--accent-primary); margin-bottom: 1rem;">Enter Password</h3>
+        <input type="password" class="password-input" id="passwordInput" placeholder="Enter team password...">
+        <button class="popup-btn" onclick="verifyPassword()">Submit</button>
+        <button class="popup-btn" style="background: var(--bg-tertiary); margin-left: 0.5rem;" onclick="closePasswordPopup()">Cancel</button>
+        <div class="password-error" id="passwordError">Incorrect password. Access denied.</div>
+    </div>
+
+    <script>
+        // Game state
+        let gameState = {
+            casesAttempted: 0,
+            casesSolved: 0,
+            currentLevel: 1,
+            xp: 0,
+            xpToNextLevel: 100,
+            caseHistory: []
+        };
+
+        // Case database (unchanged)
+        const cases = [
+            {
+                id: "CYB-001",
+                title: "Digital Blackmail",
+                difficulty: "high",
+                tags: ["blackmail", "upi-trace", "social-engineering"],
+                summary: "Victim reports receiving threatening messages demanding UPI payments. Blackmailer claims to have compromising data. Multiple payment links sent via WhatsApp.",
+                actions: [
+                    {
+                        text: "Deploy IP Grabber Honeypot",
+                        correct: true,
+                        result: "SUCCESS: Attacker clicked fake payment page. IP address and device fingerprint captured."
+                    },
+                    {
+                        text: "Analyze WhatsApp Metadata",
+                        correct: true,
+                        result: "SUCCESS: Message timestamps and device info extracted. Pattern matches known criminal group."
+                    },
+                    {
+                        text: "Direct UPI Trace",
+                        correct: false,
+                        result: "FAILED: UPI accounts are temporary burners. No useful transaction trail found."
+                    }
+                ],
+                tools: ["WHOIS", "Grabify", "Email header analyzer"]
+            },
+            {
+                id: "CYB-002",
+                title: "Silent Follower",
+                difficulty: "medium",
+                tags: ["stalking", "osint", "crypto"],
+                summary: "Target reports being followed across multiple social platforms. Stalker seems to know their real-time location. Encrypted messages found in image comments.",
+                actions: [
+                    {
+                        text: "Run Cross-Platform Username Trace",
+                        correct: true,
+                        result: "SUCCESS: Sherlock scan reveals connected accounts. Stalker's pattern identified."
+                    },
+                    {
+                        text: "Decrypt Image Messages",
+                        correct: true,
+                        result: "SUCCESS: GPG hidden text extracted from image metadata. Location tracking method exposed."
+                    },
+                    {
+                        text: "Direct Profile Block",
+                        correct: false,
+                        result: "FAILED: Stalker has multiple backup accounts. New profiles already active."
+                    }
+                ],
+                tools: ["Sherlock", "GPG decryption", "Pimeyes"]
+            },
+            {
+                id: "CYB-003",
+                title: "Crypto Heist",
+                difficulty: "hard",
+                tags: ["crypto", "ransomware", "phishing"],
+                summary: "Victim's crypto wallet drained after clicking a phishing link. Ransom note demands payment in Monero for decryption key.",
+                actions: [
+                    {
+                        text: "Analyze Phishing Email Headers",
+                        correct: true,
+                        result: "SUCCESS: Sender's IP and domain revealed. Email traced to known spam server."
+                    },
+                    {
+                        text: "Decrypt Ransom Note",
+                        correct: true,
+                        result: "SUCCESS: Note decrypted using brute force. Decryption key obtained."
+                    },
+                    {
+                        text: "Direct Crypto Recovery",
+                        correct: false,
+                        result: "FAILED: Crypto transaction untraceable. Funds moved to privacy-focused mixer."
+                    }
+                ],
+                tools: ["Email header analyzer", "Hashcat", "Monero Ocean"]
+            },
+            {
+                id: "CYB-004",
+                title: "Corporate Espionage",
+                difficulty: "mystery",
+                tags: ["encryption", "whistleblower", "forensics"],
+                summary: "Anonymous tip-off about encrypted files on a corporate server. Possible data breach involving client information.",
+                actions: [
+                    {
+                        text: "Scan for Unauthorized Access",
+                        correct: true,
+                        result: "SUCCESS: Unusual login patterns detected. IPs traced to competitor's location."
+                    },
+                    {
+                        text: "Decrypt and Analyze Files",
+                        correct: true,
+                        result: "SUCCESS: Encryption cracked. Files contain sensitive client data and internal communications."
+                    },
+                    {
+                        text: "Notify Affected Clients",
+                        correct: false,
+                        result: "FAILED: Premature disclosure alert. Whistleblower's identity compromised."
+                    }
+                ],
+                tools: ["Wireshark", "OpenSSL", "Forensic Toolkit"]
+            },
+            {
+                id: "CYB-005",
+                title: "Insider Trading",
+                difficulty: "high",
+                tags: ["finance", "insider-trading", "encryption"],
+                summary: "Suspicious trading activity detected ahead of a major corporate announcement. Involves encrypted communication between executives.",
+                actions: [
+                    {
+                        text: "Monitor Trading Patterns",
+                        correct: true,
+                        result: "SUCCESS: Unusual spikes in stock options. Potential profit from non-public information."
+                    },
+                    {
+                        text: "Decrypt Executive Emails",
+                        correct: true,
+                        result: "SUCCESS: Encrypted emails reveal discussion of upcoming merger."
+                    },
+                    {
+                        text: "Notify Regulatory Authorities",
+                        correct: false,
+                        result: "FAILED: Alert triggered before evidence solidified. Investigation compromised."
+                    }
+                ],
+                tools: ["Bloomberg Terminal", "Pandas", "GnuPG"]
+            },
+            {
+                id: "CYB-006",
+                title: "SIM Swap Scam",
+                difficulty: "medium",
+                tags: ["mobile-security", "social-engineering", "crypto"],  // Fixed missing closing bracket
+                summary: "Victim's phone number was swapped to a new SIM. Attacker accessed crypto wallet and drained funds.",
+                actions: [
+                    {
+                        text: "Verify Recent SIM Changes",
+                        correct: true,
+                        result: "SUCCESS: Unauthorized SIM change detected. Attack vector confirmed."
+                    },
+                    {
+                        text: "Secure Crypto Wallet",
+                        correct: true,
+                        result: "SUCCESS: Wallet secured with new 2FA method. Attacker locked out."
+                    },
+                    {
+                        text: "Trace SIM Card Location",
+                        correct: false,
+                        result: "FAILED: SIM card disposed of. No location data available."
+                    }
+                ],
+                tools: ["Mobile Tracker", "Blockchain Explorer", "WHOIS"]
+            },
+            {
+                id: "CYB-007",
+                title: "Data Breach Notification",
+                difficulty: "easy",
+                tags: ["email", "notification", "forensics"],
+                summary: "Victim receives an email about a data breach involving their information. Email contains a link to 'confirm' breach details.",
+                actions: [
+                    {
+                        text: "Verify Email Sender",
+                        correct: true,
+                        result: "SUCCESS: Email traced to known data breach notification service."
+                    },
+                    {
+                        text: "Check for Personal Data Exposure",
+                        correct: true,
+                        result: "SUCCESS: No sensitive data found in public breach records."
+                    },
+                    {
+                        text: "Ignore and Delete Email",
+                        correct: false,
+                        result: "FAILED: Ignored email was legitimate. Important security update missed."
+                    }
+                ],
+                tools: ["Email Checker", "Have I Been Pwned", "Mail Tester"]
+            },
+            {
+                id: "CYB-008",
+                title: "Online Impersonation",
+                difficulty: "medium",
+                tags: ["social-media", "impersonation", "scam"],
+                summary: "Victim reports someone impersonating them on social media. Impersonator is contacting victim's friends and asking for money.",
+                actions: [
+                    {
+                        text: "Gather Evidence of Impersonation",
+                        correct: true,
+                        result: "SUCCESS: Screenshots and message logs collected. Impersonator's account flagged."
+                    },
+                    {
+                        text: "Notify Friends and Family",
+                        correct: true,
+                        result: "SUCCESS: Warned contacts avoid falling for the scam."
+                    },
+                    {
+                        text: "Confront Impersonator Online",
+                        correct: false,
+                        result: "FAILED: Impersonator escalates tactics. Victim receives threats."
+                    }
+                ],
+                tools: ["Social Media Report Tool", "Canva", "Google Reverse Image Search"]
+            },
+            {
+                id: "CYB-009",
+                title: "Phishing Website Report",
+                difficulty: "easy",
+                tags: ["phishing", "website-scam", "report"],
+                summary: "Victim stumbles upon a website that looks like a popular login page. Asks users to enter credentials to 'verify' accounts.",
+                actions: [
+                    {
+                        text: "Report to Anti-Phishing Group",
+                        correct: true,
+                        result: "SUCCESS: Website taken down. Domain registered to known scammer."
+                    },
+                    {
+                        text: "Advise Victim to Change Passwords",
+                        correct: true,
+                        result: "SUCCESS: Victim's accounts secured with new passwords."
+                    },
+                    {
+                        text: "Attempt to Hack the Website",
+                        correct: false,
+                        result: "FAILED: Website owner retaliates with legal action."
+                    }
+                ],
+                tools: ["PhishTank", "Google Safe Browsing", "WHOIS"]
+            },
+            {
+                id: "CYB-010",
+                title: "Ransomware Recovery",
+                difficulty: "hard",
+                tags: ["ransomware", "recovery", "forensics"],
+                summary: "Victim's files are encrypted by ransomware. Demands payment in Bitcoin for the decryption key.",
+                actions: [
+                    {
+                        text: "Isolate Infected System",
+                        correct: true,
+                        result: "SUCCESS: Prevented ransomware from spreading to networked drives."
+                    },
+                    {
+                        text: "Attempt File Decryption",
+                        correct: true,
+                        result: "SUCCESS: Some files recovered using free decryption tools."
+                    },
+                    {
+                        text: "Pay Ransom to Attacker",
+                        correct: false,
+                        result: "FAILED: Payment made, but attacker does not provide decryption key."
+                    }
+                ],
+                tools: ["Malwarebytes", "Recuva", "Bitdefender"]
+            },
+            {
+                id: "CYB-011",
+                title: "Wi-Fi Eavesdropping",
+                difficulty: "medium",
+                tags: ["wifi", "eavesdropping", "encryption"],
+                summary: "Suspicious activity detected on the public Wi-Fi network. Possible eavesdropping on user data.",
+                actions: [
+                    {
+                        text: "Analyze Network Traffic",
+                        correct: true,
+                        result: "SUCCESS: Captured packets reveal unencrypted sensitive data."
+                    },
+                    {
+                        text: "Identify Rogue Access Points",
+                        correct: true,
+                        result: "SUCCESS: Unauthorized APs detected. Potential man-in-the-middle attack."
+                    },
+                    {
+                        text: "Ignore and Continue Monitoring",
+                        correct: false,
+                        result: "FAILED: Attackers escalate efforts. User data compromised."
+                    }
+                ],
+                tools: ["Wireshark", "Kismet", "Aircrack-ng"]
+            },
+            {
+                id: "CYB-012",
+                title: "Malicious Software Analysis",
+                difficulty: "hard",
+                tags: ["malware", "analysis", "reverse-engineering"],
+                summary: "Suspicious software found on multiple systems. Potential malware infection spreading through USB drives.",
+                actions: [
+                    {
+                        text: "Isolate Infected Machines",
+                        correct: true,
+                        result: "SUCCESS: Contained malware spread. Infected systems identified."
+                    },
+                    {
+                        text: "Analyze Malware Behavior",
+                        correct: true,
+                        result: "SUCCESS: Malware reverse-engineered. Keyloggers and ransomware components found."
+                    },
+                    {
+                        text: "Remove Malware and Restore Systems",
+                        correct: false,
+                        result: "FAILED: Malware disables removal tools. Systems remain compromised."
+                    }
+                ],
+                tools: ["Malwarebytes", "Process Explorer", "Autoruns"]
+            },
+            {
+                id: "CYB-013",
+                title: "Unauthorized Access Investigation",
+                difficulty: "medium",
+                tags: ["forensics", "unauthorized-access", "encryption"],
+                summary: "Reports of unauthorized access to sensitive data. Involves encrypted files and suspicious login attempts.",
+                actions: [
+                    {
+                        text: "Review Access Logs",
+                        correct: true,
+                        result: "SUCCESS: Suspicious logins from unknown IPs. Access times correlate with insider knowledge."
+                    },
+                    {
+                        text: "Attempt File Decryption",
+                        correct: true,
+                        result: "SUCCESS: Encryption keys found in user profile. Files decrypted."
+                    },
+                    {
+                        text: "Notify Affected Parties",
+                        correct: false,
+                        result: "FAILED: Premature notification causes panic. Investigation details leaked."
+                    }
+                ],
+                tools: ["Splunk", "OpenSSL", "FTK Imager"]
+            },
+            {
+                id: "CYB-014",
+                title: "Network Intrusion Detection",
+                difficulty: "high",
+                tags: ["network-security", "intrusion-detection", "forensics"],
+                summary: "Intrusion detection system triggered by unusual network activity. Possible data exfiltration in progress.",
+                actions: [
+                    {
+                        text: "Analyze Intrusion Detection Logs",
+                        correct: true,
+                        result: "SUCCESS: Malicious IPs and unusual data packets identified."
+                    },
+                    {
+                        text: "Block Malicious IPs",
+                        correct: true,
+                        result: "SUCCESS: Immediate threat mitigated. Further monitoring required."
+                    },
+                    {
+                        text: "Ignore as False Positive",
+                        correct: false,
+                        result: "FAILED: Attackers exploit the oversight. Data breach occurs."
+                    }
+                ],
+                tools: ["Snort", "Wireshark", "NetWitness"]
+            },
+            {
+                id: "CYB-015",
+                title: "Email Phishing Simulation",
+                difficulty: "easy",
+                tags: ["email", "phishing", "simulation"],
+                summary: "Conduct a simulated phishing attack to test employee awareness. Involves fake login page and malicious link.",
+                actions: [
+                    {
+                        text: "Create Fake Login Page",
+                        correct: true,
+                        result: "SUCCESS: Realistic login page created. Credentials will be captured."
+                    },
+                    {
+                        text: "Send Phishing Email to Target",
+                        correct: true,
+                        result: "SUCCESS: Email sent with malicious link. Awaiting victim interaction."
+                    },
+                    {
+                        text: "Monitor for Credential Harvesting",
+                        correct: false,
+                        result: "FAILED: Target reports email to IT. Simulation detected."
+                    }
+                ],
+                tools: ["Gmail", "Google Sites", "Bitly"]
+            },
+            {
+                id: "CYB-016",
+                title: "USB Drop Attack",
+                difficulty: "medium",
+                tags: ["usb", "social-engineering", "malware"],
+                summary: "Leave infected USB drives in target locations. Attack relies on user curiosity and lack of security awareness.",
+                actions: [
+                    {
+                        text: "Prepare Infected USB Drives",
+                        correct: true,
+                        result: "SUCCESS: USB drives loaded with malware and autorun script."
+                    },
+                    {
+                        text: "Drop USBs in High-Traffic Areas",
+                        correct: true,
+                        result: "SUCCESS: USBs placed in locations with high visibility."
+                    },
+                    {
+                        text: "Track Infections and Data Exfiltration",
+                        correct: false,
+                        result: "FAILED: Most USBs handed to IT. Infection rate low."
+                    }
+                ],
+                tools: ["Windows Explorer", "USB Oblivion", "Malwarebytes"]
+            },
+            {
+                id: "CYB-017",
+                title: "Website Defacement",
+                difficulty: "hard",
+                tags: ["website", "defacement", "forensics"],
+                summary: "Company website defaced with offensive content. Involves SQL injection and lack of input validation.",
+                actions: [
+                    {
+                        text: "Restore Website from Backup",
+                        correct: true,
+                        result: "SUCCESS: Website restored to previous state. Data integrity confirmed."
+                    },
+                    {
+                        text: "Analyze SQL Injection Vector",
+                        correct: true,
+                        result: "SUCCESS: Vulnerable input fields identified. Patch applied."
+                    },
+                    {
+                        text: "Notify Affected Users",
+                        correct: false,
+                        result: "FAILED: Notification email lands in spam. Users remain unaware."
+                    }
+                ],
+                tools: ["phpMyAdmin", "WordPress", "BackupBuddy"]
+            },
+            {
+                id: "CYB-018",
+                title: "Credential Stuffing Attack",
+                difficulty: "medium",
+                tags: ["credential-stuffing", "brute-force", "encryption"],
+                summary: "Automated attack using stolen credentials from previous breaches. Targets multiple accounts for password reuse.",
+                actions: [
+                    {
+                        text: "Deploy Rate Limiting",
+                        correct: true,
+                        result: "SUCCESS: Slowed down the attack. Reduced number of brute-force attempts."
+                    },
+                    {
+                        text: "Notify Users of Suspicious Activity",
+                        correct: true,
+                        result: "SUCCESS: Users alerted to change passwords. Account security enhanced."
+                    },
+                    {
+                        text: "Ignore as Low Priority",
+                        correct: false,
+                        result: "FAILED: Attackers gain access to multiple accounts. Data breach occurs."
+                    }
+                ],
+                tools: ["Fail2Ban", "Mailgun", "Hashcat"]
+            },
+            {
+                id: "CYB-019",
+                title: "Voice Phishing (Vishing) Attack",
+                difficulty: "high",
+                tags: ["vishing", "social-engineering", "scam"],
+                summary: "Attacker poses as a bank representative over the phone. Tricks victim into revealing sensitive information.",
+                actions: [
+                    {
+                        text: "Record and Analyze Call",
+                        correct: true,
+                        result: "SUCCESS: Call recording provides evidence. Attack vector confirmed."
+                    },
+                    {
+                        text: "Alert Victim's Bank",
+                        correct: true,
+                        result: "SUCCESS: Bank notified to monitor for fraudulent activity."
+                    },
+                    {
+                        text: "Ignore as Prank Call",
+                        correct: false,
+                        result: "FAILED: Attackers withdraw large sums. Victim suffers financial loss."
+                    }
+                ],
+                tools: ["Audacity", "Banking CRM", "Whois.net"]
+            },
+            {
+                id: "CYB-020",
+                title: "Anonymous Tip",
+                difficulty: "mystery",
+                tags: ["encryption", "ethics", "whistleblower"],
+                summary: "Encrypted ZIP file received from anonymous source. Claims to contain evidence of corporate fraud. Requires decision on handling sensitive information.",
+                actions: [
+                    {
+                        text: "Attempt ZIP Password Recovery",
+                        correct: true,
+                        result: "SUCCESS: Password cracked using dictionary attack. Documents appear authentic."
+                    },
+                    {
+                        text: "Verify VeraCrypt Container",
+                        correct: true,
+                        result: "SUCCESS: Hidden volume detected and accessed. Additional evidence secured."
+                    },
+                    {
+                        text: "Forward Directly to Press",
+                        correct: false,
+                        result: "FAILED: Unverified release compromised investigation. Source identity exposed."
+                    }
+                ],
+                tools: ["fcrackzip", "7zip", "VeraCrypt"]
+            }
+        ];
+
+        // Add case difficulty colors
+        const difficultyColors = {
+            easy: "#00FF41",
+            medium: "#FF8800",
+            hard: "#FF3333",
+            high: "#FF007F",
+            mystery: "#8A2BE2"
+        };
+
+        // Terminal typing effect
+        function typeText(element, text, speed = 30) {
+            let i = 0;
+            element.innerHTML = '';
+            return new Promise(resolve => {
+                function type() {
+                    if (i < text.length) {
+                        element.innerHTML += text.charAt(i);
+                        i++;
+                        playSound('keyPress');
+                        setTimeout(type, speed);
+                    } else {
+                        resolve();
+                    }
+                }
+                type();
+            });
+        }
+
+        // Sound effects
+        function playSound(soundId) {
+            const sound = document.getElementById(soundId);
+            sound.currentTime = 0;
+            sound.play().catch(e => console.log("Audio play failed:", e));
+        }
+
+        // Update stats display
+        function updateStats() {
+            document.getElementById('casesSolved').textContent = gameState.casesSolved;
+            document.getElementById('successRate').textContent = 
+                Math.round((gameState.casesSolved / Math.max(1, gameState.casesAttempted)) * 100) + '%';
+            document.getElementById('expPoints').textContent = gameState.xp + ' XP';
+            document.getElementById('playerLevel').textContent = gameState.currentLevel;
+            
+            const progressPercentage = (gameState.xp % gameState.xpToNextLevel) / gameState.xpToNextLevel * 100;
+            document.getElementById('expBar').style.width = `${progressPercentage}%`;
+        }
+
+        // Level up logic
+        function checkLevelUp() {
+            while (gameState.xp >= gameState.xpToNextLevel) {
+                gameState.currentLevel++;
+                gameState.xp -= gameState.xpToNextLevel;
+                gameState.xpToNextLevel = Math.round(gameState.xpToNextLevel * 1.5);
+                showPopup('LEVEL UP!', `Congratulations! You've reached Level ${gameState.currentLevel}!`);
+                playSound('success');
+            }
+            updateStats();
+        }
+
+        // Display new case
+        function displayCase(caseData) {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('caseDisplay').style.display = 'block';
+            document.getElementById('loadingOverlay').style.display = 'none';
+
+            document.getElementById('caseId').textContent = caseData.id;
+            typeText(document.getElementById('caseTitle'), caseData.title).then(() => {
+                document.getElementById('difficultyBadge').textContent = `Difficulty: ${caseData.difficulty.toUpperCase()}`;
+                document.getElementById('difficultyBadge').style.borderColor = difficultyColors[caseData.difficulty];
+                document.getElementById('difficultyBadge').style.color = difficultyColors[caseData.difficulty];
+                typeText(document.getElementById('caseSummary'), caseData.summary);
+            });
+
+            const tagsContainer = document.getElementById('caseTags');
+            tagsContainer.innerHTML = '';
+            caseData.tags.forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'case-tag';
+                tagElement.textContent = tag.toUpperCase();
+                tagsContainer.appendChild(tagElement);
+            });
+
+            const actionButtons = document.getElementById('actionButtons');
+            actionButtons.innerHTML = '';
+            caseData.actions.forEach((action, index) => {
+                const button = document.createElement('button');
+                button.className = 'action-btn';
+                button.textContent = action.text;
+                button.onclick = () => handleAction(action, caseData);
+                actionButtons.appendChild(button);
+            });
+        }
+
+        // Handle action selection
+        function handleAction(action, caseData) {
+            const resultDisplay = document.getElementById('resultDisplay');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultText = document.getElementById('resultText');
+            const nextCaseBtn = document.getElementById('nextCaseBtn');
+
+            gameState.casesAttempted++;
+            resultDisplay.style.display = 'block';
+            nextCaseBtn.style.display = 'block';
+
+            if (action.correct) {
+                gameState.casesSolved++;
+                gameState.xp += 50;
+                resultDisplay.className = 'result-display result-success';
+                resultTitle.textContent = 'OPERATION SUCCESSFUL';
+                typeText(resultText, action.result);
+                playSound('success');
+                addCaseLog(caseData.id, true);
+                checkLevelUp();
+            } else {
+                resultDisplay.className = 'result-display result-failure';
+                resultTitle.textContent = 'OPERATION FAILED';
+                typeText(resultText, action.result);
+                playSound('failure');
+                addCaseLog(caseData.id, false);
+            }
+
+            document.querySelectorAll('.action-btn').forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+            });
+
+            updateStats();
+        }
+
+        // Add to case log
+        function addCaseLog(caseId, success) {
+            const caseLog = document.getElementById('caseLog');
+            const logEntry = document.createElement('div');
+            logEntry.className = `case-log-item ${success ? 'success' : ''}`;
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] Case ${caseId}: ${success ? 'SOLVED' : 'FAILED'}`;
+            caseLog.prepend(logEntry);
+            gameState.caseHistory.push({ caseId, success, timestamp: new Date().toISOString() });
+        }
+
+        // Start new case
+        function startNewCase() {
+            document.getElementById('loadingOverlay').style.display = 'block';
+            playSound('terminalBeep');
+            setTimeout(() => {
+                const randomCase = cases[Math.floor(Math.random() * cases.length)];
+                displayCase(randomCase);
+            }, 1500);
+        }
+
+        // Reroll case
+        function rerollCase() {
+            if (gameState.xp >= 50) {
+                gameState.xp -= 50;
+                startNewCase();
+                updateStats();
+            } else {
+                showPopup('Insufficient XP', 'You need at least 50 XP to reroll a case.');
+            }
+        }
+
+        // Reset stats
+        function resetStats() {
+            gameState = {
+                casesAttempted: 0,
+                casesSolved: 0,
+                currentLevel: 1,
+                xp: 0,
+                xpToNextLevel: 100,
+                caseHistory: []
+            };
+            document.getElementById('caseLog').innerHTML = `
+                <div style="color: var(--text-tertiary); text-align: center; padding: 2rem; font-style: italic;">
+                    No cases solved yet.<br>
+                    <span class="cursor"></span>
+                </div>`;
+            updateStats();
+            document.getElementById('welcomeScreen').style.display = 'block';
+            document.getElementById('caseDisplay').style.display = 'none';
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        // Popup handling
+        function showPopup(title, content) {
+            document.getElementById('popupTitle').textContent = title;
+            document.getElementById('popupContent').textContent = content;
+            document.getElementById('customPopup').classList.add('show');
+            document.getElementById('popupOverlay').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('customPopup').classList.remove('show');
+            document.getElementById('popupOverlay').style.display = 'none';
+        }
+
+        // Password popup handling
+        function checkPassword(type) {
+            document.getElementById('passwordPopup').classList.add('show');
+            document.getElementById('popupOverlay').style.display = 'block';
+            document.getElementById('passwordInput').dataset.type = type;
+            document.getElementById('passwordInput').focus();
+        }
+
+        function verifyPassword() {
+            const input = document.getElementById('passwordInput');
+            const type = input.dataset.type;
+            const passwordError = document.getElementById('passwordError');
+            const correctPassword = type === 'team' ? 'astrakshaya' : 'signal2023';
+
+            if (input.value === correctPassword) {
+                const redirectUrl = type === 'team' ? 'team.html' : 'docs.html';
+                window.location.href = redirectUrl;
+            } else {
+                passwordError.style.display = 'block';
+                input.style.borderColor = 'var(--terminal-red)';
+                setTimeout(() => {
+                    passwordError.style.display = 'none';
+                    input.style.borderColor = 'var(--border-primary)';
+                    input.value = '';
+                }, 2000);
+            }
+        }
+
+        function closePasswordPopup() {
+            document.getElementById('passwordPopup').classList.remove('show');
+            document.getElementById('popupOverlay').style.display = 'none';
+            document.getElementById('passwordInput').value = '';
+        }
+
+        // Generate server lights
+        function generateServerLights() {
+            const serverLights = document.getElementById('serverLights');
+            const colors = ['red', 'blue', 'yellow', 'green'];
+            const numLights = Math.floor(window.innerWidth / 50);
+
+            for (let i = 0; i < numLights; i++) {
+                const light = document.createElement('div');
+                light.className = `server-light ${colors[Math.floor(Math.random() * colors.length)]}`;
+                light.style.left = `${Math.random() * 100}%`;
+                light.style.top = `${Math.random() * 100}%`;
+                serverLights.appendChild(light);
+            }
+        }
+
+        // Header scroll effect
+        function handleScroll() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        }
+
+        // Hamburger menu toggle
+        function toggleMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        }
+
+        // Event listeners
+        document.getElementById('startCase').addEventListener('click', startNewCase);
+        document.getElementById('nextCaseBtn').addEventListener('click', startNewCase);
+        document.getElementById('hamburger').addEventListener('click', toggleMenu);
+        document.getElementById('passwordInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') verifyPassword();
+        });
+        window.addEventListener('scroll', handleScroll);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            generateServerLights();
+            updateStats();
+            // Close menu when clicking a nav link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.getElementById('navLinks').classList.remove('active');
+                    document.getElementById('hamburger').classList.remove('active');
+                });
+            });
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            document.getElementById('serverLights').innerHTML = '';
+            generateServerLights();
+        });
+
+        // Prevent double tap zoom on mobile
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (event) => {
+            const now = new Date().getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
+</body>
+</html>
