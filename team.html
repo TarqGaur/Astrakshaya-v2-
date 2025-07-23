@@ -11,7 +11,146 @@
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/te.css">
     <link rel="stylesheet" href="css/teamv2.css">
-    <link rel="stylesheet" href="css/bag.css">    <!-- Navbar -->
+    <link rel="stylesheet" href="css/bag.css">
+    <style>
+        .professional-signal-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #1e90ff, #00b7eb);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 25px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 183, 235, 0.4);
+        }
+        .professional-signal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 183, 235, 0.6);
+        }
+        .professional-signal-icon {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+        .professional-signal-text {
+            font-size: 14px;
+            text-align: center;
+            display: block;
+            margin-top: 5px;
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 500;
+        }
+        .batman-contact-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .professional-signal-btn {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            min-width: 200px;
+            justify-content: center;
+        }
+
+        .professional-signal-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .professional-signal-icon {
+            font-size: 20px;
+            margin-right: 8px;
+        }
+
+        .professional-signal-text {
+            color: #888;
+            font-size: 14px;
+            font-family: 'Rajdhani', sans-serif;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .professional-signal-btn {
+                min-width: 180px;
+                padding: 10px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .professional-signal-btn {
+                min-width: 160px;
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+        @media (max-width: 768px) {
+            .professional-signal-btn {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+            .professional-signal-icon {
+                font-size: 18px;
+            }
+            .professional-signal-text {
+                font-size: 12px;
+            }
+            .text-blk.feature-text {
+                font-size: 14px;
+                line-height: 1.4;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                padding: 0 10px;
+            }
+            .card {
+                padding: 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .professional-signal-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            .professional-signal-icon {
+                font-size: 16px;
+            }
+            .professional-signal-text {
+                font-size: 10px;
+            }
+            .text-blk.feature-text {
+                font-size: 12px;
+                line-height: 1.3;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                padding: 0 8px;
+            }
+            .card {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
     <nav class="navbar">
         <div id="particles-js"></div>
         <div class="futuristic-text">ASTRAKSHAYA</div>
@@ -35,303 +174,301 @@
         <div id="stars4"></div>
     </div>
 
+    <div id="background-container">
+        <div class="space-background"></div>
+        <div class="stars"></div>
+        <div class="particles"></div>
 
-<div id="background-container">
-
-<div class="space-background"></div>
-<div class="stars"></div>
-<div class="particles"></div>
-
-    <div class="responsive-container-block container">
-        <p class="text-blk team-head-text">
-          Our Team
-        </p>
-        <div class="responsive-container-block">
-          <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
-            <div class="card">
-              <div class="team-image-wrapper">
-                <img class="team-member-image" src="teamImages/founder.jpg">
+        <div class="responsive-container-block container">
+            <p class="text-blk team-head-text">
+              Our Team
+            </p>
+            <div class="responsive-container-block">
+              <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
+                <div class="card">
+                  <div class="team-image-wrapper">
+                    <img class="team-member-image" src="teamImages/founder.jpg">
+                  </div>
+                  <p class="text-blk name">
+                    Suryansh Yadav
+                  </p>
+                  <p class="text-blk position">
+                    Team Head
+                  </p>
+                  <p class="text-blk feature-text">
+                    The Earth is just a launchpad. The universe is our battlefield.
+                  </p>
+                  <div class="social-icons">
+                    <a href="https://x.com/astrakshaya" target="_blank">
+                      <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
+                    </a>
+                    <a href="https://www.instagram.com/suryansh_13.8/" target="_blank">
+                      <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
+                    </a>
+                  </div>
+                </div>
               </div>
-              <p class="text-blk name">
-                Suryansh Yadav
-              </p>
-              <p class="text-blk position">
-                Team Head
-              </p>
-              <p class="text-blk feature-text">
-                The Earth is just a launchpad. The universe is our battlefield.
-              </p>
-              <div class="social-icons">
-                <a href="https://x.com/astrakshaya" target="_blank">
-                  <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
-                </a>
-                <a href="https://www.instagram.com/suryansh_13.8/" target="_blank">
-                  <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
-                </a>
+              <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
+                <div class="card">
+                  <div class="team-image-wrapper">
+                    <img class="team-member-image" src="teamImages/nithin.jpg">
+                  </div>
+                  <p class="text-blk name">
+                    Nithin S
+                  </p>
+                  <p class="text-blk position">
+                    Head of Strategy & Operations
+                  </p>
+                  <p class="text-blk feature-text">
+                    While others dream, we build. While others wait, we conquer.
+                  </p>
+                  <div class="social-icons">
+                    <a href="https://x.com/astrakshaya" target="_blank">
+                      <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
+                    </a>
+                    <a href="https://www.instagram.com/nithin_s1234/" target="_blank">
+                      <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
-            <div class="card">
-              <div class="team-image-wrapper">
-                <img class="team-member-image" src="teamImages/nithin.jpg">
+              <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
+                <div class="card">
+                  <div class="team-image-wrapper">
+                    <img class="team-member-image" src="teamImages/tarq.jpg">
+                  </div>
+                  <p class="text-blk name">
+                    Tarq Gaur
+                  </p>
+                  <p class="text-blk position">
+                    Head of Technical Development
+                  </p>
+                  <p class="text-blk feature-text">
+                    The future isn’t predicted. It’s programmed
+                  </p>
+                  <div class="social-icons">
+                    <a href="https://x.com/astrakshaya" target="_blank">
+                      <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
+                    </a>
+                    <a href="https://www.instagram.com/tarq_gaur/" target="_blank">
+                      <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
+                    </a>
+                  </div>
+                </div>
               </div>
-              <p class="text-blk name">
-                Nithin S
-              </p>
-              <p class="text-blk position">
-                Head of Strategy & Operations
-              </p>
-              <p class="text-blk feature-text">
-                While others dream, we build. While others wait, we conquer.
-              </p>
-              <div class="social-icons">
-                <a href="https://x.com/astrakshaya" target="_blank">
-                  <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
-                </a>
-                <a href="https://www.instagram.com/nithin_s1234/" target="_blank">
-                  <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
-                </a>
-                </a>
+              <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
+                <div class="card">
+                  <div class="team-image-wrapper">
+                    <img class="team-member-image" src="teamImages/shaurya.jpg">
+                  </div>
+                  <p class="text-blk name">
+                    Shaurya Jain
+                  </p>
+                  <p class="text-blk position">
+                    Head of Electronics Department
+                  </p>
+                  <p class="text-blk feature-text">
+                    Engineering the future with every volt, wire, and spark.
+                  </p>
+                  <div class="social-icons">
+                    <a href="https://x.com/astrakshaya" target="_blank">
+                      <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
+                    </a>
+                    <a href="https://www.instagram.com/shour_yajain/" target="_blank">
+                      <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
-            <div class="card">
-              <div class="team-image-wrapper">
-                <img class="team-member-image" src="teamImages/tarq.jpg">
+              <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
+                <div class="card">
+                  <div class="team-image-wrapper">
+                    <img class="team-member-image" src="teamImages/divyansh.png">
+                  </div>
+                  <p class="text-blk name">
+                    Divyansh Singh
+                  </p>
+                  <p class="text-blk position">
+                    Head of Chemical Sciences and Development
+                  </p>
+                  <p class="text-blk feature-text">
+                    We don’t just mix chemicals, we engineer reactions that change the game, reshape industries, and fuel the future
+                  </p>
+                  <div class="social-icons">
+                    <a href="https://x.com/astrakshaya" target="_blank">
+                      <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
+                    </a>
+                    <a href="https://www.instagram.com/divyanshsingh.2n22/" target="_blank">
+                      <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
+                    </a>
+                  </div>
+                </div>
               </div>
-              <p class="text-blk name">
-                Tarq Gaur
-              </p>
-              <p class="text-blk position">
-                Head of Technical Development
-              </p>
-              <p class="text-blk feature-text">
-                The future isn’t predicted. It’s programmed
-              </p>
-              <div class="social-icons">
-                <a href="https://x.com/astrakshaya" target="_blank">
-                  <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
-                </a>
-                <a href="https://www.instagram.com/tarq_gaur/" target="_blank">
-                  <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
-                </a>
-                </a>
+              <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
+                <div class="card">
+                  <div class="team-image-wrapper">
+                    <img class="team-member-image" src="teamImages/bhannu.jpg">
+                  </div>
+                  <p class="text-blk name">
+                    Bhanu Prakash M N
+                  </p>
+                  <p class="text-blk position">
+                    Head of Design & Innovation
+                  </p>
+                  <p class="text-blk feature-text">
+                    We don’t just design, we create the future, break boundaries, spark revolutions, reshape perspectives, and redefine the impossible.               
+                  </p>
+                  <div class="social-icons">
+                    <a href="https://x.com/astrakshaya" target="_blank">
+                      <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
+                    </a>
+                    <a href="https://www.instagram.com/astrakshaya/" target="_blank">
+                      <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
-            <div class="card">
-              <div class="team-image-wrapper">
-                <img class="team-member-image" src="teamImages/shaurya.jpg">
+              <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
+                <div class="card">
+                  <div class="team-image-wrapper">
+                    <img class="team-member-image" src="teamImages/rajveer.jpg">
+                  </div>
+                  <p class="text-blk name">
+                    Rajveer Kuri
+                  </p>
+                  <p class="text-blk position">
+                    Head of Launch and Communications 
+                  </p>
+                  <p class="text-blk feature-text">
+                    We don’t just communicate, we launch revolutions, pushing boundaries with every mission and message.
+                  </p>
+                  <div class="social-icons">
+                    <a href="https://x.com/astrakshaya" target="_blank">
+                      <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
+                    </a>
+                    <a href="https://www.instagram.com/rajveer_kuri/" target="_blank">
+                      <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
+                    </a>
+                  </div>
+                </div>
               </div>
-              <p class="text-blk name">
-                Shaurya Jain
-              </p>
-              <p class="text-blk position">
-                Head of Electronics Department
-              </p>
-              <p class="text-blk feature-text">
-                Engineering the future with every volt, wire, and spark.
-              </p>
-              <div class="social-icons">
-                <a href="https://x.com/astrakshaya" target="_blank">
-                  <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
-                </a>
-                <a href="https://www.instagram.com/shour_yajain/" target="_blank">
-                  <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
-                </a>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
-            <div class="card">
-              <div class="team-image-wrapper">
-                <img class="team-member-image" src="teamImages/divyansh.png">
-              </div>
-              <p class="text-blk name">
-                Divyansh Singh
-              </p>
-              <p class="text-blk position">
-                Head of Chemical Sciences and Development
-              </p>
-              <p class="text-blk feature-text">
-                We don’t just mix chemicals, we engineer reactions that change the game, reshape industries, and fuel the future
-              </p>
-              <div class="social-icons">
-                <a href="https://x.com/astrakshaya" target="_blank">
-                  <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
-                </a>
-                <a href="https://www.instagram.com/divyanshsingh.2n22/" target="_blank">
-                  <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
-                </a>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
-            <div class="card">
-              <div class="team-image-wrapper">
-                <img class="team-member-image" src="teamImages/bhannu.jpg">
-              </div>
-              <p class="text-blk name">
-                Bhanu Prakash M N
-              </p>
-              <p class="text-blk position">
-                Head of Design & Innovation
-              </p>
-              <p class="text-blk feature-text">
-                We don’t just design, we create the future, break boundaries, spark revolutions, reshape perspectives, and redefine the impossible.               </p>
-              <div class="social-icons">
-                <a href="https://x.com/astrakshaya" target="_blank">
-                  <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
-                </a>
-                <a href="https://www.instagram.com/astrakshaya/" target="_blank">
-                  <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
-                </a>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
-            <div class="card">
-              <div class="team-image-wrapper">
-                <img class="team-member-image" src="teamImages/rajveer.jpg">
-              </div>
-              <p class="text-blk name">
-                Rajveer Kuri
-              </p>
-              <p class="text-blk position">
-                Head of Launch and Communications 
-              </p>
-              <p class="text-blk feature-text">
-                We don’t just communicate, we launch revolutions, pushing boundaries with every mission and message.
-              </p>
-              <div class="social-icons">
-                <a href="https://x.com/astrakshaya" target="_blank">
-                  <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
-                </a>
-                <a href="https://www.instagram.com/rajveer_kuri/" target="_blank">
-                  <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
-            <div class="card">
-              <div class="team-image-wrapper">
-                <img class="team-member-image" src="teamImages/sumit.jpg">
-              </div>
-              <p class="text-blk name">
-                Sumit Maheshwari
-              </p>
-              <p class="text-blk position">
-                Head of Flight Control & Mission Operations
-              </p>
-              <p class="text-blk feature-text">
-                We don’t just control flights, we command destiny, turning every mission into a step towards the impossible              </p>
-              <div class="social-icons">
-                <a href="https://x.com/astrakshaya" target="_blank">
-                  <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
-                </a>
-                <a href="https://www.instagram.com/s7mit_x/" target="_blank">
-                  <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
-                </a>
+              <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
+                <div class="card">
+                  <div class="team-image-wrapper">
+                    <img class="team-member-image" src="teamImages/sumit.jpg">
+                  </div>
+                  <p class="text-blk name">
+                    Sumit Maheshwari
+                  </p>
+                  <p class="text-blk position">
+                    Head of Flight Control & Mission Operations
+                  </p>
+                  <p class="text-blk feature-text">
+                    We don’t just control flights, we command destiny, turning every mission into a step towards the impossible              
+                  </p>
+                  <div class="social-icons">
+                    <a href="https://x.com/astrakshaya" target="_blank">
+                      <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
+                    </a>
+                    <a href="https://www.instagram.com/s7mit_x/" target="_blank">
+                      <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-            </div><div class="responsive-container-block">
-          <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
-            <div class="card">
-              <div class="team-image-wrapper">
-                <img class="team-member-image" src="teamImages/suprith.jpg">
+            <div class="responsive-container-block">
+              <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
+                <div class="card">
+                  <div class="team-image-wrapper">
+                    <img class="team-member-image" src="teamImages/suprith.jpg">
+                  </div>
+                  <p class="text-blk name">
+                    Suprith
+                  </p>
+                  <p class="text-blk position">
+                    Head of Mechanical Systems
+                  </p>
+                  <p class="text-blk feature-text">
+                    We don’t just build machines. We create the unstoppable force that drives the future, one innovation at a time
+                  </p>
+                  <div class="social-icons">
+                    <a href="https://x.com/astrakshaya" target="_blank">
+                      <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
+                    </a>
+                    <a href="https://www.instagram.com/astrakshaya/" target="_blank">
+                      <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
+                    </a>
+                  </div>
+                </div>
               </div>
-              <p class="text-blk name">
-                Suprith
-              </p>
-              <p class="text-blk position">
-                Head of Mechanical Systems
-              </p>
-              <p class="text-blk feature-text">
-                We don’t just build machines. We create the unstoppable force that drives the future, one innovation at a time
-              </p>
-              <div class="social-icons">
-                <a href="https://x.com/astrakshaya" target="_blank">
-                  <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
-                </a>
-                <a href="https://www.instagram.com/astrakshaya/" target="_blank">
-                  <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
-                </a>
+              <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
+                <div class="card">
+                  <div class="team-image-wrapper">
+                    <img class="team-member-image" src="teamImages/areeb.jpg">
+                  </div>
+                  <p class="text-blk name">
+                    Areeb
+                  </p>
+                  <p class="text-blk position">
+                    Head of Research And Development
+                  </p>
+                  <p class="text-blk feature-text">
+                    We don’t just build the future, we smash through it, and leave a trail of disruption behind.
+                  </p>
+                  <div class="social-icons">
+                    <a href="https://x.com/astrakshaya" target="_blank">
+                      <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
+                    </a>
+                    <a href="https://www.instagram.com/iamareeb_18/" target="_blank">
+                      <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
+                <div class="card">
+                  <div class="team-image-wrapper">
+                    <img class="team-member-image" src="teamImages/OIP (1).jpg">
+                  </div>
+                  <p class="text-blk name">
+                    Astrakshaya's Batman
+                  </p>
+                  <p class="text-blk position">
+                    Head of Cyber Security
+                  </p>
+                  <p class="text-blk feature-text">
+                    Hackers fear the dark, but I am the dark. Batman's watch never blinks, and neither does our security               
+                  </p>
+                  <div class="social-icons">
+                    <div class="batman-contact-container">
+                        <a href="gotham/index.html" class="professional-signal-btn" target="_blank">
+                            <span class="professional-signal-icon">🦇</span>
+                            <span>Contact Batman</span>
+                        </a>
+                        <span class="professional-signal-text">24/7 Cyber Security Support</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
-            <div class="card">
-              <div class="team-image-wrapper">
-                <img class="team-member-image" src="teamImages/areeb.jpg">
-              </div>
-              <p class="text-blk name">
-                Areeb
-              </p>
-              <p class="text-blk position">
-                Head of Research And Development
-              </p>
-              <p class="text-blk feature-text">
-                We don’t just build the future, we smash through it, and leave a trail of disruption behind.
-              </p>
-              <div class="social-icons">
-                <a href="https://x.com/astrakshaya" target="_blank">
-                  <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
-                </a>
-                <a href="https://www.instagram.com/iamareeb_18/" target="_blank">
-                  <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="responsive-cell-block wk-desk-3 wk-ipadp-3 wk-tab-6 wk-mobile-12 card-container">
-            <div class="card">
-              <div class="team-image-wrapper">
-                <img class="team-member-image" src="teamImages/OIP (1).jpg">
-              </div>
-              <p class="text-blk name">
-                Astrakshaya's Batman
-              </p>
-              <p class="text-blk position">
-                Head of Cyber Security
-              </p>
-              <p class="text-blk feature-text">
-                Hackers fear the dark, but I am the dark. Batman’s watch never blinks, and neither does our security              </p>
-              <div class="social-icons">
-                <a href="https://x.com/astrakshaya" target="_blank">
-                  <img class="twitter-icon" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/Icon.svg">
-                </a>
-                <a href="https://www.instagram.com/astrakshaya/" target="_blank">
-                  <img class="facebook-icon" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg">
-                </a>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
       
-      <!-- Footer -->
-      <footer class="footer">
-          <div class="footer-content">
-              <div class="footer-text">
-                  <p>&copy; 2025 ASTARAKSHYA. All Rights Reserved.</p>
-                  <p>Innovating for a Better Future in Space Exploration</p>
-              </div>
-          </div>
-      </footer>
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <p>© 2025 ASTARAKSHAYA. All Rights Reserved.</p>
+                    <p>Innovating for a Better Future in Space Exploration</p>
+                </div>
+            </div>
+        </footer>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/particles.js"></script> 
-   <script src="js/nav.js"></script>
-   <script src="js/bag.js"></script> 
-   <script src="js/stardust.js"></script>
-   <script src="js/earth.js"></script>
-   
+    <script src="js/nav.js"></script>
+    <script src="js/bag.js"></script> 
+    <script src="js/stardust.js"></script>
+    <script src="js/earth.js"></script>
 </body>
 </html>
