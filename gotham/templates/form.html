@@ -1336,13 +1336,21 @@
         <div class="loading-spinner"></div>
     </div>
 
-    <script src="firebase-config.js"></script>
-    <script>
-    firebase.initializeApp(firebaseConfig);
+   <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBsgaiVhiw1J1fU55tilho7fnTwHwxVasM",
+    authDomain: "gotham-signal.firebaseapp.com",
+    projectId: "gotham-signal",
+    storageBucket: "gotham-signal.appspot.com", // 
+    messagingSenderId: "481579241989",
+    appId: "1:481579241989:web:c954fcf8ab98fe14e6826c",
+    measurementId: "G-2R4LS1JJJ1"
+  };
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        const storage = firebase.storage();
+  firebase.initializeApp(firebaseConfig);
+
+  const db = firebase.database();
+  const storage = firebase.storage();
 
         // Create server towers
         function createServerTowers() {
