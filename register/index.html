@@ -125,6 +125,53 @@
             background-clip: text;
         }
 
+        /* Sponsor Logos Section */
+        .sponsor-section {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            max-width: 50vw;
+            overflow: hidden;
+            padding: 8px 0;
+        }
+
+        .sponsor-track {
+            display: flex;
+            gap: 40px;
+            animation: scroll-sponsors 20s linear infinite;
+            will-change: transform;
+        }
+
+        .sponsor-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll-sponsors {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .sponsor-logo {
+            flex-shrink: 0;
+            height: 32px;
+            width: auto;
+            object-fit: contain;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+            filter: brightness(0) invert(1);
+        }
+
+        .sponsor-logo:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
         .nav-links {
             display: flex;
             gap: 32px;
@@ -448,6 +495,18 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            .sponsor-section {
+                width: 300px;
+            }
+
+            .sponsor-logo {
+                height: 24px;
+            }
+
+            .sponsor-track {
+                gap: 30px;
+            }
+
             .header {
                 padding: 16px;
             }
@@ -543,6 +602,39 @@
         <!-- Header -->
         <header class="header">
             <div class="logo">SkyHack</div>
+            
+            <!-- Sponsor Logos -->
+            <div class="sponsor-section">
+                <div class="sponsor-track">
+                    <!-- First set of logos -->
+                    <a href="https://www.unstop.com" target="_blank" rel="noopener noreferrer">
+                        <img src="unstop.png" alt="Unstop" class="sponsor-logo">
+                    </a>
+                    <a href="https://www.geeksforgeeks.org" target="_blank" rel="noopener noreferrer">
+                        <img src="geeksforgeeks.png" alt="GeeksforGeeks" class="sponsor-logo">
+                    </a>
+                    <a href="https://www.codecrafters.io" target="_blank" rel="noopener noreferrer">
+                        <img src="codecrafters.png" alt="CodeCrafters" class="sponsor-logo">
+                    </a>
+                    <a href="https://www.letsdefend.io" target="_blank" rel="noopener noreferrer">
+                        <img src="letsdefend.png" alt="LetsDefend" class="sponsor-logo">
+                    </a>
+                    <!-- Duplicate set for seamless loop -->
+                    <a href="https://www.unstop.com" target="_blank" rel="noopener noreferrer">
+                        <img src="unstop-white.png" alt="Unstop" class="sponsor-logo">
+                    </a>
+                    <a href="https://www.geeksforgeeks.org" target="_blank" rel="noopener noreferrer">
+                        <img src="geeksforgeeks.png" alt="GeeksforGeeks" class="sponsor-logo">
+                    </a>
+                    <a href="https://www.codecrafters.io" target="_blank" rel="noopener noreferrer">
+                        <img src="codecrafter.png" alt="CodeCrafters" class="sponsor-logo">
+                    </a>
+                    <a href="https://www.letsdefend.io" target="_blank" rel="noopener noreferrer">
+                        <img src="lets_defend.jpg" alt="LetsDefend" class="sponsor-logo">
+                    </a>
+                </div>
+            </div>
+            
             <nav class="nav-links">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="mailto:astrakshaya@gmail.com?subject=Contact%20from%20Website&body=Hi%20Astrakshaya%20Team," class="nav-link">Contact</a>
@@ -784,13 +876,13 @@
 
         modelViewer.addEventListener('load', () => {
             console.log('Model loaded successfully');
-            fallback.style.display = 'none';
+            if (fallback) fallback.style.display = 'none';
             loadingManager.setModelLoaded(true);
         });
 
         modelViewer.addEventListener('error', (event) => {
             console.error('Model loading error:', event);
-            fallback.style.display = 'block';
+            if (fallback) fallback.style.display = 'block';
             loadingManager.hideLoading();
         });
 
@@ -844,4 +936,3 @@
     </script>
 </body>
 </html>
-
