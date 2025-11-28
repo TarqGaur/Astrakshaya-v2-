@@ -319,7 +319,7 @@
     </script>
 
     <script>
-        const targetDate = new Date('2025-11-28T23:59:00').getTime();
+        const targetDate = new Date('2025-11-28T23:59:59').getTime();
         
         const hoursEl = document.getElementById('hours');
         const minutesEl = document.getElementById('minutes');
@@ -466,7 +466,12 @@
                         e.preventDefault && e.preventDefault();
                         showOverlay();
                     }
-                    // If timer is zero, do nothing here and allow existing handlers to run
+                    // If timer is zero, redirect to LinkedIn instead of showing GIF or alerts
+                    else {
+                        e.stopImmediatePropagation();
+                        e.preventDefault && e.preventDefault();
+                        window.location.href = 'https://www.linkedin.com/company/astrakshaya/posts/?feedView=all';
+                    }
                 }catch(err){
                     console.error('Overlay show error', err);
                 }
