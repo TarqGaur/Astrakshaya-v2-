@@ -1,0 +1,2418 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ASTRAKSHAYA AEROSPACE - SkyHack 2025</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* Skeletal Loading Screen */
+.skeleton-loader {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  transition: opacity 0.6s ease-out;
+  overflow: hidden;
+}
+
+.skeleton-loader.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.skeleton-topbar {
+  height: 64px;
+  background: rgba(20, 20, 20, 1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  gap: 16px;
+}
+
+.skeleton-topbar-item {
+  height: 28px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #1a1a1a 25%, #282828 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-topbar-item.small {
+  width: 80px;
+}
+
+.skeleton-topbar-item.medium {
+  width: 200px;
+}
+
+.skeleton-main {
+  display: flex;
+  flex: 1;
+  gap: 12px;
+  padding: 12px;
+  overflow: hidden;
+}
+
+.skeleton-sidebar {
+  width: 280px;
+  background: rgba(10, 10, 10, 1);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skeleton-sidebar-item {
+  height: 48px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #1a1a1a 25%, #282828 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-content {
+  flex: 1;
+  background: rgba(10, 10, 10, 1);
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.skeleton-hero {
+  width: 100%;
+  height: 180px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #1a1a1a 25%, #282828 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-card {
+  height: 80px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #1a1a1a 25%, #282828 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  margin-bottom: 12px;
+}
+
+.skeleton-right-panel {
+  width: 320px;
+  background: rgba(10, 10, 10, 1);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skeleton-right-item {
+  height: 60px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #1a1a1a 25%, #282828 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: rgba(20, 20, 20, 1);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.skeleton-player-item {
+  height: 40px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #1a1a1a 25%, #282828 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-player-item.small {
+  width: 60px;
+}
+
+.skeleton-player-item.medium {
+  flex: 1;
+  max-width: 300px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Top Bar */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  z-index: 100;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  color: #000;
+  font-size: 14px;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.7);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.search-box {
+  flex: 1;
+  max-width: 400px;
+  height: 40px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 500px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+}
+
+.search-box input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 14px;
+}
+
+.search-box input::placeholder {
+  color: #b3b3b3;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.topbar-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: 800;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #fff;
+  pointer-events: none;
+}
+
+.btn-premium {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 8px 32px;
+  border-radius: 500px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-install {
+  background: transparent;
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Main Layout */
+.main-container {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 90px;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+}
+
+.right-panel {
+  width: 360px;
+  background: #121212;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: #fff;
+}
+
+.right-panel .cover {
+  height: 260px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #8b88ff, #5e5ce6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  font-weight: 900;
+  color: #000;
+  overflow: hidden;
+}
+
+.right-panel .meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 8px;
+  flex: 1;
+  overflow: auto;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  background: #121212;
+  border-radius: 8px;
+  padding: 24px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+}
+
+.sidebar-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #b3b3b3;
+}
+
+.sidebar-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.sidebar-icon {
+  color: #b3b3b3;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.sidebar-item {
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #b3b3b3;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sidebar-item:hover {
+  color: #fff;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  margin: 8px 0;
+}
+
+.playlist-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  align-items: center;
+}
+
+.playlist-item:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.playlist-cover {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #5e5ce6, #8b88ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.playlist-info {
+  flex: 1;
+}
+
+.playlist-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.playlist-meta {
+  font-size: 12px;
+  color: #b3b3b3;
+  margin-top: 2px;
+}
+
+/* Content Area */
+.content {
+  flex: 1;
+  background: linear-gradient(180deg, #0B3D91 0%, #121212 300px);
+  border-radius: 8px;
+  overflow-y: auto;
+  padding: 24px 32px;
+}
+
+.content::-webkit-scrollbar {
+  width: 12px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.3);
+  border-radius: 6px;
+}
+
+/* Custom scrollbar for right panel metadata (shows arrows top/bottom) */
+.right-panel .meta {
+  /* Spotify-like minimal scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.14) transparent;
+}
+
+.right-panel .meta::-webkit-scrollbar {
+  width: 8px;
+}
+
+.right-panel .meta::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* hide default up/down buttons that appear in some browsers */
+.right-panel .meta::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+}
+
+.right-panel .meta::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.right-panel .meta::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.14);
+  border-radius: 8px;
+  min-height: 36px;
+  transition: background 150ms ease;
+}
+
+.right-panel .meta::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.24);
+}
+
+/* Drop Button Styles */
+.drop-button {
+  background: #1DB954;
+  color: #000;
+  border: none;
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  border-radius: 500px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 4px 24px rgba(29, 185, 84, 0.3);
+  width: 100%;
+}
+
+.drop-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.drop-button:hover {
+  background: #1ed760;
+  transform: scale(1.02);
+  box-shadow: 0 8px 32px rgba(29, 185, 84, 0.4);
+}
+
+.drop-button:hover::before {
+  transform: translateX(100%);
+}
+
+.drop-button:active {
+  transform: scale(0.96);
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: scale(0);
+  animation: ripple-animation 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.voyager-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.voyager-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.voyager-description {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #b3b3b3;
+  margin-bottom: 16px;
+}
+
+/* Hero Section */
+.hero {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.hero-image {
+  width: 232px;
+  height: 232px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  background: linear-gradient(135deg, #1ed760, #1db954);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  font-weight: 900;
+  color: #000;
+  flex-shrink: 0;
+}
+
+.hero-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+}
+
+.hero-type {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.hero-title {
+  font-size: 72px;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #fff;
+}
+
+.hero-meta span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* Action Buttons */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding: 24px 0;
+}
+
+.btn-play {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #1ed760;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.btn-play:hover {
+  transform: scale(1.06);
+  background: #1fdf64;
+}
+
+.btn-play svg {
+  width: 24px;
+  height: 24px;
+  fill: #000;
+  margin-left: 2px;
+}
+
+/* When playing, invert main play button styling and show pause icon */
+.btn-play.playing {
+  background: #fff;
+}
+.btn-play.playing svg {
+  fill: #000;
+}
+
+.action-icon {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #b3b3b3;
+  font-size: 18px;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 0; /* ensure svg fits exactly inside circle */
+}
+
+.action-icon:hover {
+  border-color: #fff;
+  color: #fff;
+  transform: scale(1.04);
+}
+
+.btn-more {
+  background: none;
+  border: none;
+  color: #b3b3b3;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Table */
+.table-container {
+  margin-top: 32px;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 40px 1fr 60px;
+  gap: 16px;
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  color: #b3b3b3;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 40px 1fr 60px;
+  gap: 16px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  align-items: center;
+  transition: background 0.2s;
+  color: #fff;
+}
+
+.table-row:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.rank {
+  color: #b3b3b3;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.team-name {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.download-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #b3b3b3;
+  transition: all 0.2s;
+}
+
+.download-icon:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.download-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* Player Bar */
+.player-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: #181818;
+  border-top: 1px solid #282828;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: center;
+  padding: 0 16px;
+  gap: 16px;
+}
+
+.now-playing {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.now-playing-cover {
+  width: 56px;
+  height: 56px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #1ed760, #1db954);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 18px;
+  color: #000;
+  flex-shrink: 0;
+}
+
+.now-playing-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.now-playing-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.now-playing-artist {
+  font-size: 12px;
+  color: #b3b3b3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.like-icon {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #b3b3b3;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 50%;
+  transition: transform 120ms ease, color 160ms ease, background 160ms ease;
+  user-select: none;
+}
+
+.like-icon:hover {
+  color: #fff;
+  transform: scale(1.06);
+  background: rgba(255,255,255,0.03);
+}
+
+.like-icon svg { display: block; width:18px; height:18px; }
+
+/* Constrain action icons' SVG sizes so they don't overflow their circles */
+.action-icon svg,
+.action-icon svg *,
+.like-icon svg,
+.like-icon svg * {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.like-icon.liked {
+  color: #1db954; /* spotify green */
+  background: rgba(29,185,84,0.12);
+}
+
+.like-icon.liked:hover { background: rgba(29,185,84,0.16); }
+
+.player-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.controls-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.control-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #b3b3b3;
+  cursor: pointer;
+}
+
+.control-btn:hover {
+  color: #fff;
+}
+
+.control-btn.play {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
+}
+
+.control-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.control-btn.play svg {
+  width: 14px;
+  height: 14px;
+}
+
+#shuffleBtn {
+  position: relative;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+#shuffleBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+#shuffleBtn svg {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  width: 16px;
+  height: 16px;
+}
+
+#shuffleBtn.active svg {
+  color: #1ed760;
+  transform: scale(1.1) rotate(360deg);
+  animation: shuffle-pulse 0.4s ease-in-out;
+}
+
+@keyframes shuffle-pulse {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.15) rotate(180deg); }
+  100% { transform: scale(1.1) rotate(360deg); }
+}
+
+#shuffleBtn.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #1ed760;
+  opacity: 0.2;
+  animation: shuffle-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes shuffle-ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+#repeatBtn {
+  position: relative;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+#repeatBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+#repeatBtn svg {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  width: 16px;
+  height: 16px;
+}
+
+#repeatBtn.active svg {
+  color: #1ed760;
+  transform: scale(1.1) rotate(360deg);
+  animation: repeat-pulse 0.4s ease-in-out;
+}
+
+@keyframes repeat-pulse {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.15) rotate(180deg); }
+  100% { transform: scale(1.1) rotate(360deg); }
+}
+
+#repeatBtn.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #1ed760;
+  opacity: 0.2;
+  animation: repeat-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes repeat-ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.progress-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #b3b3b3;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+}
+
+.progress-bar:hover {
+  height: 6px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #fff;
+  border-radius: 2px;
+  width: 0%;
+  position: relative;
+}
+
+.progress-bar:hover .progress-fill::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.player-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.volume-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 125px;
+}
+
+.volume-icon {
+  color: #b3b3b3;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.volume-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+}
+
+.volume-fill {
+  height: 100%;
+  background: #1db954; /* spotify green */
+  border-radius: 2px;
+  width: 70%;
+  transition: width 120ms linear, background 160ms ease;
+}
+
+.volume-fill.muted {
+  background: rgba(255,255,255,0.18);
+}
+
+.volume-icon {
+  color: #b3b3b3;
+  cursor: pointer;
+  font-size: 16px;
+  background: transparent;
+  border: none;
+  padding: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.volume-icon:focus { outline: none; }
+
+.volume-icon.muted { color: rgba(179,179,179,0.6); opacity: 0.85; }
+
+/* Rotating disc animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotating-disc {
+  animation: spin 6s linear infinite;
+}
+
+/* Fullscreen icon and overlay animations */
+#fullscreenBtn svg { width:18px; height:18px; transition: transform 220ms ease, opacity 220ms ease; display:block; }
+#fullscreenBtn svg .corner { stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform 260ms cubic-bezier(.2,.8,.2,1), opacity 220ms ease, stroke 220ms ease; transform-origin: 50% 50%; }
+#fullscreenBtn.fs-active svg .corner { transform: scale(1.08); stroke: #1db954; opacity: 1; }
+#fullscreenBtn.fs-press { animation: fs-press 360ms cubic-bezier(.2,.8,.2,1); }
+@keyframes fs-press {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.14); }
+  100% { transform: scale(1); }
+}
+
+#fullscreenOverlay { opacity: 0; transform: scale(0.98); transition: opacity 220ms ease, transform 220ms ease; }
+#fullscreenOverlay.open { opacity: 1; transform: scale(1); }
+#fullscreenOverlay.closing { opacity: 0; transform: scale(0.98); }
+
+#fullscreenOverlay img { transition: transform 260ms cubic-bezier(.2,.8,.2,1); }
+#fullscreenOverlay.open img { transform: scale(1); }
+
+/* Modal Styles from SkyHack Gallery */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-overlay.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal {
+  background: #121212;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+  box-shadow: 0 16px 24px rgba(0, 0, 0, 0.3), 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  padding: 24px 24px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background: #121212;
+  z-index: 10;
+}
+
+.modal-header h2 {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: #b3b3b3;
+  font-size: 32px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.modal-body {
+  padding: 16px 24px 24px;
+}
+
+.modal-body p {
+  color: #a7a7a7;
+  font-size: 14px;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.modal label {
+  display: block;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.modal input[type="text"] {
+  width: 100%;
+  padding: 12px 14px;
+  background: #121212;
+  border: 1px solid #727272;
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  margin-bottom: 24px;
+}
+
+.modal input[type="text"]:hover {
+  border-color: #b3b3b3;
+}
+
+.modal input[type="text"]:focus {
+  outline: none;
+  border-color: #ffffff;
+}
+
+.modal input[type="text"]::placeholder {
+  color: #6a6a6a;
+}
+
+.file-input-wrapper {
+  margin-bottom: 20px;
+}
+
+.modal input[type="file"] {
+  display: none;
+}
+
+.file-label {
+  display: block;
+  padding: 40px 20px;
+  background: #181818;
+  border: 2px dashed #535353;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.file-label:hover {
+  background: #282828;
+  border-color: #b3b3b3;
+}
+
+.file-label.has-files {
+  padding: 24px 20px;
+}
+
+.file-icon {
+  width: 48px;
+  height: 48px;
+  display: block;
+  margin: 0 auto 16px;
+  opacity: 0.7;
+}
+
+.file-label:hover .file-icon {
+  opacity: 1;
+}
+
+.file-label-text {
+  color: #a7a7a7;
+  font-size: 13px;
+  display: block;
+  margin-top: 8px;
+}
+
+.file-count {
+  color: #1ed760;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 12px;
+  display: none;
+}
+
+.file-count.show {
+  display: block;
+}
+
+.preview-grid {
+  display: none;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.preview-grid.show {
+  display: grid;
+}
+
+.preview-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #282828;
+}
+
+.preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.preview-item:hover .preview-remove {
+  opacity: 1;
+}
+
+.preview-remove:hover {
+  background: #1ed760;
+  color: #000000;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: #1ed760;
+  color: #000000;
+  border: none;
+  border-radius: 500px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.1em;
+  margin-top: 8px;
+}
+
+.submit-btn:hover {
+  background: #1fdf64;
+  transform: scale(1.04);
+}
+
+.submit-btn:active {
+  transform: scale(0.96);
+}
+
+.submit-btn:disabled {
+  background: #535353;
+  color: #121212;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.modal::-webkit-scrollbar {
+  width: 12px;
+}
+
+.modal::-webkit-scrollbar-track {
+  background: #121212;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background: #282828;
+  border-radius: 6px;
+  border: 3px solid #121212;
+}
+
+.modal::-webkit-scrollbar-thumb:hover {
+  background: #3e3e3e;
+}
+
+@media (max-width: 600px) {
+  .modal {
+    max-width: 100%;
+    border-radius: 0;
+    max-height: 100vh;
+  }
+
+  .modal-header h2 {
+    font-size: 20px;
+  }
+
+  .preview-grid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Skeletal Loader -->
+<div class="skeleton-loader" id="skeletonLoader">
+  <!-- Topbar -->
+  <div class="skeleton-topbar">
+    <div class="skeleton-topbar-item small"></div>
+    <div class="skeleton-topbar-item medium" style="margin-left: auto;"></div>
+    <div class="skeleton-topbar-item small"></div>
+    <div class="skeleton-topbar-item small"></div>
+  </div>
+  
+  <!-- Main Content -->
+  <div class="skeleton-main">
+    <!-- Sidebar -->
+    <div class="skeleton-sidebar">
+      <div class="skeleton-sidebar-item"></div>
+      <div class="skeleton-sidebar-item"></div>
+      <div class="skeleton-sidebar-item"></div>
+      <div class="skeleton-sidebar-item"></div>
+      <div class="skeleton-sidebar-item"></div>
+    </div>
+    
+    <!-- Content Area -->
+    <div class="skeleton-content">
+      <div class="skeleton-hero"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+    
+    <!-- Right Panel -->
+    <div class="skeleton-right-panel">
+      <div class="skeleton-right-item"></div>
+      <div class="skeleton-right-item"></div>
+      <div class="skeleton-right-item"></div>
+      <div class="skeleton-right-item"></div>
+    </div>
+  </div>
+  
+  <!-- Player Bar -->
+  <div class="skeleton-player">
+    <div class="skeleton-player-item small"></div>
+    <div class="skeleton-player-item medium"></div>
+    <div class="skeleton-player-item small"></div>
+    <div class="skeleton-player-item small"></div>
+  </div>
+</div>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <div class="topbar-center">astrakshaya aerospace</div>
+</div>
+
+<!-- Main Container -->
+<div class="main-container">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Voyager 1: The Sound of Earth</div>
+      <div class="sidebar-actions">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13M9 9h12M9 13h12"/></svg>
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      </div>
+    </div>
+    
+    <div class="sidebar-item" style="font-size:13px;color:#b3b3b3;line-height:1.6;">
+      Voyager 1 carries "The Sound of Earth" - a golden record with greetings in 55 languages, Earth's natural sounds, and music from various cultures. Launched in 1977, it continues its journey through interstellar space at 38,000 mph, carrying humanity's message to the cosmos.
+    </div>
+    
+    <div class="sidebar-divider"></div>
+    
+    <div class="playlist-item">
+      <div class="playlist-cover" style="display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:4px;background:transparent;position:relative;">
+        <img src="disc_front.png" alt="Disc" class="rotating-disc" style="width:100%;height:100%;position:absolute;">
+        <img src="disc_back.png" alt="Disc Back" style="width:100%;height:100%;position:absolute;opacity:0.3;">
+      </div>
+      <div class="playlist-info">
+        <div class="playlist-name">Voyager Golden Record</div>
+        <div class="playlist-meta">Interstellar • NASA</div>
+      </div>
+    </div>
+    
+    <div class="playlist-item">
+      <div class="playlist-cover" style="display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:4px;background:transparent;position:relative;">
+        <img src="disc_front.png" alt="Disc" class="rotating-disc" style="width:100%;height:100%;position:absolute;">
+        <img src="disc_back.png" alt="Disc Back" style="width:100%;height:100%;position:absolute;opacity:0.3;">
+      </div>
+      <div class="playlist-info">
+        <div class="playlist-name">Earth's Music</div>
+        <div class="playlist-meta">Curated • Cosmos</div>
+      </div>
+    </div>
+
+    <!-- Drop Photos Button -->
+    <div style="margin:20px 12px;">
+      <div style="font-size:14px;font-weight:600;color:#ffffff;margin-bottom:16px;letter-spacing:0.5px;text-align:center;">Drop Photos to SkyHack Gallery</div>
+      <button class="drop-button" id="dropBtn" style="margin-top:8px;">Drop</button>
+    </div>
+  </div>
+
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h2>SkyHack Gallery</h2>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Submit your team name and up to 5 photos below</p>
+
+        <form id="teamForm" action="https://getform.io/f/bdrkyrvb" method="POST" enctype="multipart/form-data">
+          <label for="team_name">Team Name</label>
+          <input id="team_name" type="text" name="team_name" placeholder="Enter your team name" required>
+
+          <label for="photos">Photos</label>
+          <div class="file-input-wrapper">
+            <input id="photos" type="file" name="photos[]" accept="image/*" multiple required>
+            <label for="photos" class="file-label" id="fileLabel">
+              <svg class="file-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="#1ed760" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M17 8L12 3L7 8" stroke="#1ed760" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 3V15" stroke="#1ed760" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <strong style="color: #ffffff; font-size: 15px;">Choose photos</strong>
+              <span class="file-label-text">or drag and drop</span>
+              <span class="file-count" id="fileCount"></span>
+            </label>
+            <div class="preview-grid" id="previewGrid"></div>
+          </div>
+
+          <button type="submit" class="submit-btn">SUBMIT</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Area -->
+  <div class="content">
+    <!-- Hero Section -->
+    <div class="hero">
+      <div class="hero-image">
+        <img src="cover.png.jpg" alt="Cover" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">
+      </div>
+      <div class="hero-info">
+        <div class="hero-type">Leaderboard</div>
+        <div class="hero-title">Top 20 Teams</div>
+        <div class="hero-meta">
+          <span><strong>Astrakshaya Aerospace</strong></span>
+          <span class="dot"></span>
+          <span>SkyHack 2025</span>
+          <span class="dot"></span>
+          <span>20 teams</span>
+          <span class="dot"></span>
+          <span>Dec 2025</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button class="btn-play">
+        <svg viewBox="0 0 16 16"><path d="M3 1.713a.7.7 0 011.05-.607l10.89 6.288a.7.7 0 010 1.212L4.05 14.894A.7.7 0 013 14.288V1.713z"/></svg>
+      </button>
+      <div id="likeBtnMain" class="action-icon like-icon" role="button" aria-pressed="false" title="Save to Your Library" style="display:flex;align-items:center;justify-content:center;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="likeIconMain"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      </div>
+      <div id="downloadHero" class="action-icon" title="Download" role="button" aria-label="Download cover">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <path d="M12 3v12"/>
+          <path d="M8 11l4 4 4-4"/>
+        </svg>
+      </div>
+      <button class="btn-more">•••</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+      <div class="table-header">
+        <div>#</div>
+        <div>Team Name</div>
+        <div>Download</div>
+      </div>
+      
+      <div id="teamsContainer"></div>
+    </div>
+  </div>
+
+  <!-- Right Details Panel -->
+  <div class="right-panel">
+      <div class="cover">
+        <video id="coverVideo" src="raag.mp4" style="width:100%;height:100%;object-fit:contain;border-radius:8px;background:#000" preload="metadata"></video>
+      </div>
+    <div class="meta">
+      <div style="font-size:20px;font-weight:800">Jaat Kahan Ho</div>
+      <div style="color:#b3b3b3">Kesarbai Kerkar</div>
+      <div style="height:12px"></div>
+      <div class="credits-box" style="background:#0f0f0f;padding:12px;border-radius:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-weight:700">Credits</div>
+          <button id="showCreditsBtn" aria-expanded="false" style="color:#b3b3b3;font-size:12px;background:none;border:none;cursor:pointer">Show all</button>
+        </div>
+        <div class="credits-summary" style="margin-top:8px;color:#b3b3b3">
+          <div>Kesarbai Kerkar — Main Artist</div>
+          <div>Ilaiyaraaja — Composer</div>
+          <div>Traditional — Lyricist</div>
+        </div>
+
+        <div class="credits-expanded" style="display:none;margin-top:12px;color:#b3b3b3;font-size:13px;line-height:1.45">
+          <div style="font-weight:700;margin-bottom:6px">About the Artist</div>
+          <div>Kesarbai Kerkar was one of the foremost classical vocalists of the 20th century, known for her powerful voice and authoritative renditions of traditional Indian music. Her recordings preserve a repertoire that influenced later generations of classical and popular musicians.</div>
+          <div style="height:8px"></div>
+          <div style="font-weight:700;margin-bottom:6px">About the Track</div>
+          <div>“Jaat Kahan Ho” is a traditional composition presented here in a classical interpretation that highlights vocal ornamentation and modal phrasing. The performance emphasizes expressive timing and nuanced melodic development.</div>
+          <div style="height:8px"></div>
+          <div style="font-weight:700;margin-bottom:6px">Voyager Golden Record</div>
+          <div>The Voyager Golden Record was included aboard NASA's Voyager 1 spacecraft launched in 1977. It contains a selection of music, sounds, and images meant to represent the diversity of life and culture on Earth. This selection places the track in a broader cultural context as part of humanity's attempt to communicate across the cosmos.</div>
+        </div>
+      </div>
+
+      <!-- small cover preview below credits -->
+      <div class="credits-cover" style="margin-top:12px;">
+        <img src="cover2.png" alt="Cover preview" style="width:100%;height:220px;object-fit:cover;object-position:top center;border-radius:8px;display:block;"> 
+      </div>
+
+      <!-- moved preview into the cover above -->
+    </div>
+  </div>
+</div>
+
+<!-- Player Bar -->
+<div class="player-bar">
+  <div class="now-playing">
+    <div class="now-playing-cover">
+      <img src="cover2.png" alt="Cover" style="width:100%;height:100%;object-fit:cover;border-radius:4px;">
+    </div>
+    <div class="now-playing-info">
+      <div class="now-playing-title">Jaat Kahan Ho</div>
+      <div class="now-playing-artist">Kesarbai Kerkar</div>
+    </div>
+  </div>
+
+  <div class="player-controls">
+    <div class="controls-buttons">
+      <button class="control-btn" id="shuffleBtn" data-active="false">
+        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13.151.922a.75.75 0 10-1.06 1.06L13.109 3H11.16a3.75 3.75 0 00-2.873 1.34l-6.173 7.356A2.25 2.25 0 01.39 12.5H0V14h.391a3.75 3.75 0 002.873-1.34l6.173-7.356a2.25 2.25 0 011.724-.804h1.947l-1.017 1.018a.75.75 0 001.06 1.06L15.98 3.75 13.15.922zM.391 3.5H0V2h.391c1.109 0 2.16.49 2.873 1.34L4.89 5.277l-.979 1.167-1.796-2.14A2.25 2.25 0 00.39 3.5z" fill="currentColor" />
+          <path d="M7.5 10.723l.98-1.167.957 1.14a2.25 2.25 0 001.724.804h1.947l-1.017-1.018a.75.75 0 111.06-1.06l2.829 2.828-2.829 2.828a.75.75 0 11-1.06-1.06L13.109 13H11.16a3.75 3.75 0 01-2.873-1.34l-.787-.938z" fill="currentColor" />
+        </svg>
+      </button>
+      <button class="control-btn">
+        <svg viewBox="0 0 16 16"><path d="M3.3 1a.7.7 0 01.7.7v5.15l9.95-5.744a.7.7 0 011.05.606v12.575a.7.7 0 01-1.05.607L4 9.149V14.3a.7.7 0 01-.7.7H1.7a.7.7 0 01-.7-.7V1.7a.7.7 0 01.7-.7h1.6z"/></svg>
+      </button>
+      <button class="control-btn play">
+        <svg viewBox="0 0 16 16"><path d="M3 1.713a.7.7 0 011.05-.607l10.89 6.288a.7.7 0 010 1.212L4.05 14.894A.7.7 0 013 14.288V1.713z"/></svg>
+      </button>
+      <button class="control-btn">
+        <svg viewBox="0 0 16 16"><path d="M12.7 1a.7.7 0 00-.7.7v5.15L2.05 1.107A.7.7 0 001 1.712v12.575a.7.7 0 001.05.607L12 9.149V14.3a.7.7 0 00.7.7h1.6a.7.7 0 00.7-.7V1.7a.7.7 0 00-.7-.7h-1.6z"/></svg>
+      </button>
+      <button class="control-btn" id="repeatBtn" data-active="false">
+        <svg viewBox="0 0 16 16"><path d="M0 4.75A3.75 3.75 0 013.75 1h8.5A3.75 3.75 0 0116 4.75v5a3.75 3.75 0 01-3.75 3.75H9.81l1.018 1.018a.75.75 0 11-1.06 1.06L6.939 12.75l2.829-2.828a.75.75 0 111.06 1.06L9.811 12h2.439a2.25 2.25 0 002.25-2.25v-5a2.25 2.25 0 00-2.25-2.25h-8.5A2.25 2.25 0 001.5 4.75v5A2.25 2.25 0 003.75 12H5v1.5H3.75A3.75 3.75 0 010 9.75v-5z"/></svg>
+      </button>
+    </div>
+    <div class="progress-container">
+      <span>1:23</span>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: 35%"></div>
+      </div>
+      <span>3:45</span>
+    </div>
+  </div>
+
+  <div class="player-right">
+    <div id="likeBtnSmall" class="like-icon" role="button" aria-pressed="false" title="Save to Your Library" style="margin-right:8px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="likeIconSmall"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+    </div>
+    <div class="volume-container">
+      <button id="volumeBtn" class="volume-icon" aria-pressed="false" title="Mute / Unmute" type="button">
+        <svg id="volumeSvg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+          <path id="volWave1" d="M19 9a4 4 0 010 6" ></path>
+          <path id="volWave2" d="M16.5 6.5a8 8 0 010 11" ></path>
+        </svg>
+      </button>
+      <div class="volume-bar" id="volumeBar">
+        <div class="volume-fill" id="volumeFill"></div>
+      </div>
+    </div>
+    <button class="control-btn" id="fullscreenBtn" aria-pressed="false" title="Toggle fullscreen" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path class="corner c1" d="M4 8V4h4" />
+        <path class="corner c2" d="M20 8V4h-4" />
+        <path class="corner c3" d="M20 16v4h-4" />
+        <path class="corner c4" d="M8 20H4v-4" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- using coverVideo (raag.mp4) as the single media source; removed separate raag.mp3 -->
+
+<script>
+const TEAMS = [
+  {r:1,t:'TARS',u:'https://fromsmash.com/TARS'},
+  {r:2,t:'WALLE',u:'https://fromsmash.com/WALLE'},
+  {r:3,t:'Racpupu',u:'https://fromsmash.com/Racpupu'},
+  {r:4,t:'Photon Pilot',u:'https://fromsmash.com/Q-SatLink'},
+  {r:5,t:'Argus',u:'https://fromsmash.com/Voltix'},
+  {r:6,t:'Ardubotz',u:'https://fromsmash.com/Ardubotz'},
+  {r:7,t:'CRESHACKERZ',u:'https://fromsmash.com/SpaceSense'},
+  {r:8,t:'AnomalyX',u:'https://fromsmash.com/Innoverse'},
+  {r:9,t:'Tensors',u:'https://fromsmash.com/SentinelAI'},
+  {r:10,t:'The Hackonauts',u:'https://fromsmash.com/hackonauts'},
+  {r:11,t:'AstroBite',u:'https://fromsmash.com/SkyHack'},
+  {r:12,t:'Saketh21092',u:'https://fromsmash.com/SkyHack_2025_Saketh21092'},
+  {r:13,t:'Code Storm',u:'https://fromsmash.com/OrbitShield'},
+  {r:14,t:'RockGame',u:'https://fromsmash.com/AapdaPredict'},
+  {r:15,t:'subhajitroy857',u:'https://fromsmash.com/AstraGaurdAI'},
+  {r:16,t:'Starbugs',u:'https://fromsmash.com/Starbugs'},
+  {r:17,t:'NebriX',u:'https://fromsmash.com/Nebrix'},
+  {r:18,t:'HackSiblings',u:'https://fromsmash.com/VyomSaathi'},
+  {r:19,t:'Vyoma',u:'https://fromsmash.com/Vyoma'},
+  {r:20,t:'sivasaran8667',u:'https://fromsmash.com/OrbitXOS'}
+];
+
+const container = document.getElementById('teamsContainer');
+TEAMS.forEach(team => {
+  const row = document.createElement('div');
+  row.className = 'table-row';
+  row.innerHTML = `
+    <div class="rank">${team.r}</div>
+    <div class="team-name">${team.t}</div>
+    <a href="${team.u}" target="_blank" class="download-icon" title="Download Certificate">
+      <svg viewBox="0 0 16 16"><path d="M.47 11.47A.75.75 0 011 11.25h14a.75.75 0 010 1.5H1a.75.75 0 01-.53-.22z"/><path d="M7.25 1a.75.75 0 011.5 0v9.19l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V1z"/></svg>
+    </a>
+  `;
+  container.appendChild(row);
+});
+
+// --- Media / Player wiring (raag.mp4) ---
+const video = document.getElementById('coverVideo');
+const btnPlayMain = document.querySelector('.btn-play');
+const btnPlayBar = document.querySelector('.control-btn.play');
+const progressBar = document.querySelector('.progress-bar');
+const progressFill = document.querySelector('.progress-fill');
+const volumeBar = document.querySelector('.volume-bar');
+const volumeFill = document.querySelector('.volume-fill');
+const nowPlayingTitle = document.querySelector('.now-playing-title');
+const nowPlayingArtist = document.querySelector('.now-playing-artist');
+const nowPlayingCover = document.querySelector('.now-playing-cover');
+// coverVideo is used for the large preview inside the cover box
+
+function formatTime(s) {
+  if (!s || isNaN(s)) return '0:00';
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60).toString().padStart(2, '0');
+  return `${m}:${sec}`;
+}
+
+function setPlayIcon(isPlaying) {
+  // Update bottom player icon
+  if (btnPlayBar) {
+    if (isPlaying) {
+      btnPlayBar.innerHTML = '<svg viewBox="0 0 16 16"><path d="M5 3h2v10H5zM9 3h2v10H9z"/></svg>';
+    } else {
+      btnPlayBar.innerHTML = '<svg viewBox="0 0 16 16"><path d="M3 1.713a.7.7 0 011.05-.607l10.89 6.288a.7.7 0 010 1.212L4.05 14.894A.7.7 0 013 14.288V1.713z"/></svg>';
+    }
+  }
+
+  // Update large green play button icon & styling
+  if (btnPlayMain) {
+    if (isPlaying) {
+      btnPlayMain.classList.add('playing');
+      btnPlayMain.innerHTML = '<svg viewBox="0 0 24 24" style="width:22px;height:22px"><rect x="6" y="5" width="4" height="14" fill="currentColor"/><rect x="14" y="5" width="4" height="14" fill="currentColor"/></svg>';
+    } else {
+      btnPlayMain.classList.remove('playing');
+      btnPlayMain.innerHTML = '<svg viewBox="0 0 16 16"><path d="M3 1.713a.7.7 0 011.05-.607l10.89 6.288a.7.7 0 010 1.212L4.05 14.894A.7.7 0 013 14.288V1.713z"/></svg>';
+    }
+  }
+}
+
+function togglePlay() {
+  if (!video) return;
+  if (video.paused) {
+    // ensure we start from the requested start offset if needed
+    if (video.currentTime < VIDEO_START && video.duration > VIDEO_START) video.currentTime = VIDEO_START;
+    video.play().catch(()=>{});
+    setPlayIcon(true);
+    btnPlayMain.classList.add('playing');
+  } else {
+    video.pause();
+    setPlayIcon(false);
+    btnPlayMain.classList.remove('playing');
+  }
+}
+
+btnPlayMain && btnPlayMain.addEventListener('click', togglePlay);
+btnPlayBar && btnPlayBar.addEventListener('click', togglePlay);
+
+// Shuffle button toggle
+const shuffleBtn = document.getElementById('shuffleBtn');
+if (shuffleBtn) {
+  shuffleBtn.addEventListener('click', function() {
+    const isActive = this.dataset.active === 'true';
+    this.dataset.active = !isActive;
+    if (!isActive) {
+      this.classList.add('active');
+    } else {
+      this.classList.remove('active');
+    }
+  });
+}
+
+// Repeat/Loop button toggle
+const repeatBtn = document.getElementById('repeatBtn');
+if (repeatBtn) {
+  repeatBtn.addEventListener('click', function() {
+    const isActive = this.dataset.active === 'true';
+    this.dataset.active = !isActive;
+    if (!isActive) {
+      this.classList.add('active');
+    } else {
+      this.classList.remove('active');
+    }
+  });
+}
+// Credits "Show all" toggle
+const showCreditsBtn = document.getElementById('showCreditsBtn');
+const creditsExpanded = document.querySelector('.credits-expanded');
+if (showCreditsBtn && creditsExpanded) {
+  showCreditsBtn.addEventListener('click', function() {
+    const expanded = this.getAttribute('aria-expanded') === 'true';
+    this.setAttribute('aria-expanded', String(!expanded));
+    this.textContent = expanded ? 'Show all' : 'Show less';
+    if (!expanded) {
+      creditsExpanded.style.display = 'block';
+    } else {
+      creditsExpanded.style.display = 'none';
+    }
+  });
+}
+
+// Drop Button Click Handler - Open Modal
+const dropBtn = document.getElementById('dropBtn');
+if (dropBtn) {
+  dropBtn.addEventListener('click', function(e) {
+    openModal();
+  });
+}
+
+// update progress/labels from video
+video && video.addEventListener('timeupdate', () => {
+  const pct = (video.currentTime / Math.max(1, video.duration)) * 100;
+  progressFill.style.width = pct + '%';
+  const times = document.querySelectorAll('.progress-container span');
+  if (times && times.length >= 2) {
+    times[0].textContent = formatTime(video.currentTime);
+    times[1].textContent = formatTime(video.duration);
+  }
+});
+
+progressBar && progressBar.addEventListener('click', (e) => {
+  if (!video || !video.duration) return;
+  const rect = progressBar.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  video.currentTime = pct * video.duration;
+});
+
+volumeBar && volumeBar.addEventListener('click', (e) => {
+  if (!video) return;
+  const rect = volumeBar.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  video.volume = Math.max(0, Math.min(1, pct));
+  volumeFill.style.width = `${video.volume * 100}%`;
+});
+
+// Mute toggle and drag-to-adjust volume
+const volumeBtn = document.getElementById('volumeBtn');
+let lastVolume = (video && typeof video.volume === 'number') ? video.volume : 0.7;
+if (video) {
+  if (isNaN(video.volume) || video.volume === undefined) video.volume = lastVolume;
+  if (volumeFill) volumeFill.style.width = (video.volume * 100) + '%';
+}
+
+function updateVolumeUI() {
+  if (!video) return;
+  const v = video.muted ? 0 : video.volume;
+  if (volumeFill) volumeFill.style.width = (v * 100) + '%';
+  if (volumeFill) volumeFill.classList.toggle('muted', video.muted || v === 0);
+  if (volumeBtn) volumeBtn.classList.toggle('muted', video.muted || v === 0);
+  if (volumeBtn) volumeBtn.setAttribute('aria-pressed', (video.muted ? 'true' : 'false'));
+  // update svg waves opacity for clarity
+  try {
+    const w1 = document.getElementById('volWave1');
+    const w2 = document.getElementById('volWave2');
+    if (w1) w1.style.opacity = (video.muted || v === 0) ? '0.18' : '1';
+    if (w2) w2.style.opacity = (video.muted || v === 0) ? '0.18' : '1';
+  } catch(e){}
+}
+
+function toggleMute() {
+  if (!video) return;
+  if (!video.muted) {
+    // store last volume
+    lastVolume = video.volume > 0 ? video.volume : lastVolume || 0.7;
+    video.muted = true;
+  } else {
+    video.muted = false;
+    video.volume = lastVolume;
+  }
+  updateVolumeUI();
+}
+
+if (volumeBtn) volumeBtn.addEventListener('click', toggleMute);
+
+// drag/interactive volume handling using pointer events
+(function(){
+  if (!volumeBar || !video) return;
+  let dragging = false;
+  function setVolumeFromEvent(e) {
+    const rect = volumeBar.getBoundingClientRect();
+    const clientX = (e.touches && e.touches[0]) ? e.touches[0].clientX : e.clientX;
+    const pct = (clientX - rect.left) / rect.width;
+    const clamped = Math.max(0, Math.min(1, pct));
+    video.volume = clamped;
+    video.muted = clamped === 0;
+    updateVolumeUI();
+  }
+
+  volumeBar.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    volumeBar.setPointerCapture(e.pointerId);
+    setVolumeFromEvent(e);
+  });
+
+  window.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    setVolumeFromEvent(e);
+  });
+
+  window.addEventListener('pointerup', (e) => {
+    if (!dragging) return;
+    dragging = false;
+    try { volumeBar.releasePointerCapture(e.pointerId); } catch(_) {}
+  });
+
+  // keep UI in sync if volume changed programmatically
+  video.addEventListener('volumechange', updateVolumeUI);
+  // initialize
+  updateVolumeUI();
+})();
+
+// Ensure the cover video shows a thumbnail from 6s and starts playback from 6s
+const VIDEO_START = 6; // seconds
+
+video && video.addEventListener('loadedmetadata', () => {
+  try {
+    if (video.duration && video.duration > VIDEO_START) {
+      // Seek to the start frame (6s) to capture poster/thumbnail
+      const seekTo = Math.min(VIDEO_START, video.duration - 0.1);
+      video.currentTime = seekTo;
+      // When seeked, draw a frame to a canvas and set as poster
+      const handleSeeked = () => {
+        try {
+          const w = video.videoWidth || video.clientWidth;
+          const h = video.videoHeight || video.clientHeight;
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(video, 0, 0, w, h);
+          const dataURL = canvas.toDataURL('image/png');
+          video.setAttribute('poster', dataURL);
+        } catch (err) {
+          // capturing frame may fail cross-origin; ignore silently
+          console.warn('Could not capture poster frame:', err);
+        }
+        // keep video paused at start time
+        video.pause();
+        // remove this handler
+        video.removeEventListener('seeked', handleSeeked);
+      };
+      video.addEventListener('seeked', handleSeeked);
+    }
+  } catch (e) {
+    console.warn('Error preparing cover poster:', e);
+  }
+});
+
+// When video plays, ensure it starts from VIDEO_START if earlier
+video && video.addEventListener('play', () => {
+  // ensure player-bar button shows pause state
+  setPlayIcon(true);
+  btnPlayMain && btnPlayMain.classList.add('playing');
+  if (video.currentTime < VIDEO_START && video.duration > VIDEO_START) {
+    video.currentTime = VIDEO_START;
+  }
+});
+
+video && video.addEventListener('pause', () => {
+  setPlayIcon(false);
+  btnPlayMain && btnPlayMain.classList.remove('playing');
+});
+
+// --- Like button handling (Spotify-like) ---
+const likeBtnMain = document.getElementById('likeBtnMain'); // the hero/action area heart
+const likeBtnBar = document.getElementById('likeBtn'); // the bottom player heart
+const likeBtnSmall = document.getElementById('likeBtnSmall'); // small like beside volume
+const likeIconMain = document.getElementById('likeIconMain');
+const likeIconBar = document.getElementById('likeIcon');
+const likeIconSmall = document.getElementById('likeIconSmall');
+const LIKE_KEY = 'liked_song_jaat_kahan_ho';
+
+function setLikeState(liked) {
+  [likeBtnMain, likeBtnBar, likeBtnSmall].forEach(el => {
+    if (!el) return;
+    el.classList.toggle('liked', liked);
+    el.setAttribute('aria-pressed', liked ? 'true' : 'false');
+  });
+
+  // update icons fill/stroke to reflect liked state
+  if (likeIconMain) {
+    if (liked) { likeIconMain.setAttribute('fill', 'currentColor'); likeIconMain.setAttribute('stroke', 'none'); }
+    else { likeIconMain.setAttribute('fill', 'none'); likeIconMain.setAttribute('stroke', 'currentColor'); }
+  }
+  if (likeIconBar) {
+    if (liked) { likeIconBar.setAttribute('fill', 'currentColor'); likeIconBar.setAttribute('stroke', 'none'); }
+    else { likeIconBar.setAttribute('fill', 'none'); likeIconBar.setAttribute('stroke', 'currentColor'); }
+  }
+  if (likeIconSmall) {
+    if (liked) { likeIconSmall.setAttribute('fill', 'currentColor'); likeIconSmall.setAttribute('stroke', 'none'); }
+    else { likeIconSmall.setAttribute('fill', 'none'); likeIconSmall.setAttribute('stroke', 'currentColor'); }
+  }
+}
+
+function toggleLike(fromEl) {
+  const current = localStorage.getItem(LIKE_KEY) === '1';
+  const next = !current;
+  localStorage.setItem(LIKE_KEY, next ? '1' : '0');
+  setLikeState(next);
+
+  // animate the clicked button for feedback
+  const target = fromEl || likeBtnMain || likeBtnBar;
+  if (target) {
+    target.animate([
+      { transform: 'scale(1)' },
+      { transform: 'scale(1.18)' },
+      { transform: 'scale(1)' }
+    ], { duration: 300, easing: 'cubic-bezier(.2,.7,.2,1)' });
+  }
+}
+
+if (likeBtnMain) likeBtnMain.addEventListener('click', (e) => { toggleLike(e.currentTarget); });
+if (likeBtnBar) likeBtnBar.addEventListener('click', (e) => { toggleLike(e.currentTarget); });
+if (likeBtnSmall) likeBtnSmall.addEventListener('click', (e) => { toggleLike(e.currentTarget); });
+
+// Initialize from localStorage
+setLikeState(localStorage.getItem(LIKE_KEY) === '1');
+
+// --- Hero download button behavior ---
+const downloadHero = document.getElementById('downloadHero');
+if (downloadHero) {
+  downloadHero.addEventListener('click', async () => {
+    // try to download the hero image; fallback to cover video
+    const img = document.querySelector('.hero-image img');
+    let src = img && img.getAttribute('src');
+    let filename = 'download';
+    if (src) {
+      // resolve filename from src
+      try { filename = src.split('/').pop().split('?')[0]; } catch(e) {}
+      // create anchor to trigger download
+      const a = document.createElement('a');
+      a.href = src;
+      a.download = filename || 'download';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      return;
+    }
+
+    // fallback: try cover video
+    const vid = document.getElementById('coverVideo');
+    if (vid && vid.getAttribute('src')) {
+      const vsrc = vid.getAttribute('src');
+      try { filename = vsrc.split('/').pop().split('?')[0]; } catch(e) {}
+      const a = document.createElement('a');
+      a.href = vsrc;
+      a.download = filename || 'video.mp4';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      return;
+    }
+
+    alert('No downloadable asset found.');
+  });
+}
+
+// --- More button: simple contextual menu ---
+const moreBtn = document.querySelector('.btn-more');
+let moreMenuEl = null;
+function closeMoreMenu() {
+  if (moreMenuEl) { moreMenuEl.remove(); moreMenuEl = null; document.removeEventListener('click', onDocClickForMenu); }
+}
+function onDocClickForMenu(e) {
+  if (!moreMenuEl) return;
+  if (!moreMenuEl.contains(e.target) && e.target !== moreBtn) closeMoreMenu();
+}
+if (moreBtn) {
+  moreBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (moreMenuEl) { closeMoreMenu(); return; }
+    moreMenuEl = document.createElement('div');
+    moreMenuEl.style.position = 'absolute';
+    moreMenuEl.style.background = '#121212';
+    moreMenuEl.style.border = '1px solid rgba(255,255,255,0.06)';
+    moreMenuEl.style.padding = '8px';
+    moreMenuEl.style.borderRadius = '8px';
+    moreMenuEl.style.boxShadow = '0 6px 18px rgba(0,0,0,0.6)';
+    moreMenuEl.style.zIndex = 1200;
+    moreMenuEl.innerHTML = '<div style="padding:8px 12px;cursor:pointer;color:#fff">Share</div><div style="padding:8px 12px;cursor:pointer;color:#b3b3b3">Open in new tab</div>';
+    document.body.appendChild(moreMenuEl);
+    const rect = moreBtn.getBoundingClientRect();
+    moreMenuEl.style.left = (rect.left - 8) + 'px';
+    moreMenuEl.style.top = (rect.bottom + 8) + 'px';
+    document.addEventListener('click', onDocClickForMenu);
+    // attach simple handlers
+    moreMenuEl.querySelectorAll('div')[0].addEventListener('click', () => { navigator.clipboard && imgToShare(); closeMoreMenu(); });
+    moreMenuEl.querySelectorAll('div')[1].addEventListener('click', () => { window.open(document.location.href, '_blank'); closeMoreMenu(); });
+  });
+}
+
+function imgToShare() {
+  const img = document.querySelector('.hero-image img');
+  if (img && img.src) {
+    try { navigator.clipboard.writeText(img.src); alert('Image URL copied to clipboard'); } catch (e) { alert('Copied URL: ' + img.src); }
+  } else alert('No image to share');
+}
+
+// If user clicks play while the video is still seeking/setting up, ensure time is at VIDEO_START
+video && video.addEventListener('click', () => {
+  if (video.currentTime < VIDEO_START && video.duration > VIDEO_START) {
+    video.currentTime = VIDEO_START;
+  }
+});
+
+// --- Fullscreen overlay (simple image display, reuse existing controls) ---
+const fullscreenBtn = document.getElementById('fullscreenBtn');
+let fullscreenOverlay = null;
+const playerBar = document.querySelector('.player-bar');
+const mainContainer = document.querySelector('.main-container');
+
+function createFullscreenOverlay() {
+  fullscreenOverlay = document.createElement('div');
+  fullscreenOverlay.id = 'fullscreenOverlay';
+  // overlay fills the viewport from very top down to the player bar (no gaps)
+  fullscreenOverlay.style.cssText = `
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 90px; /* leave the 90px player bar visible */
+    background: linear-gradient(135deg, #0B3D91, #121212);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1999;
+  `;
+  
+  const img = document.createElement('img');
+  img.src = 'cover2.png';
+  img.alt = 'Cover';
+  img.style.cssText = `
+    width: 70vw; /* 70% of viewport width */
+    height: 70vh; /* 70% of viewport height */
+    max-width: 70%;
+    max-height: 70%;
+    object-fit: contain;
+
+  `;
+  
+  fullscreenOverlay.appendChild(img);
+  document.body.appendChild(fullscreenOverlay);
+  // trigger open animation
+  requestAnimationFrame(() => { fullscreenOverlay.classList.add('open'); });
+
+  // Hide main content and show overlay, mark button active
+  if (mainContainer) mainContainer.style.display = 'none';
+  if (playerBar) playerBar.style.zIndex = '2001';
+  if (fullscreenBtn) { fullscreenBtn.classList.add('fs-active'); fullscreenBtn.setAttribute('aria-pressed','true'); }
+
+  // Close on ESC key
+  document.addEventListener('keydown', handleEscKey);
+}
+
+function closeFullscreenOverlay() {
+  if (fullscreenOverlay) {
+    // animate closing so it feels smooth
+    fullscreenOverlay.classList.remove('open');
+    fullscreenOverlay.classList.add('closing');
+    if (fullscreenBtn) { fullscreenBtn.classList.remove('fs-active'); fullscreenBtn.setAttribute('aria-pressed','false'); }
+    // wait for animation to finish before removing
+    setTimeout(() => {
+      if (fullscreenOverlay) fullscreenOverlay.remove();
+      fullscreenOverlay = null;
+      document.removeEventListener('keydown', handleEscKey);
+      if (mainContainer) mainContainer.style.display = 'flex';
+      if (playerBar) playerBar.style.zIndex = '100';
+    }, 220);
+  }
+}
+
+function handleEscKey(e) {
+  if (e.key === 'Escape' && fullscreenOverlay) {
+    closeFullscreenOverlay();
+  }
+}
+
+if (fullscreenBtn) {
+  fullscreenBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (!fullscreenOverlay) {
+      createFullscreenOverlay();
+    } else {
+      closeFullscreenOverlay();
+    }
+  });
+}
+
+// add a short press/pop visual on pointerdown and remove after animation
+if (fullscreenBtn) {
+  fullscreenBtn.addEventListener('pointerdown', (e) => {
+    fullscreenBtn.classList.add('fs-press');
+    // remove the class after the animation ends
+    setTimeout(() => fullscreenBtn.classList.remove('fs-press'), 380);
+  });
+}
+
+// Modal JS Functions
+const modalOverlay = document.getElementById('modalOverlay');
+const photosInput = document.getElementById('photos');
+const form = document.getElementById('teamForm');
+const fileCount = document.getElementById('fileCount');
+const previewGrid = document.getElementById('previewGrid');
+const fileLabel = document.getElementById('fileLabel');
+
+let selectedFiles = [];
+
+function openModal() {
+  modalOverlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  modalOverlay.classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+
+function closeModalOnOverlay(event) {
+  if (event.target === modalOverlay) {
+    closeModal();
+  }
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+    closeModal();
+  }
+});
+
+function updateFileDisplay() {
+  if (selectedFiles.length > 0) {
+    fileCount.textContent = `${selectedFiles.length} photo${selectedFiles.length > 1 ? 's' : ''} selected`;
+    fileCount.classList.add('show');
+    fileLabel.classList.add('has-files');
+    previewGrid.classList.add('show');
+    renderPreviews();
+  } else {
+    fileCount.textContent = '';
+    fileCount.classList.remove('show');
+    fileLabel.classList.remove('has-files');
+    previewGrid.classList.remove('show');
+    previewGrid.innerHTML = '';
+  }
+}
+
+function renderPreviews() {
+  previewGrid.innerHTML = '';
+  selectedFiles.forEach((file, index) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const previewItem = document.createElement('div');
+      previewItem.className = 'preview-item';
+      previewItem.innerHTML = `
+        <img src="${e.target.result}" alt="Preview ${index + 1}">
+        <button type="button" class="preview-remove" onclick="removeFile(${index})">&times;</button>
+      `;
+      previewGrid.appendChild(previewItem);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function removeFile(index) {
+  selectedFiles.splice(index, 1);
+  updateFileInput();
+  updateFileDisplay();
+}
+
+function updateFileInput() {
+  const dt = new DataTransfer();
+  selectedFiles.forEach(file => dt.items.add(file));
+  photosInput.files = dt.files;
+}
+
+photosInput.addEventListener('change', () => {
+  const files = Array.from(photosInput.files);
+  
+  if (files.length > 5) {
+    alert('Please select up to 5 photos only.');
+    return;
+  }
+  
+  selectedFiles = files;
+  updateFileDisplay();
+});
+
+window.removeFile = removeFile;
+
+form.addEventListener('submit', (e) => {
+  const files = photosInput.files;
+  if (!files || files.length === 0) {
+    alert('Please upload at least one photo.');
+    e.preventDefault();
+    return;
+  }
+  if (files.length > 5) {
+    alert('Max 5 photos allowed.');
+    e.preventDefault();
+    return;
+  }
+  
+  for (let i = 0; i < files.length; i++) {
+    if (!files[i].type.startsWith('image/')) {
+      alert('Only image files are allowed.');
+      e.preventDefault();
+      return;
+    }
+  }
+  
+  const submitBtn = form.querySelector('.submit-btn');
+  submitBtn.textContent = 'SUBMITTING...';
+  submitBtn.disabled = true;
+});
+
+// Hide skeleton loader when page is fully loaded
+window.addEventListener('load', () => {
+  const skeletonLoader = document.getElementById('skeletonLoader');
+  if (skeletonLoader) {
+    setTimeout(() => {
+      skeletonLoader.classList.add('hidden');
+      setTimeout(() => {
+        skeletonLoader.remove();
+      }, 600);
+    }, 500);
+  }
+});
+
+</script>
+
+</body>
+</html>
